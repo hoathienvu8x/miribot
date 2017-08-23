@@ -64,6 +64,7 @@ class TemplateHelper
     /**
      * Replace all wildcards in template with user input values
      * @param \SimpleXMLElement $template
+     * @param $wildcardData
      */
     protected function replaceWildcards(&$template, $wildcardData)
     {

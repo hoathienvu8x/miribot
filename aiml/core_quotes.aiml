@@ -2,7 +2,7 @@
 <aiml version="2.0" encoding="UTF-8">
     <!-- GOOD QUOTES -->
     <category>
-        <pattern># CÂU * HAY *</pattern>
+        <pattern># CHÂM NGÔN *</pattern>
         <template>
             <random>
                 <li>Con người sinh ra không phải để tan biến đi như một hạt cát vô danh. Họ sinh ra để in dấu lại trên mặt đất, in dấu lại trong trái tim người khác.</li>
@@ -21,6 +21,69 @@
                 <li>Cuộc sống không phải luôn luôn hoàn hảo nhưng nó là kết quả của những gì bạn tạo ra. Vì thế hãy làm nó có giá trị, làm sao cho nó đáng nhớ và đừng bao giờ để ai đó đánh cắp hạnh phúc của bạn.</li>
                 <li>Lo lắng chỉ làm lãng phí thời gian, nó không làm thay đổi gì cà, ngoài việc lấy đi niềm vui và làm cho bạn lúc nào cũng bận rộn mà chẳng hoàn tất được gì cả.</li>
             </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>CHÂM NGÔN</pattern>
+        <template>
+            <srai># CHÂM NGÔN *</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># # CHÂM NGÔN *</pattern>
+        <template>
+            <srai># CHÂM NGÔN *</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># # # CHÂM NGÔN *</pattern>
+        <template>
+            <srai># CHÂM NGÔN *</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>CÂU HAY</pattern>
+        <template>
+            <srai># CHÂM NGÔN *</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># # CÂU HAY *</pattern>
+        <template>
+            <srai># CHÂM NGÔN *</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># # # CÂU HAY *</pattern>
+        <template>
+            <srai># CHÂM NGÔN *</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># CÂU * HAY *</pattern>
+        <template>
+            <srai># CHÂM NGÔN *</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># # CÂU * * HAY *</pattern>
+        <template>
+            <srai># CHÂM NGÔN *</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern># # # CÂU * * * HAY *</pattern>
+        <template>
+            <srai># CHÂM NGÔN *</srai>
         </template>
     </category>
 </aiml>

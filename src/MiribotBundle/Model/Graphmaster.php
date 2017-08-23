@@ -78,19 +78,6 @@ class Graphmaster
             return false;
         }
 
-        /**
-         * In case the node we found has <srai/> tag
-         * Process the text content of <srai/> tag as new
-         * query and repeat the search process. However,
-         * this time we will find for exact match as
-         * the pattern to reduce to usually contains very
-         * simple definition, mostly keywords
-         */
-        /** @var \SimpleXMLElement $srai */
-        if ($srai = $node->getTemplate()->srai) {
-            return $this->getReferenceNode($srai);
-        }
-
         return $node;
     }
 
@@ -102,6 +89,9 @@ class Graphmaster
     protected function match($node, $query)
     {
         if ($node->getTemplate() !== null) {
+            if ($srai = $node->getTemplate()->srai) {
+                return $this->getReferenceNode($srai);
+            }
             return $node;
         }
 
@@ -163,13 +153,13 @@ class Graphmaster
      * @param \SimpleXMLElement $srai
      * @return bool
      */
-    protected function getReferenceNode(\SimpleXMLElement $srai)
+    protected function getReferenceNode($srai)
     {
         $sraiTxt = $srai->__toString();
 
         // Replace <star/> in srai
         if ($srai->star) {
-            $sraiTxt = preg_replace("<star index=\"\d\"\/>", '*', $sraiTxt);
+            $sraiTxt = preg_replace("/<star[^>]*\/>/", '*', $sraiTxt);
         }
 
         return $this->matchQueryPattern($this->tokenize($sraiTxt));

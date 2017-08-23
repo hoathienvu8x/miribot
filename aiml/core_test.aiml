@@ -33,6 +33,13 @@
     </category>
 
     <category>
+        <pattern># # IS * *</pattern>
+        <template>
+            Yes, <star index="1"/> <star index="2"/> is <star index="3"/> <star index="4"/>
+        </template>
+    </category>
+
+    <category>
         <pattern># LÀ *</pattern>
         <template>
             <srai># IS *</srai>
