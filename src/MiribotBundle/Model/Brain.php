@@ -50,16 +50,22 @@ class Brain
         $queryString .= " " . $lastBotSentence;
 
         // Pre-process user input to break it into sentences
-        $sentences = $this->helper->string->produceQueries($queryString);
+        $sentences = $this->helper->string->sentenceSplitting($queryString);
 
         // Initialize bot's answer
         $answer = "";
 
-        // The sentences serve as queries for the brain to get its answer
-        foreach ($sentences as $query) {
-            $a = $this->thinkForAnswer($query, $userInput);
-            if (!empty($a)) {
-                $answer .= $a . " ";
+        // The sentences serve as query string for the brain to get its answer
+        foreach ($sentences as $sentence) {
+            // Produce a query for the bot
+            $query = $this->helper->string->produceQueries($sentence);
+
+            // Think for an answer and get a match answer template
+            $matchedAnswerTemplate = $this->thinkForAnswer($query, $sentence);
+
+            // Combine all answer templates to get final answers
+            if (!empty($matchedAnswerTemplate)) {
+                $answer .= $matchedAnswerTemplate . " ";
             }
         }
 
@@ -71,20 +77,22 @@ class Brain
 
     /**
      * Think for an answer
-     * @param $query
+     * @param array $query A set of query tokens
+     * @param string $queryString Original query string
      * @return string
      */
-    protected function thinkForAnswer($query, $userInput)
+    protected function thinkForAnswer($query, $queryString)
     {
         // 1. Find a word node that has template matches the query pattern
         $wordNode = $this->knowledge->matchQueryPattern($query);
 
+        // Return blank answer if we cannot find the node
         if (!$wordNode) {
             return "";
         }
 
-        // 2. Process the node template
-        $answer = $this->helper->template->getResponseFromTemplate($wordNode, $this->helper->string->tokenize($userInput));
+        // 2. Process the node template to get final response
+        $answer = $this->helper->template->getResponseFromTemplate($wordNode, $this->helper->string->tokenize($queryString));
 
         return trim($answer);
     }

@@ -21,15 +21,8 @@ class StringHelper
         // 1. Normalize the input to produce a string of text in uppercase
         $input = $this->normalize($input);
 
-        // 2. Split the input into sentences
-        $sentences = $this->sentenceSplitting($input);
-
-        // 3. For each sentence, produce a set of tokens
-        foreach ($sentences as &$sentence) {
-            $sentence = $this->tokenize($sentence);
-        }
-
-        return $sentences;
+        // 2. Produce a set of tokens
+        return $this->tokenize($input);
     }
 
     /**
