@@ -78,6 +78,11 @@ class Graphmaster
             return false;
         }
 
+        // Return the real node if there exists srai reference
+        if ($srai = $node->getTemplate()->srai) {
+            return $this->getReferenceNode($srai);
+        }
+
         return $node;
     }
 
@@ -89,9 +94,6 @@ class Graphmaster
     protected function match($node, $query)
     {
         if ($node->getTemplate() !== null) {
-            if ($srai = $node->getTemplate()->srai) {
-                return $this->getReferenceNode($srai);
-            }
             return $node;
         }
 

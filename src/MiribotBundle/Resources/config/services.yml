@@ -19,7 +19,7 @@ services:
 
   helper_memory:
     class: MiribotBundle\Helper\MemoryHelper
-    arguments: ['miribot', '3600', 'miribot']
+    arguments: ['miribot', '3600']
 
   helper_template:
     class: MiribotBundle\Helper\TemplateHelper
