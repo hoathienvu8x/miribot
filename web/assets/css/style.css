@@ -1,0 +1,43 @@
+body {
+    padding-top: 5rem;
+}
+
+.starter-template {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.part {
+    margin: 10px auto;
+
+}
+
+.bot {
+    float: left;
+    margin: 5px;
+}
+
+.bot-portrait {
+    width: 23.105%;
+}
+
+.bot-response {
+    width: 75.09138%;
+    height: 256px;
+    border: 1px solid #ddd;
+    border-radius: 10px 0 0 10px;
+    -moz-border-radius: 10px 0 0 10px;
+    -webkit-border-radius: 10px 0 0 10px;
+    padding: 10px;
+    word-wrap: break-word;
+    overflow-y: scroll;
+}
+
+@media only screen and (max-width: 1200px) {
+    .bot-portrait {
+        display: none;
+    }
+    .bot-response {
+        width: 100%;
+    }
+}

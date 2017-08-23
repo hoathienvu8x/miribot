@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+    <!-- GREETINGS -->
+    <category>
+        <pattern>XIN CHÀO</pattern>
+        <template>
+            <random>
+                <li>Xin chào!</li>
+                <li>Chao xìn!</li>
+                <li>Chào nhưng không xin :v</li>
+                <li>Xin nhưng không chào ^_^</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern># HELLO</pattern>
+        <template>
+            <random>
+                <li>Hello!</li>
+                <li>Ciao.</li>
+                <li>Good day!</li>
+                <li>Hi.</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern># IS *</pattern>
+        <template>
+            Yes, <star index="1"/> is <star index="2"/>
+        </template>
+    </category>
+
+    <category>
+        <pattern># LÀ *</pattern>
+        <template>
+            <srai># IS *</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>CHÀO *</pattern>
+        <template>
+            <think>
+                <set name="subject"><star index="1"/></set>
+            </think>
+            <condition name="subject">
+                <li value="miribot">Chào <get name="user" /></li>
+                <li>Bạn chào ai đấy?</li>
+            </condition>
+        </template>
+    </category>
+
+    <category>
+        <pattern>CHÀO BUỔI SÁNG</pattern>
+        <template>
+            <random>
+                <li>Chào ngày mới!</li>
+                <li>Chào buổi sáng</li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>TÔI THÍCH UỐNG CÀ PHÊ</pattern>
+        <template>Bạn có hay cho kem hay đường vào cà phê không?</template>
+    </category>
+
+    <category>
+        <pattern>CÓ</pattern>
+        <that>BẠN CÓ HAY CHO KEM HAY ĐƯỜNG VÀO CÀ PHÊ KHÔNG</that>
+        <template>Tôi cũng thế.</template>
+    </category>
+
+    <category>
+        <pattern>KHÔNG</pattern>
+        <that>BẠN CÓ HAY CHO KEM HAY ĐƯỜNG VÀO CÀ PHÊ KHÔNG</that>
+        <template>Thế à? Tôi thích uống ngọt với ngậy.</template>
+    </category>
+
+    <category>
+        <pattern>I LIKE DRINKING COFFEE</pattern>
+        <template>Do you usually put cream or sugar to your coffee?</template>
+    </category>
+
+    <category>
+        <pattern>YES</pattern>
+        <that>DO YOU USUALLY PUT CREAM OR SUGAR TO YOUR COFFEE</that>
+        <template>Me too.</template>
+    </category>
+
+    <category>
+        <pattern>NO</pattern>
+        <that>DO YOU USUALLY PUT CREAM OR SUGAR TO YOUR COFFEE</that>
+        <template>Really? I like drinking sweet coffee.</template>
+    </category>
+</aiml>

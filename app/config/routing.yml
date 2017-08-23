@@ -1,0 +1,3 @@
+miribot:
+    resource: "@MiribotBundle/Resources/config/routing.yml"
+    prefix:   /

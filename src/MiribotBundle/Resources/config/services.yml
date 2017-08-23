@@ -1,0 +1,31 @@
+services:
+  # Miribot services
+  miribot:
+    class: MiribotBundle\Model\Miribot
+    arguments: ["@miribot_brain", "@helper"]
+
+  miribot_brain:
+    class: MiribotBundle\Model\Brain
+    arguments: ["@graphmaster", "@helper"]
+
+  # Helper services
+  helper:
+    class: MiribotBundle\Helper\Helper
+    arguments: ["@helper_memory", "@helper_string", "@helper_template"]
+
+  helper_string:
+    class: MiribotBundle\Helper\StringHelper
+    arguments: []
+
+  helper_memory:
+    class: MiribotBundle\Helper\MemoryHelper
+    arguments: ['miribot', '3600', 'miribot']
+
+  helper_template:
+    class: MiribotBundle\Helper\TemplateHelper
+    arguments: ["@helper_memory"]
+
+  # Others
+  graphmaster:
+    class: MiribotBundle\Model\Graphmaster
+    arguments: ["@kernel", "@helper"]

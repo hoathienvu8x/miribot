@@ -1,0 +1,6 @@
+miribot_homepage:
+    path:     /
+    defaults: { _controller: MiribotBundle:Miribot:index }
+miribot_answer:
+    path:     /answer
+    defaults: { _controller: MiribotBundle:Miribot:answer }

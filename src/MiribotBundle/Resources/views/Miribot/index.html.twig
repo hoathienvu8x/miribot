@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Miribot">
+    <meta name="author" content="Khue Quang Nguyen">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
+    <title>{% block title %}Miribot{% endblock %}</title>
+
+    <!-- Stylesheets -->
+    {% block stylesheets %}
+        <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/css/bootstrap-theme.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    {% endblock %}
+</head>
+
+<body>
+
+<!-- Main content -->
+<div class="container">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h1 class="panel-title text-center">
+                {% if botname is defined %}
+                    {{ botname }}
+                {% else %}
+                    MIRI
+                {% endif %}
+            </h1>
+        </div>
+        <div class="panel-body">
+            <div class="part bot-part">
+                <div class="bot bot-portrait">
+                    {% if botportrait is defined %}
+                        <img src="{{ asset('assets/portraits/' ~ botportrait ~ '.png') }}" class="img-responsiveimg-thumbnail" alt="Bot Portrait"/>
+                    {% else %}
+                        <img src="{{ asset('assets/portraits/default.png') }}" class="img-responsive img-thumbnail" alt="Bot Portrait"/>
+                    {% endif %}
+                </div>
+                <div class="bot bot-response" id="botres">
+                    <!-- Bot responses goes here -->
+                </div>
+            </div>
+            <span class="clearfix"></span>
+            <div class="part user-part">
+                <div class="user user-input">
+                    <textarea name="user_input" rows="2" class="form-control" onkeydown="inputMessage(this, event)" placeholder="Viết gì đó vào đây..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="urls">
+        <input type="hidden" name="answer_url" id="answer-url" value="{{ url('miribot_answer') }}"/>
+    </div>
+</div><!-- /.container -->
+
+<footer>
+    <div class="text-center">Created by Khue Quang Nguyen, {{ "now"|date('Y') }}</div>
+</footer>
+
+<!-- JavaScripts -->
+{% block javascripts %}
+    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ asset('assets/js/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/ie10-viewport-bug-workaround.js') }}"></script>
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+{% endblock %}
+
+</body>
+
+</html>
