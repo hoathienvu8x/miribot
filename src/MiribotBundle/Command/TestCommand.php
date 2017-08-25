@@ -30,11 +30,12 @@ class TestCommand extends ContainerAwareCommand
     {
         $aiml = new \DOMDocument();
         $aiml->load("E:\\Projects\\miribot\\aiml\\core_test.aiml");
-        $categories = $aiml->getElementsByTagName("category");
-        /** @var \DOMElement $category */
-        foreach ($categories as $category) {
-            $pattern = $category->getElementsByTagName("pattern");
-            echo $pattern->item(0)->textContent . "\n";
+        $patterns = $aiml->getElementsByTagName("pattern");
+        $input = "KHUE IS GOOD";
+        foreach ($patterns as $pattern) {
+            $match = array();
+            preg_match_all($input, $pattern, $match);
+            var_dump($match);
         }
     }
 }
