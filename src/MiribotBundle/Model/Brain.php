@@ -44,7 +44,7 @@ class Brain
         // Get last sentence of the bot as <that>
         $lastBotSentence = $this->helper->memory->recallLastSentence();
 
-        //
+        // Append last bot sentence to user input
         $queryString = $userInput . " " . $lastBotSentence;
 
         // Pre-process user input to break it into sentences

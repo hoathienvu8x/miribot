@@ -153,4 +153,6 @@
             <template>I guess plain is good.</template>
         </category>
     </topic>
+
+    <span>This is <star/> and <star index="2" /></span>
 </aiml>

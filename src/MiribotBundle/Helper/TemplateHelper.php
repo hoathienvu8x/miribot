@@ -10,6 +10,7 @@ namespace MiribotBundle\Helper;
 
 
 use MiribotBundle\Model\Graphmaster\Nodemapper;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class TemplateHelper
 {
@@ -39,60 +40,45 @@ class TemplateHelper
         ->processConditions($template)// Process conditional tags
         ->replaceWildcards($template, $wildcardData)// Replace all template wildcards with user input
         ->handleGetters($template)// Handle get tags
-        ->handleSetters($template); // Handle set tags
+        ->handleSetters($template)// Handle set tags
+        ->handleThinks($template);
 
-        return $template->__toString();
+        return $template->textContent;
     }
 
     /**
      * Process condition tags
-     * @param $template
+     * @param \DOMElement $template
      * @return $this
      */
     protected function processConditions(&$template)
     {
-        /** @var \SimpleXMLElement $condition */
-        if ($condition = $template->condition) {
-            $variableName = "";
-            $variableData = "";
-            /**
-             * @var string $key
-             * @var \SimpleXMLElement $value
-             */
-            foreach ($condition->attributes() as $key => $value) {
-                if ($key == "name") {
-                    $variableName = $value->__toString();
-                    $variableData = $this->memory->recallUserData("variables.{$variableName}");
-                }
-            }
+        /** @var \DOMElement $condition */
+        if ($condition = $template->getElementsByTagName("condition")->item(0)) {
+            $variableName = $condition->getAttribute("name");
+            $variableData = $this->memory->recallUserData("variables.{$variableName}");
 
             $default = $template;
             $matched = false;
-            if ($possibleResponseTemplates = $condition->li) {
-                /** @var \SimpleXMLElement $item */
-                foreach ($possibleResponseTemplates as $item) {
-                    // Save list item without attribute as default response template
-                    if ($item->attributes()->count() == 0) {
-                        $default = $item;
-                    }
 
-                    /**
-                     * @var string $key
-                     * @var \SimpleXMLElement $value
-                     */
-                    foreach ($item->attributes() as $key => $value) {
-                        if ($key == "value" && $variableData == $value->__toString()) {
-                            $template = $item;
+            if ($lis = $condition->getElementsByTagName("li")) {
+                /** @var \DOMElement $li */
+                foreach ($lis as $li) {
+                    if (!$li->hasAttribute("value")) {
+                        $default = $li;
+                    } else {
+                        if ($li->getAttribute("value") == $variableData) {
+                            $template = $li;
                             $matched = true;
                             break;
                         }
                     }
                 }
+            }
 
-                // If no response template matched then fallback to default
-                if (!$matched) {
-                    $template = $default;
-                }
+            // If no response template matched then fallback to default
+            if (!$matched) {
+                $template = $default;
             }
         }
 
@@ -101,18 +87,22 @@ class TemplateHelper
 
     /**
      * Get random template response
-     * @param \SimpleXMLElement $template
+     * @param \DOMElement $template
      * @return $this
      */
     protected function processRandomResponse(&$template)
     {
-        if ($template->random) {
+        /** @var \DOMElement $random */
+        if ($random = $template->getElementsByTagName("random")->item(0)) {
+            $lis = $random->getElementsByTagName("li");
+
             // Get maximum response index
-            $maxIdx = $template->random->li->count() - 1;
+            $maxIdx = $lis->length - 1;
 
             // Randomize response content from min to max index
-            /** @var \SimpleXMLElement $response */
-            $template = $template->random->li[mt_rand(0, $maxIdx)];
+            $idx = mt_rand(0, $maxIdx);
+
+            $template = $lis->item($idx);
         }
         return $this;
     }
@@ -138,49 +128,38 @@ class TemplateHelper
 
     /**
      * Replace all wildcards in template with user input values
-     * @param \SimpleXMLElement $template
+     * @param \DOMElement $template
      * @param $wildcardData
+     * @return $this
      */
     protected function replaceWildcards(&$template, $wildcardData)
     {
-        // Replace all wildcards with user values
-        $rawXml = $template->asXML();
-        $stars = array();
-        preg_match_all('/<star[^>]*\/>/', $rawXml, $stars);
-        $stars = array_shift($stars);
-        array_walk($stars, function (&$v) {
-            $v = addcslashes($v, '\"\/');
-            $v = "/{$v}/";
-        });
+        $stars = $template->getElementsByTagName("star");
+        $noOfStars = $stars->length;
+        for ($i = 0; $i < $noOfStars; $i++) {
+            $wildcardValue = $template->ownerDocument->createTextNode(array_shift($wildcardData));
+            $star = $stars->item(0);
+            $star->parentNode->replaceChild($wildcardValue, $star);
+        }
 
-        $rawXml = preg_replace($stars, $wildcardData, $rawXml);
-        $template = new \SimpleXMLElement($rawXml);
         return $this;
     }
 
     /**
      * Handle getter tags
-     * @param \SimpleXMLElement $template
+     * @param \DOMElement $template
+     * @return $this
      */
     protected function handleGetters(&$template)
     {
-        if ($getters = $template->get) {
-            // Get required variable values
-            $variableNames = $this->collectNamesOfVariables($getters);
-            $variableValues = $this->getVariableValuesFromMemory($variableNames);
-
-            // Replace variable values for each getter tag found
-            $rawXml = $template->asXML();
-            $getters = array();
-            preg_match_all('/<get[^>]*\/>/', $rawXml, $getters);
-            $getters = array_shift($getters);
-            array_walk($getters, function (&$v) {
-                $v = addcslashes($v, '\"\/');
-                $v = "/{$v}/";
-            });
-
-            $rawXml = preg_replace($getters, $variableValues, $rawXml);
-            $template = new \SimpleXMLElement($rawXml);
+        $getters = $template->getElementsByTagName("get");
+        $noOfGetters = $getters->length;
+        for ($i = 0; $i < $noOfGetters; $i++) {
+            $getter = $getters->item(0);
+            $variableName = $getter->getAttribute("name");
+            $variableData = $this->memory->recallUserData("variables.{$variableName}");
+            $replacement = $template->ownerDocument->createTextNode($variableData);
+            $getter->parentNode->replaceChild($replacement, $getter);
         }
 
         return $this;
@@ -188,20 +167,20 @@ class TemplateHelper
 
     /**
      * Handle setter tags
-     * @param \SimpleXMLElement $template
+     * @param \DOMElement $template
+     * @return $this
      */
     protected function handleSetters(&$template)
     {
-        // Get normal setters
-        if ($setters = $template->set) {
-            $this->setVariables($setters);
-        }
-
-        // Get setters inside think
-        /** @var \SimpleXMLElement $think */
-        if ($think = $template->think) {
-            if ($setters = $think->set) {
-                $this->setVariables($setters);
+        if ($template->getElementsByTagName("set")->length > 0) {
+            $setters = $template->getElementsByTagName("set");
+            $noOfSetters = $setters->length;
+            for ($i = 0; $i < $noOfSetters; $i++) {
+                $setter = $setters->item(0);
+                $variableName = $setter->getAttribute("name");
+                $variableData = $setter->textContent;
+                $this->memory->rememberUserData("variables.{$variableName}", $variableData);
+                $setter->parentNode->removeChild($setter);
             }
         }
 
@@ -209,54 +188,20 @@ class TemplateHelper
     }
 
     /**
-     * @param $setters
+     * @param \DOMElement $template
+     * @return $this
      */
-    private function setVariables(&$setters)
+    protected function handleThinks(&$template)
     {
-        /** @var \SimpleXMLElement $setter */
-        foreach ($setters as $setter) {
-            // Set require variable values to the memory
-            $attributes = $setter->attributes();
-            /**
-             * @var string $key
-             * @var \SimpleXMLElement $value
-             */
-            foreach ($attributes as $key => $value) {
-                if ($key === "name") {
-                    $value = $value->__toString();
-                    $this->memory->rememberUserData("variables.{$value}", $setter->__toString());
-                }
+        if ($template->getElementsByTagName("think")->length > 0) {
+            $thinks = $template->getElementsByTagName("think");
+            $noOfThinks = $thinks->length;
+            for ($i = 0; $i < $noOfThinks; $i++) {
+                $think = $thinks->item(0);
+                $think->parentNode->removeChild($think);
             }
         }
-    }
 
-    /**
-     * Collect names of variables from getters
-     */
-    private function collectNamesOfVariables(&$getters)
-    {
-        $variableNames = array();
-        foreach ($getters as $getter) {
-            $attributes = $getter->attributes();
-            foreach ($attributes as $key => $value) {
-                if ($key === "name") {
-                    $variableNames[] = $value->__toString();
-                }
-            }
-        }
-        return $variableNames;
-    }
-
-    /**
-     * @param array $variableNames
-     * @return array
-     */
-    private function getVariableValuesFromMemory(&$variableNames)
-    {
-        $variableValues = array();
-        foreach ($variableNames as $key) {
-            $variableValues[$key] = $this->memory->recallUserData("variables.{$key}");
-        }
-        return $variableValues;
+        return $this;
     }
 }

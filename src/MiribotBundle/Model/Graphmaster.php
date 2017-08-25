@@ -50,10 +50,11 @@ class Graphmaster
     public function build()
     {
         // Fetch AIML data
-        $aiml = new \SimpleXMLElement($this->loadAimlData());
+        $aiml = new \DOMDocument();
+        $aiml->loadXML($this->loadAimlData());
 
         /** @var \SimpleXMLElement $categories */
-        $categories = $aiml->category;
+        $categories = $aiml->getElementsByTagName("category");
 
         // Map AIML data to bot's Graphmaster knowledge
         $this->mapToNodemapper($categories);
@@ -79,7 +80,7 @@ class Graphmaster
         }
 
         // Return the real node if there exists srai reference
-        if ($srai = $node->getTemplate()->srai) {
+        if ($srai = $node->getTemplate()->getElementsByTagName("srai")->item(0)) {
             return $this->getReferenceNode($srai);
         }
 
@@ -116,16 +117,22 @@ class Graphmaster
 
     /**
      * Search for reference node
-     * @param \SimpleXMLElement $srai
+     * @param \DOMElement $srai
      * @return bool
      */
     protected function getReferenceNode($srai)
     {
-        $sraiTxt = $srai->__toString();
+        $sraiTxt = $srai->textContent;
 
         // Replace <star/> in srai
-        if ($srai->star) {
-            $sraiTxt = preg_replace("/<star[^>]*\/>/", '*', $sraiTxt);
+        if ($srai->getElementsByTagName("star")->length > 0) {
+            $stars = $srai->getElementsByTagName("star");
+            $noOfStars = $stars->length;
+            for ($i = 0; $i < $noOfStars; $i++) {
+                $asterisk = $srai->ownerDocument->createTextNode("*");
+                $star = $stars->item(0);
+                $srai->replaceChild($asterisk, $star);
+            }
         }
 
         return $this->matchQueryPattern($this->tokenize($sraiTxt));
@@ -137,17 +144,16 @@ class Graphmaster
      */
     protected function mapToNodemapper($categories)
     {
-        /** @var \SimpleXMLElement $category */
+        /** @var \DOMElement $category */
         foreach ($categories as $category) {
 
             // Get pattern string
-            $pattern = $category->pattern->__toString();
+            $pattern = $category->getElementsByTagName("pattern")->item(0)->textContent;
 
-            $thatPattern = "";
             /** @var \SimpleXMLElement $that */
-            if ($that = $category->that) {
+            if ($category->getElementsByTagName("that")->length > 0) {
                 // In case the category contains that, add it to the pattern
-                $pattern .= " " . $that->__toString();
+                $pattern .= " " . $category->getElementsByTagName("that")->item(0)->textContent;
             }
 
             // Build pattern tokens
@@ -163,8 +169,8 @@ class Graphmaster
 
     /**
      * Build a category branch
-     * @param $category
-     * @param $pattern
+     * @param \DOMElement $category
+     * @param string $pattern
      * @param $patternTokens
      * @return Nodemapper|null
      */
@@ -176,7 +182,7 @@ class Graphmaster
 
             // If the node contains last word in an entry, set response template
             if ($i == count($patternTokens) - 1) {
-                $template = $category->template;
+                $template = $category->getElementsByTagName("template")->item(0);
             } else { // Otherwise leave the template null
                 $template = null;
             }

@@ -31,7 +31,7 @@ class Nodemapper
     protected $pattern = null;
 
     /**
-     * @var \SimpleXMLElement|null
+     * @var \DOMElement|null
      */
     protected $template = null;
 
@@ -44,7 +44,7 @@ class Nodemapper
      * Nodemapper constructor.
      * @param $word
      * @param $pattern
-     * @param $template
+     * @param \DOMElement $template
      */
     public function __construct($word, $pattern, $template)
     {
@@ -153,7 +153,7 @@ class Nodemapper
     }
 
     /**
-     * @return null|\SimpleXMLElement
+     * @return null|\DOMElement
      */
     public function getTemplate()
     {

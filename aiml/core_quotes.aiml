@@ -32,20 +32,6 @@
     </category>
 
     <category>
-        <pattern># # CHÂM NGÔN *</pattern>
-        <template>
-            <srai># CHÂM NGÔN *</srai>
-        </template>
-    </category>
-
-    <category>
-        <pattern># # # CHÂM NGÔN *</pattern>
-        <template>
-            <srai># CHÂM NGÔN *</srai>
-        </template>
-    </category>
-
-    <category>
         <pattern>CÂU HAY</pattern>
         <template>
             <srai># CHÂM NGÔN *</srai>
@@ -53,35 +39,7 @@
     </category>
 
     <category>
-        <pattern># # CÂU HAY *</pattern>
-        <template>
-            <srai># CHÂM NGÔN *</srai>
-        </template>
-    </category>
-
-    <category>
-        <pattern># # # CÂU HAY *</pattern>
-        <template>
-            <srai># CHÂM NGÔN *</srai>
-        </template>
-    </category>
-
-    <category>
-        <pattern># CÂU * HAY *</pattern>
-        <template>
-            <srai># CHÂM NGÔN *</srai>
-        </template>
-    </category>
-
-    <category>
-        <pattern># # CÂU * * HAY *</pattern>
-        <template>
-            <srai># CHÂM NGÔN *</srai>
-        </template>
-    </category>
-
-    <category>
-        <pattern># # # CÂU * * * HAY *</pattern>
+        <pattern>* CÂU * HAY *</pattern>
         <template>
             <srai># CHÂM NGÔN *</srai>
         </template>
