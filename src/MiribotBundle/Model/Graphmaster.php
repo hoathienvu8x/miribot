@@ -68,7 +68,7 @@ class Graphmaster
     public function matchQueryPattern($query)
     {
         // Find the node that matches query pattern
-        $node = $this->match($this->graph, $query);
+        $node = $this->match1($this->graph, $query);
 
         /**
          * If there is no definition for the node then see whether there exists a wildcard node after it
@@ -118,13 +118,14 @@ class Graphmaster
             }
         }
 
-        //print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
+        print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
 
         $matchingTokens = array("#", "_", $word, "^", "*");
         foreach ($matchingTokens as $idx => $token) {
             $tokenNode = $node->getChild(md5($token));
 
             if ($tokenNode) {
+
                 /**
                  * First word of the query actually belongs to a pattern with any of the
                  * wildcard as prefix
@@ -143,11 +144,44 @@ class Graphmaster
                 } else {
                     array_unshift($query, $word);
                 }
+
             }
         }
 
         return false;
 
+    }
+
+    protected function match1($node, $query)
+    {
+        if (empty($query) || $node->getTemplate() !== null) {
+            return $node;
+        }
+
+        $word = array_shift($query);
+
+        print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
+
+        $matchingTokens = array("#", "_", $word, "^", "*");
+        foreach ($matchingTokens as $token) {
+            if ($node->getWord() == $token) {
+                $suffix = array_shift($query);
+                foreach($node->getChildren() as $childNode) {
+                    if ($matched = $this->match1($childNode, $query)) {
+                        return $matched;
+                    } else {
+                        array_unshift($query, $suffix);
+                    }
+                }
+            } else {
+                if ($nextBranch = $node->getChild(md5($word))) {
+                    array_unshift($query, $word);
+                    return $this->match1($nextBranch, $query);
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

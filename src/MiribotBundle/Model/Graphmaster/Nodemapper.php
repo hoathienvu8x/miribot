@@ -139,7 +139,7 @@ class Nodemapper
      */
     public function getPattern()
     {
-        return $this->template;
+        return $this->pattern;
     }
 
     /**

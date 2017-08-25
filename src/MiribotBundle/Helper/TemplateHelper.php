@@ -29,6 +29,7 @@ class TemplateHelper
     public function getResponseFromTemplate($wordNode, $userInputTokens)
     {
         $pattern = explode(" ", $wordNode->getPattern());
+        $userInputTokens = array_map('strtoupper', $userInputTokens);
         $wildcardData = array_diff($userInputTokens, $pattern);
 
         $template = $wordNode->getTemplate();
@@ -40,6 +41,10 @@ class TemplateHelper
 
         // Replace all template wildcards with user input
         $this->replaceWildcards($template, $wildcardData);
+
+        // Handle getting and setting variables from the template
+        $this->handleGetters($template);
+        $this->handleSetters($template);
 
         return $template->__toString();
     }
@@ -69,18 +74,89 @@ class TemplateHelper
     protected function replaceWildcards(&$template, $wildcardData)
     {
         // Replace all wildcards with user values
-        if ($template->star) {
+        $rawXml = $template->asXML();
+        $stars = array();
+        preg_match_all('/<star[^>]*\/>/', $rawXml, $stars);
+        $stars = array_shift($stars);
+        array_walk($stars, function(&$v) {
+            $v = addcslashes($v, '\"\/');
+            $v = "/{$v}/";
+        });
+
+        $rawXml = preg_replace($stars, $wildcardData, $rawXml);
+        $template = new \SimpleXMLElement($rawXml);
+    }
+
+    /**
+    * Handle getter tags
+    */
+    protected function handleGetters(&$template)
+    {
+        if ($getters = $template->get) {
+            // Get required variable values
+            $variableNames = $this->collectNamesOfVariables($getters);
+            $variableValues = $this->getVariableValuesFromMemory($variableNames);
+
+            // Replace variable values for each getter tag found
             $rawXml = $template->asXML();
-            $stars = array();
-            preg_match_all('/<star[^>]*\/>/', $rawXml, $stars);
-            $stars = array_shift($stars);
-            array_walk($stars, function(&$v) {
+            $getters = array();
+            preg_match_all('/<get[^>]*\/>/', $rawXml, $getters);
+            $getters = array_shift($getters);
+            array_walk($getters, function(&$v) {
                 $v = addcslashes($v, '\"\/');
                 $v = "/{$v}/";
             });
 
-            $rawXml = preg_replace($stars, $wildcardData, $rawXml);
+            $rawXml = preg_replace($getters, $variableValues, $rawXml);
             $template = new \SimpleXMLElement($rawXml);
         }
+    }
+
+    /**
+    * Handle setter tags
+    */
+    protected function handleSetters(&$template)
+    {
+        if ($setters = $template->set) {
+            foreach ($setters as $setter) {
+                // Set require variable values to the memory
+                $attributes = $setter->attributes();
+                foreach ($attributes as $key => $value) {
+                    if ($key === "name") {
+                        $value = $value->__toString();
+                        $this->memory->rememberUserData("variables.{$value}", $setter->__toString());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+    * Collect names of variables from getters
+    */
+    private function collectNamesOfVariables(&$getters)
+    {
+        $variableNames = array();
+        foreach ($getters as $getter) {
+            $attributes = $getter->attributes();
+            foreach($attributes as $key => $value) {
+                if ($key === "name") {
+                    $variableNames[] = $value->__toString();
+                }
+            }
+        }
+        return $variableNames;
+    }
+
+    /**
+    * Get variable values from memory based on the collected names
+    */
+    private function getVariableValuesFromMemory(&$variableNames)
+    {
+        $variableValues = array();
+        foreach($variableNames as $key) {
+            $variableValues[$key] = $this->memory->recallUserData("variables.{$key}");
+        }
+        return $variableValues;
     }
 }

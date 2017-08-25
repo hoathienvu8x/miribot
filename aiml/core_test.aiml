@@ -26,16 +26,9 @@
     </category>
 
     <category>
-        <pattern># IS *</pattern>
+        <pattern>_ IS *</pattern>
         <template>
             Yes, <star index="1"/> is <star index="2"/>
-        </template>
-    </category>
-
-    <category>
-        <pattern># # IS * *</pattern>
-        <template>
-            Yes, <star index="1"/> <star index="2"/> is <star index="3"/> <star index="4"/>
         </template>
     </category>
 
@@ -101,5 +94,19 @@
         <pattern>NO</pattern>
         <that>DO YOU USUALLY PUT CREAM OR SUGAR TO YOUR COFFEE</that>
         <template>Really? I like drinking sweet coffee.</template>
+    </category>
+
+    <category>
+        <pattern>MY NAME IS *</pattern>
+        <template>
+            <set name="somename"><star index="1"/></set>I will remember your name.
+        </template>
+    </category>
+
+    <category>
+        <pattern>WHAT IS MY NAME</pattern>
+        <template>
+            Your name is <get name="somename"/>
+        </template>
     </category>
 </aiml>

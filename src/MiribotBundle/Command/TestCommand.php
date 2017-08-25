@@ -28,14 +28,5 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Miribot $bot */
-        //$bot = $this->getContainer()->get('miribot');
-
-        $w = '\0Khue \1is \2good';
-        $p = "<star index=\"1\" /> <star index='2'/> <star/>";
-
-        $matches = array();
-        preg_match_all("/<star[^>]*>/", $p, $matches);
-        dump($matches);
     }
 }

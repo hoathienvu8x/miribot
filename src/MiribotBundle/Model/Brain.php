@@ -44,28 +44,17 @@ class Brain
         // Get last sentence of the bot
         $lastBotSentence = $this->helper->memory->recallLastSentence();
 
-        $queryString = $userInput;
+        $queryStrings = array($userInput, $userInput . " " . $lastBotSentence);
 
-        // Append bot's last sentence to user input
-        $queryString .= " " . $lastBotSentence;
+        foreach($queryStrings as $queryString) {
+            // Pre-process user input to break it into sentences
+            $sentences = $this->helper->string->sentenceSplitting($queryString);
 
-        // Pre-process user input to break it into sentences
-        $sentences = $this->helper->string->sentenceSplitting($queryString);
+            // Think for answer
+            $answer = $this->thinkForAnswer($sentences);
 
-        // Initialize bot's answer
-        $answer = "";
-
-        // The sentences serve as query string for the brain to get its answer
-        foreach ($sentences as $sentence) {
-            // Produce a query for the bot
-            $query = $this->helper->string->produceQueries($sentence);
-
-            // Think for an answer and get a match answer template
-            $matchedAnswerTemplate = $this->thinkForAnswer($query, $sentence);
-
-            // Combine all answer templates to get final answers
-            if (!empty($matchedAnswerTemplate)) {
-                $answer .= $matchedAnswerTemplate . " ";
+            if (!empty($answer)) {
+                break;
             }
         }
 
@@ -75,13 +64,34 @@ class Brain
         return empty($answer) ? "..." : $answer;
     }
 
+    protected function thinkForAnswer($sentences) {
+
+        $answer = "";
+
+        // The sentences serve as query string for the brain to get its answer
+        foreach ($sentences as $sentence) {
+            // Produce a query for the bot
+            $query = $this->helper->string->produceQueries($sentence);
+
+            // Think for an answer and get a match answer template
+            $matchedAnswerTemplate = $this->queryKnowledge($query, $sentence);
+
+            // Combine all answer templates to get final answers
+            if (!empty($matchedAnswerTemplate)) {
+                $answer .= $matchedAnswerTemplate . "";
+            }
+        }
+
+        return $answer;
+    }
+
     /**
-     * Think for an answer
+     * Query the knowledge
      * @param array $query A set of query tokens
      * @param string $queryString Original query string
      * @return string
      */
-    protected function thinkForAnswer($query, $queryString)
+    protected function queryKnowledge($query, $queryString)
     {
         // 1. Find a word node that has template matches the query pattern
         $wordNode = $this->knowledge->matchQueryPattern($query);

@@ -18,7 +18,7 @@ class MemoryHelper extends FilesystemCache
      * @param int $defaultLifetime
      * @param string $directory
      */
-    public function __construct($namespace = '', $defaultLifetime = 3600, $directory = 'miribot')
+    public function __construct($namespace = '', $defaultLifetime = 3600, $directory = null)
     {
         parent::__construct($namespace, $defaultLifetime, $directory);
     }
