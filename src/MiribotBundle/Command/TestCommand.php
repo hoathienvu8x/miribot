@@ -28,5 +28,13 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $aiml = new \DOMDocument();
+        $aiml->load("E:\\Projects\\miribot\\aiml\\core_test.aiml");
+        $categories = $aiml->getElementsByTagName("category");
+        /** @var \DOMElement $category */
+        foreach ($categories as $category) {
+            $pattern = $category->getElementsByTagName("pattern");
+            echo $pattern->item(0)->textContent . "\n";
+        }
     }
 }

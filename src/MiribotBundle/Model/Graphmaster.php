@@ -93,24 +93,23 @@ class Graphmaster
      */
     protected function match($node, $query)
     {
-        if ($node->countChildren() == 0) {
-            if ($node->getTemplate()) {
-                return $node;
-            } else {
-                return false;
-            }
+        if ($node->getTemplate() !== null) {
+            return $node;
         } else {
             // Get the first word of the query
             $word = array_shift($query);
             $matchingTokens = array("#", "_", $word, "^", "*");
+
             //print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
+
             foreach($matchingTokens as $token) {
-                if ($childNode = $node->getChild(md5($token))) {
+                if ($childNode = $node->getChild($token)) {
                     if ($matchNode = $this->match($childNode, $query)) {
                         return $matchNode;
                     }
                 }
             }
+
             return false;
         }
     }
@@ -144,6 +143,7 @@ class Graphmaster
             // Get pattern string
             $pattern = $category->pattern->__toString();
 
+            $thatPattern = "";
             /** @var \SimpleXMLElement $that */
             if ($that = $category->that) {
                 // In case the category contains that, add it to the pattern
@@ -155,32 +155,43 @@ class Graphmaster
 
             // Create a category branch that contains word Nodemappers lead to a specific template
             // then add to the knowledge Graphmaster
-
             /** @var Nodemapper $categoryBranchNode */
-            $categoryBranchNode = null;
-
-            for ($i = count($patternTokens) - 1; $i >= 0; $i--) {
-                $word = $patternTokens[$i];
-
-                // If the node contains last word in an entry, set response template
-                if ($i == count($patternTokens) - 1) {
-                    $template = $category->template;
-                } else { // Otherwise leave the template null
-                    $template = null;
-                }
-
-                // Create a new word node
-                $wordNode = new Nodemapper($word, $pattern, $template);
-
-                if ($categoryBranchNode) {
-                    $wordNode->addChild($categoryBranchNode);
-                }
-
-                $categoryBranchNode = $wordNode;
-            }
-
+            $categoryBranchNode = $this->buildCategoryBranch($category, $pattern, $patternTokens);
             $this->graph->addChild($categoryBranchNode);
         }
+    }
+
+    /**
+     * Build a category branch
+     * @param $category
+     * @param $pattern
+     * @param $patternTokens
+     * @return Nodemapper|null
+     */
+    protected function buildCategoryBranch($category, $pattern, $patternTokens) {
+        $categoryBranchNode = null;
+
+        for ($i = count($patternTokens) - 1; $i >= 0; $i--) {
+            $word = $patternTokens[$i];
+
+            // If the node contains last word in an entry, set response template
+            if ($i == count($patternTokens) - 1) {
+                $template = $category->template;
+            } else { // Otherwise leave the template null
+                $template = null;
+            }
+
+            // Create a new word node
+            $wordNode = new Nodemapper($word, $pattern, $template);
+
+            if ($categoryBranchNode) {
+                $wordNode->addChild($categoryBranchNode);
+            }
+
+            $categoryBranchNode = $wordNode;
+        }
+
+        return $categoryBranchNode;
     }
 
     /**

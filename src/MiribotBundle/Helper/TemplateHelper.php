@@ -28,42 +28,93 @@ class TemplateHelper
      */
     public function getResponseFromTemplate($wordNode, $userInputTokens)
     {
-        // Extract wildcard data
-        $wildcardData = $this->extractWildcardData(explode(" ", $wordNode->getPattern()), $userInputTokens);
-
         // Retrieve node's template
         $template = $wordNode->getTemplate();
 
-        // Select random response if necessary
-        if ($template->random) {
-            $template = $this->getRandomResponse($template);
-        }
+        // Extract wildcard data
+        $wildcardData = $this->extractWildcardData(explode(" ", $wordNode->getPattern()), $userInputTokens);
 
-        // Replace all template wildcards with user input
-        $this->replaceWildcards($template, $wildcardData);
-
-        // Handle getting and setting variables from the template
-        $this->handleGetters($template);
-        $this->handleSetters($template);
+        // Process template data
+        $this->processRandomResponse($template)// Select random response if necessary
+        ->processConditions($template)// Process conditional tags
+        ->replaceWildcards($template, $wildcardData)// Replace all template wildcards with user input
+        ->handleGetters($template)// Handle get tags
+        ->handleSetters($template); // Handle set tags
 
         return $template->__toString();
     }
 
     /**
+     * Process condition tags
+     * @param $template
+     * @return $this
+     */
+    protected function processConditions(&$template)
+    {
+        /** @var \SimpleXMLElement $condition */
+        if ($condition = $template->condition) {
+            $variableName = "";
+            $variableData = "";
+            /**
+             * @var string $key
+             * @var \SimpleXMLElement $value
+             */
+            foreach ($condition->attributes() as $key => $value) {
+                if ($key == "name") {
+                    $variableName = $value->__toString();
+                    $variableData = $this->memory->recallUserData("variables.{$variableName}");
+                }
+            }
+
+            $default = $template;
+            $matched = false;
+            if ($possibleResponseTemplates = $condition->li) {
+                /** @var \SimpleXMLElement $item */
+                foreach ($possibleResponseTemplates as $item) {
+                    // Save list item without attribute as default response template
+                    if ($item->attributes()->count() == 0) {
+                        $default = $item;
+                    }
+
+                    /**
+                     * @var string $key
+                     * @var \SimpleXMLElement $value
+                     */
+                    foreach ($item->attributes() as $key => $value) {
+                        if ($key == "value" && $variableData == $value->__toString()) {
+                            $template = $item;
+                            $matched = true;
+                            break;
+                        }
+                    }
+                }
+
+                // If no response template matched then fallback to default
+                if (!$matched) {
+                    $template = $default;
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Get random template response
      * @param \SimpleXMLElement $template
-     * @return \SimpleXMLElement
+     * @return $this
      */
-    protected function getRandomResponse(&$template)
+    protected function processRandomResponse(&$template)
     {
-        // Get maximum response index
-        $maxIdx = $template->random->li->count() - 1;
+        if ($template->random) {
+            // Get maximum response index
+            $maxIdx = $template->random->li->count() - 1;
 
-        // Randomize response content from min to max index
-        /** @var \SimpleXMLElement $response */
-        $response = $template->random->li[mt_rand(0, $maxIdx)];
-
-        return $response;
+            // Randomize response content from min to max index
+            /** @var \SimpleXMLElement $response */
+            $template = $template->random->li[mt_rand(0, $maxIdx)];
+        }
+        return $this;
     }
 
     /**
@@ -104,6 +155,7 @@ class TemplateHelper
 
         $rawXml = preg_replace($stars, $wildcardData, $rawXml);
         $template = new \SimpleXMLElement($rawXml);
+        return $this;
     }
 
     /**
@@ -130,6 +182,8 @@ class TemplateHelper
             $rawXml = preg_replace($getters, $variableValues, $rawXml);
             $template = new \SimpleXMLElement($rawXml);
         }
+
+        return $this;
     }
 
     /**
@@ -138,19 +192,39 @@ class TemplateHelper
      */
     protected function handleSetters(&$template)
     {
+        // Get normal setters
         if ($setters = $template->set) {
-            foreach ($setters as $setter) {
-                // Set require variable values to the memory
-                $attributes = $setter->attributes();
-                /**
-                 * @var string $key
-                 * @var \SimpleXMLElement $value
-                 */
-                foreach ($attributes as $key => $value) {
-                    if ($key === "name") {
-                        $value = $value->__toString();
-                        $this->memory->rememberUserData("variables.{$value}", $setter->__toString());
-                    }
+            $this->setVariables($setters);
+        }
+
+        // Get setters inside think
+        /** @var \SimpleXMLElement $think */
+        if ($think = $template->think) {
+            if ($setters = $think->set) {
+                $this->setVariables($setters);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $setters
+     */
+    private function setVariables(&$setters)
+    {
+        /** @var \SimpleXMLElement $setter */
+        foreach ($setters as $setter) {
+            // Set require variable values to the memory
+            $attributes = $setter->attributes();
+            /**
+             * @var string $key
+             * @var \SimpleXMLElement $value
+             */
+            foreach ($attributes as $key => $value) {
+                if ($key === "name") {
+                    $value = $value->__toString();
+                    $this->memory->rememberUserData("variables.{$value}", $setter->__toString());
                 }
             }
         }

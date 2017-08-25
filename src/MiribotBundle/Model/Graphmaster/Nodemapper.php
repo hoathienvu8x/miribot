@@ -48,7 +48,7 @@ class Nodemapper
      */
     public function __construct($word, $pattern, $template)
     {
-        $this->id = md5($word);
+        $this->id = md5($pattern) . "_" . $word;
         $this->pattern = $pattern;
         $this->word = $word;
         $this->template = $template;
@@ -181,44 +181,12 @@ class Nodemapper
         }
 
         if (isset($this->children[$child->getId()])) {
-            // Merge content of the two children
-            $internalChild = $this->children[$child->getId()];
-            $this->children[$child->getId()] = $this->merge($internalChild, $child);
             return $this;
         }
 
         $child->parentId = $this->id;
         $this->children[$child->getId()] = $child;
         return $this;
-    }
-
-    /**
-     * @param Nodemapper $node1
-     * @param Nodemapper $node2
-     * @return Nodemapper
-     */
-    protected function merge(Nodemapper $node1, Nodemapper $node2)
-    {
-        foreach ($node2->children as $child) {
-            $node1->addChild($child);
-        }
-
-        // Merge template
-        $tempXml = "";
-
-        if ($node1->getTemplate()) {
-            $tempXml .= $node1->getTemplate()->asXML();
-        }
-
-        if ($node2->getTemplate()) {
-            $tempXml .= " " . $node2->getTemplate()->asXML();
-        }
-
-        if (!empty($tempXml)) {
-            $node1->setTemplate(new \SimpleXMLElement($tempXml));
-        }
-
-        return $node1;
     }
 
     /**
@@ -236,16 +204,18 @@ class Nodemapper
     }
 
     /**
-     * @param $id
+     * @param $word
      * @return mixed|Nodemapper
      */
-    public function getChild($id)
+    public function getChild($word)
     {
-        if (!isset($this->children[$id])) {
-            return false;
+        foreach($this->children as $child) {
+            if ($child->getWord() == $word) {
+                return $child;
+            }
         }
 
-        return $this->children[$id];
+        return false;
     }
 
     /**

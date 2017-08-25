@@ -41,22 +41,17 @@ class Brain
      */
     public function getAnswer($userInput)
     {
-        // Get last sentence of the bot
+        // Get last sentence of the bot as <that>
         $lastBotSentence = $this->helper->memory->recallLastSentence();
 
-        $queryStrings = array(
-            'pattern' => $userInput,
-            'that' => $userInput . " " . $lastBotSentence
-        );
+        //
+        $queryString = $userInput . " " . $lastBotSentence;
 
-        $answer = "";
-        foreach($queryStrings as $queryTag => $queryString) {
-            // Pre-process user input to break it into sentences
-            $sentences = $this->helper->string->sentenceSplitting($queryString);
+        // Pre-process user input to break it into sentences
+        $sentences = $this->helper->string->sentenceSplitting($queryString);
 
-            // Think for answer
-            $answer = $this->thinkForAnswer($sentences);
-        }
+        // Think for answer
+        $answer = $this->thinkForAnswer($sentences);
 
         // Save bot's last sentence
         $this->helper->memory->rememberLastSentence($answer);
@@ -64,6 +59,11 @@ class Brain
         return empty($answer) ? "..." : $answer;
     }
 
+    /**
+     * Think for an answer
+     * @param $sentences
+     * @return string
+     */
     protected function thinkForAnswer($sentences) {
 
         $answer = "";
@@ -82,7 +82,7 @@ class Brain
             }
         }
 
-        return $answer;
+        return trim($answer);
     }
 
     /**
@@ -105,6 +105,6 @@ class Brain
         $tokenizedInput = $this->helper->string->tokenize($queryString);
         $answer = $this->helper->template->getResponseFromTemplate($wordNode, $tokenizedInput);
 
-        return trim($answer);
+        return ucfirst(trim($answer));
     }
 }

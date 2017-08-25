@@ -26,7 +26,7 @@
     </category>
 
     <category>
-        <pattern>* IS *</pattern>
+        <pattern>_ IS *</pattern>
         <template>
             Yes, <star index="1"/> is <star index="2"/>.
         </template>
@@ -109,4 +109,48 @@
             Your name is <get name="somename"/>
         </template>
     </category>
+
+    <category>
+        <pattern>THINK ABOUT *</pattern>
+        <template>
+            I will think about it. <think><set name="somevar"><star index="1"/></set></think>
+        </template>
+    </category>
+
+    <category>
+        <pattern>TELL ME ABOUT *</pattern>
+        <template>
+            <get name="somevar"/> is good.
+        </template>
+    </category>
+
+    <category>
+        <pattern>MY GENDER IS *</pattern>
+        <template>
+            I will remember your gender. <think><set name="gender"><star index="1"/></set></think>
+        </template>
+    </category>
+
+    <category>
+        <pattern>DO YOU FIND ME ATTRACTIVE</pattern>
+        <template>
+            <condition name="gender">
+                <li value="male">I find you very handsome.</li>
+                <li value="female">I find you very pretty.</li>
+                <li>I find you very attractive.</li>
+            </condition>
+        </template>
+    </category>
+
+    <topic name="coffee">
+        <category>
+            <pattern>HOW DO YOU DRINK COFFEE?</pattern>
+            <template>I prefer mine with cream and sugar.</template>
+        </category>
+
+        <category>
+            <pattern>I DRINK IT PLAIN</pattern>
+            <template>I guess plain is good.</template>
+        </category>
+    </topic>
 </aiml>
