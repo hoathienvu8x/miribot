@@ -68,7 +68,7 @@ class Graphmaster
     public function matchQueryPattern($query)
     {
         // Find the node that matches query pattern
-        $node = $this->match1($this->graph, $query);
+        $node = $this->match($this->graph, $query);
 
         /**
          * If there is no definition for the node then see whether there exists a wildcard node after it
@@ -93,95 +93,26 @@ class Graphmaster
      */
     protected function match($node, $query)
     {
-        if ($node->getTemplate() !== null) {
-            return $node;
-        }
-
-        // Get the first word of the query
-        $word = array_shift($query);
-
-        /**
-         * If the first word has an exact match with node's content
-         * then track down the path that leads to goal node recursively
-         * with the next word in the query.
-         * If no matched goal node is found, place the word back to the
-         * head of the query.
-         */
-        if ($word == $node->getWord()) {
-            $nextWord = array_shift($query);
-            $nextNode = $node->getChild(md5($nextWord));
-
-            if ($nextNode) {
-                return $this->match($nextNode, $query);
+        if ($node->countChildren() == 0) {
+            if ($node->getTemplate()) {
+                return $node;
             } else {
-                array_unshift($query, $nextWord);
+                return false;
             }
-        }
-
-        print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
-
-        $matchingTokens = array("#", "_", $word, "^", "*");
-        foreach ($matchingTokens as $idx => $token) {
-            $tokenNode = $node->getChild(md5($token));
-
-            if ($tokenNode) {
-
-                /**
-                 * First word of the query actually belongs to a pattern with any of the
-                 * wildcard as prefix
-                 * e.g. `# hello` instead of `hello (something)`
-                 * then put back the word to the query and search
-                 */
-                if ($tokenNode->getChild(md5($word))) {
-                    array_unshift($query, $word);
-                    return $this->match($tokenNode, $query);
-                }
-
-                $nextNode = $this->match($tokenNode, $query);
-
-                if ($nextNode) {
-                    return $nextNode;
-                } else {
-                    array_unshift($query, $word);
-                }
-
-            }
-        }
-
-        return false;
-
-    }
-
-    protected function match1($node, $query)
-    {
-        if (empty($query) || $node->getTemplate() !== null) {
-            return $node;
-        }
-
-        $word = array_shift($query);
-
-        print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
-
-        $matchingTokens = array("#", "_", $word, "^", "*");
-        foreach ($matchingTokens as $token) {
-            if ($node->getWord() == $token) {
-                $suffix = array_shift($query);
-                foreach($node->getChildren() as $childNode) {
-                    if ($matched = $this->match1($childNode, $query)) {
-                        return $matched;
-                    } else {
-                        array_unshift($query, $suffix);
+        } else {
+            // Get the first word of the query
+            $word = array_shift($query);
+            $matchingTokens = array("#", "_", $word, "^", "*");
+            //print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
+            foreach($matchingTokens as $token) {
+                if ($childNode = $node->getChild(md5($token))) {
+                    if ($matchNode = $this->match($childNode, $query)) {
+                        return $matchNode;
                     }
                 }
-            } else {
-                if ($nextBranch = $node->getChild(md5($word))) {
-                    array_unshift($query, $word);
-                    return $this->match1($nextBranch, $query);
-                }
             }
+            return false;
         }
-
-        return false;
     }
 
     /**

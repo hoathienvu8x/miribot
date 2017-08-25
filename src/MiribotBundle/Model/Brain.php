@@ -44,18 +44,18 @@ class Brain
         // Get last sentence of the bot
         $lastBotSentence = $this->helper->memory->recallLastSentence();
 
-        $queryStrings = array($userInput, $userInput . " " . $lastBotSentence);
+        $queryStrings = array(
+            'pattern' => $userInput,
+            'that' => $userInput . " " . $lastBotSentence
+        );
 
-        foreach($queryStrings as $queryString) {
+        $answer = "";
+        foreach($queryStrings as $queryTag => $queryString) {
             // Pre-process user input to break it into sentences
             $sentences = $this->helper->string->sentenceSplitting($queryString);
 
             // Think for answer
             $answer = $this->thinkForAnswer($sentences);
-
-            if (!empty($answer)) {
-                break;
-            }
         }
 
         // Save bot's last sentence
@@ -78,7 +78,7 @@ class Brain
 
             // Combine all answer templates to get final answers
             if (!empty($matchedAnswerTemplate)) {
-                $answer .= $matchedAnswerTemplate . "";
+                $answer .= $matchedAnswerTemplate . " ";
             }
         }
 
@@ -102,7 +102,8 @@ class Brain
         }
 
         // 2. Process the node template to get final response
-        $answer = $this->helper->template->getResponseFromTemplate($wordNode, $this->helper->string->tokenize($queryString));
+        $tokenizedInput = $this->helper->string->tokenize($queryString);
+        $answer = $this->helper->template->getResponseFromTemplate($wordNode, $tokenizedInput);
 
         return trim($answer);
     }

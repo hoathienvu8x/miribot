@@ -14,28 +14,28 @@
     </category>
 
     <category>
-        <pattern># HELLO</pattern>
+        <pattern>HELLO *</pattern>
         <template>
             <random>
-                <li>Hello!</li>
-                <li>Ciao.</li>
-                <li>Good day!</li>
-                <li>Hi.</li>
+                <li>Hello <star index="1"/>!</li>
+                <li>Ciao <star index="1"/>.</li>
+                <li>Good day <star index="1"/>!</li>
+                <li>Hi <star index="1"/>.</li>
             </random>
         </template>
     </category>
 
     <category>
-        <pattern>_ IS *</pattern>
+        <pattern>* IS *</pattern>
         <template>
-            Yes, <star index="1"/> is <star index="2"/>
+            Yes, <star index="1"/> is <star index="2"/>.
         </template>
     </category>
 
     <category>
-        <pattern># LÀ *</pattern>
+        <pattern>* LÀ *</pattern>
         <template>
-            <srai># IS *</srai>
+            <srai>* IS *</srai>
         </template>
     </category>
 
