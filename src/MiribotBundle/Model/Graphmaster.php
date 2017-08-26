@@ -184,6 +184,11 @@ class Graphmaster
         /** @var \DOMElement $category */
         foreach ($categories as $category) {
 
+            // Skip category data in <learn> tags
+            if ($category->parentNode && $category->parentNode->tagName == "learn") {
+                continue;
+            }
+
             // Get pattern string
             $pattern = $category->getElementsByTagName("pattern")->item(0)->textContent;
 
@@ -356,6 +361,7 @@ class Graphmaster
             '<topic>',
             '<topicstar>',
             '<uppercase>',
+            '<emotion>'
         );
 
         return implode("", $tagList);

@@ -11,6 +11,8 @@ var lastUserInput = "";
  */
 function inputMessage(el, event) {
     var botres = jQuery("#botres");
+    var botport = jQuery("#botport");
+
     el = jQuery(el);
     var userInput = el.val();
 
@@ -35,7 +37,9 @@ function inputMessage(el, event) {
                 data: {input: userInput},
                 dataType: 'json',
                 success: function(data) {
-                    botres.append("[Miri] >>> " + data.answer + "<br/>");
+                    botres.append("[Miri] >>> <span class='bot-answer'>" + data.answer + "</span><br/>");
+                    var portrait = data.emotion + ".png";
+                    botport.css("background", 'url(../assets/portraits/' + portrait + ')');
                 }
             });
 

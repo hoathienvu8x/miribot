@@ -23,7 +23,7 @@ services:
 
   helper_template:
     class: MiribotBundle\Helper\TemplateHelper
-    arguments: ["@helper_memory"]
+    arguments: ["@kernel", "@helper_memory"]
 
   # Others
   graphmaster:

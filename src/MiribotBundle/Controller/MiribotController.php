@@ -18,8 +18,6 @@ class MiribotController extends Controller
         ini_set('memory_limit', '2G');
         ini_set('max_execution_time', '900');
         $answer = $this->get('miribot')->answer($request->get('input'));
-        return $this->json(array(
-            'answer' => $answer
-        ));
+        return $this->json($answer);
     }
 }

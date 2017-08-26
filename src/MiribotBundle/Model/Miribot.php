@@ -24,7 +24,7 @@ class Miribot
     /**
      * Give answer to user input
      * @param $userInput
-     * @return string
+     * @return array
      */
     public function answer($userInput)
     {

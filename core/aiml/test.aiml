@@ -132,14 +132,24 @@
     <!-- <emotion> test -->
     <category>
         <pattern>HAPPY</pattern>
-        <template>
-            <emotion value="happy"/> I am really happy.
-        </template>
+        <template>I am really happy.<emotion value="happy"/></template>
     </category>
     <category>
         <pattern>ANGRY</pattern>
+        <template>I feel angry.<emotion value="angry"/></template>
+    </category>
+
+    <!-- <learn> test -->
+    <category>
+        <pattern>I LIKE *</pattern>
         <template>
-            <emotion value="angry"/> I feel angry.
+            I will remember that you like <star />.
+            <learn>
+                <category>
+                    <pattern>WHAT DO I LIKE</pattern>
+                    <template>You like <star />.</template>
+                </category>
+            </learn>
         </template>
     </category>
 </aiml>

@@ -1,5 +1,7 @@
 body {
     padding-top: 5rem;
+    background: url('background.png') no-repeat fixed right bottom;
+    background-size: 30%;
 }
 
 .starter-template {
@@ -17,8 +19,17 @@ body {
     margin: 5px;
 }
 
+.bot-name {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 2.5em;
+    text-shadow: 0 0 10px red;
+    color: white;
+}
+
 .bot-portrait {
-    width: 23.105%;
+    width: 256px;
+    height: 256px;
+    background: url("../portraits/default.png");
 }
 
 .bot-response {
@@ -31,12 +42,19 @@ body {
     padding: 10px;
     word-wrap: break-word;
     overflow-y: scroll;
+    font-size: 2em;
+}
+
+.bot-answer {
+    font-family: 'Shadows Into Light Two', cursive;
+    font-weight: bolder;
 }
 
 @media only screen and (max-width: 1200px) {
     .bot-portrait {
         display: none;
     }
+
     .bot-response {
         width: 100%;
     }

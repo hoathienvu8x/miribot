@@ -41,6 +41,12 @@ class Nodemapper
     protected $children = array();
 
     /**
+     * For storing emotion and stuffs
+     * @var array
+     */
+    protected $extraData = array();
+
+    /**
      * Nodemapper constructor.
      * @param $word
      * @param $pattern
@@ -171,6 +177,28 @@ class Nodemapper
     }
 
     /**
+     * Get extra data
+     * @param $key
+     * @return array|bool
+     */
+    public function getExtraData($key)
+    {
+        return isset($this->extraData[$key]) ? $this->extraData[$key] : false;
+    }
+
+    /**
+     * Set extra data
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function setExtraData($key, $value)
+    {
+        $this->extraData[$key] = $value;
+        return $this;
+    }
+
+    /**
      * @param Nodemapper $child
      * @return $this
      */
@@ -218,7 +246,7 @@ class Nodemapper
      */
     public function getChildrenByWord($word)
     {
-        return array_filter($this->children, function(Nodemapper $child) use ($word) {
+        return array_filter($this->children, function (Nodemapper $child) use ($word) {
             return $child->getWord() == $word;
         });
     }

@@ -44,7 +44,6 @@ class Brain
     protected function init()
     {
         // Initialize bot's personality
-        
 
         // Build bot's knowledge
         $this->knowledge->build();
@@ -53,7 +52,7 @@ class Brain
     /**
      * Get answer from bot's brain
      * @param $userInput
-     * @return string
+     * @return array
      */
     public function getAnswer($userInput)
     {
@@ -61,22 +60,23 @@ class Brain
         $sentences = $this->helper->string->sentenceSplitting($userInput);
 
         // Think for answer
-        $answer = $this->thinkForAnswer($sentences);
+        $response = $this->thinkForAnswer($sentences);
 
         // Save bot's last sentence
-        $this->helper->memory->rememberLastSentence($answer);
+        $this->helper->memory->rememberLastSentence($response['answer']);
 
-        return empty($answer) ? "..." : $answer;
+        return $response;
     }
 
     /**
      * Think for an answer
      * @param $sentences
-     * @return string
+     * @return array
      */
     protected function thinkForAnswer($sentences) {
 
         $answer = "";
+        $emotion = false;
 
         // The sentences serve as query string for the brain to get its answer
         foreach ($sentences as $sentence) {
@@ -91,7 +91,14 @@ class Brain
             $query = $this->helper->string->produceQueries($sentence, $that, $topic);
 
             // Think for an answer and get a match answer template
-            $matchedAnswerTemplate = $this->queryKnowledge($query, $sentence, $that, $topic);
+            $knowledge = $this->queryKnowledge($query, $sentence, $that, $topic);
+
+            if (!$knowledge) {
+                continue;
+            }
+
+            $matchedAnswerTemplate = $knowledge['answer'];
+            $emotion = $knowledge['emotion'];
 
             // Combine all answer templates to get final answers
             if (!empty($matchedAnswerTemplate)) {
@@ -105,14 +112,21 @@ class Brain
             }
         }
 
-        return trim($answer);
+        if (empty($answer)) {
+            $answer = "...";
+        }
+
+        return array(
+            'answer' => trim($answer),
+            'emotion' => $emotion ? $emotion : 'default'
+        );
     }
 
     /**
      * Query the knowledge
      * @param array $query A set of query tokens
      * @param string $queryString Original query string
-     * @return string
+     * @return array|bool
      */
     protected function queryKnowledge($query, $queryString, $that, $topic)
     {
@@ -121,16 +135,27 @@ class Brain
 
         // Return blank answer if we cannot find the node
         if (!$node) {
-            return "";
+            return false;
         }
 
         $tokenizedInput = $this->helper->string->tokenize($queryString);
         $node = $this->produceResponse($node, $tokenizedInput, $that, $topic);
-        $answer = $node->getTemplate()->textContent;
+        $answer = ucfirst(trim($node->getTemplate()->textContent));
 
-        return ucfirst(trim($answer));
+        return array(
+            'answer' => $answer,
+            'emotion' => $node->getExtraData("emotion")
+        );
     }
 
+    /**
+     * Produce final response node
+     * @param Nodemapper $node
+     * @param $tokenizedInput
+     * @param $that
+     * @param $topic
+     * @return Nodemapper
+     */
     protected function produceResponse(Nodemapper $node, $tokenizedInput, $that, $topic)
     {
         $referenceNodes = array();

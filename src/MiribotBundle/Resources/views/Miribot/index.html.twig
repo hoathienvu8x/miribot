@@ -14,6 +14,8 @@
         <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/css/bootstrap-theme.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two" rel="stylesheet">
     {% endblock %}
 </head>
 
@@ -21,9 +23,9 @@
 
 <!-- Main content -->
 <div class="container">
-    <div class="panel panel-warning">
+    <div class="panel panel-danger">
         <div class="panel-heading">
-            <h1 class="panel-title text-center">
+            <h1 class="panel-title text-center bot-name">
                 {% if botname is defined %}
                     {{ botname }}
                 {% else %}
@@ -33,13 +35,7 @@
         </div>
         <div class="panel-body">
             <div class="part bot-part">
-                <div class="bot bot-portrait">
-                    {% if botportrait is defined %}
-                        <img src="{{ asset('assets/portraits/' ~ botportrait ~ '.png') }}" class="img-responsiveimg-thumbnail" alt="Bot Portrait"/>
-                    {% else %}
-                        <img src="{{ asset('assets/portraits/default.png') }}" class="img-responsive img-thumbnail" alt="Bot Portrait"/>
-                    {% endif %}
-                </div>
+                <div class="bot bot-portrait img-thumbnail img-responsive" id="botport"></div>
                 <div class="bot bot-response" id="botres">
                     <!-- Bot responses goes here -->
                 </div>
