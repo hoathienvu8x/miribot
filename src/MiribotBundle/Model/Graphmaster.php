@@ -68,20 +68,12 @@ class Graphmaster
      */
     public function matchQueryPattern($query)
     {
+        //dump($this->graph);die;
         // Find the node that matches query pattern
         $node = $this->match($this->graph, $query);
 
-        /**
-         * If there is no definition for the node then see whether there exists a wildcard node after it
-         * that is belongs to 0 or more pattern
-         */
         if (!$node || !$node->getTemplate()) {
             return false;
-        }
-
-        // Return the real node if there exists srai reference
-        if ($srai = $node->getTemplate()->getElementsByTagName("srai")->item(0)) {
-            return $this->getReferenceNode($srai);
         }
 
         return $node;
@@ -97,17 +89,23 @@ class Graphmaster
         if ($node->getTemplate() !== null) {
             return $node;
         } else {
+
+            // Handle empty <that>
+            if ($node->getWord() == "<that>" && ($child = $node->getFirstChild())) {
+                if ($child->getWord() == "<topic>") {
+                    return $this->match($child, $query);
+                }
+            }
+
             // Get the first word of the query
             $word = array_shift($query);
             $matchingTokens = array("#", "_", $word, "^", "*");
 
             //print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
 
-            foreach($matchingTokens as $token) {
-                if ($childNode = $node->getChild($token)) {
-                    if ($matchNode = $this->match($childNode, $query)) {
-                        return $matchNode;
-                    }
+            foreach ($matchingTokens as $token) {
+                if ($matchNode = $this->matchToken($node, $token, $query)) {
+                    return $matchNode;
                 }
             }
 
@@ -116,14 +114,32 @@ class Graphmaster
     }
 
     /**
+     * Match a token to node branch
+     * @param Nodemapper $node
+     * @param $token
+     * @param $query
+     * @return bool|Nodemapper|mixed
+     */
+    protected function matchToken(Nodemapper $node, $token, $query)
+    {
+        $possibleMatch = $node->getChildrenByWord($token);
+        if (count($possibleMatch) > 0) {
+            foreach ($possibleMatch as $match) {
+                if ($matchBranch = $this->match($match, $query)) {
+                    return $matchBranch;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Search for reference node
      * @param \DOMElement $srai
-     * @return bool
+     * @return bool|Nodemapper
      */
-    protected function getReferenceNode($srai)
+    public function getReferenceNode($srai, $that, $topic)
     {
-        $sraiTxt = $srai->textContent;
-
         // Replace <star/> in srai
         if ($srai->getElementsByTagName("star")->length > 0) {
             $stars = $srai->getElementsByTagName("star");
@@ -134,8 +150,10 @@ class Graphmaster
                 $srai->replaceChild($asterisk, $star);
             }
         }
+        $sraiTxt = $srai->textContent;
+        $sraiQuery = $this->helper->string->produceQueries($sraiTxt, $that, $topic);
 
-        return $this->matchQueryPattern($this->tokenize($sraiTxt));
+        return $this->matchQueryPattern($sraiQuery);
     }
 
     /**
@@ -150,10 +168,24 @@ class Graphmaster
             // Get pattern string
             $pattern = $category->getElementsByTagName("pattern")->item(0)->textContent;
 
+            // Add that to the pattern
             /** @var \SimpleXMLElement $that */
             if ($category->getElementsByTagName("that")->length > 0) {
                 // In case the category contains that, add it to the pattern
-                $pattern .= " " . $category->getElementsByTagName("that")->item(0)->textContent;
+                $pattern .= " <that> " . $category->getElementsByTagName("that")->item(0)->textContent;
+            } else {
+                $pattern .= " <that>";
+            }
+
+            // Add topic to the pattern
+            if ($parent = $category->parentNode) {
+                if ($parent->tagName == "topic") {
+                    $pattern .= " <topic> " . mb_strtoupper($parent->getAttribute("name"));
+                } else {
+                    $pattern .= " <topic>";
+                }
+            } else {
+                $pattern .= " <topic>";
             }
 
             // Build pattern tokens
@@ -174,7 +206,8 @@ class Graphmaster
      * @param $patternTokens
      * @return Nodemapper|null
      */
-    protected function buildCategoryBranch($category, $pattern, $patternTokens) {
+    protected function buildCategoryBranch($category, $pattern, $patternTokens)
+    {
         $categoryBranchNode = null;
 
         for ($i = count($patternTokens) - 1; $i >= 0; $i--) {
@@ -272,17 +305,5 @@ class Graphmaster
         );
 
         return implode("", $tagList);
-    }
-
-    /**
-     * Get string tokens
-     * @param $text
-     * @return array
-     */
-    protected function tokenize($text)
-    {
-        $tokens = mb_split(' ', $text);
-        $tokens = array_map('trim', $tokens);
-        return array_filter($tokens);
     }
 }

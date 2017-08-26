@@ -16,13 +16,23 @@ class StringHelper
      * @param $input
      * @return array
      */
-    public function produceQueries($input)
+    public function produceQueries($input, $that, $topic)
+    {
+        $query = $this->standardize($input);
+        $query[] = "<that>";
+        $query = array_merge($query, $this->standardize($that));
+        $query[] = "<topic>";
+        $query = array_merge($query, $this->standardize($topic));
+        return $query;
+    }
+
+    protected function standardize($string)
     {
         // 1. Normalize the input to produce a string of text in uppercase
-        $input = $this->normalize($input);
+        $string = $this->normalize($string);
 
         // 2. Produce a set of tokens
-        return $this->tokenize($input);
+        return $this->tokenize($string);
     }
 
     /**
@@ -42,7 +52,7 @@ class StringHelper
      */
     public function sentenceSplitting($text)
     {
-        return preg_split("/[.!?\n]/", trim($text), -1, PREG_SPLIT_NO_EMPTY);
+        return preg_split("/[\.\!\?\;\:\n\t]/", trim($text), -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**
@@ -52,7 +62,7 @@ class StringHelper
      */
     public function tokenize($text)
     {
-        $tokens = mb_split('\W', $text);
+        $tokens = mb_split('[^\w\_\^\#\*\d]', $text);
         $tokens = array_map('trim', $tokens);
         return array_filter($tokens);
     }

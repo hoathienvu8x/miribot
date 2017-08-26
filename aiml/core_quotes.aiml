@@ -2,7 +2,7 @@
 <aiml version="2.0" encoding="UTF-8">
     <!-- GOOD QUOTES -->
     <category>
-        <pattern># CHÂM NGÔN *</pattern>
+        <pattern>_ CHÂM NGÔN *</pattern>
         <template>
             <random>
                 <li>Con người sinh ra không phải để tan biến đi như một hạt cát vô danh. Họ sinh ra để in dấu lại trên mặt đất, in dấu lại trong trái tim người khác.</li>
@@ -27,21 +27,21 @@
     <category>
         <pattern>CHÂM NGÔN</pattern>
         <template>
-            <srai># CHÂM NGÔN *</srai>
+            <srai>_ CHÂM NGÔN *</srai>
         </template>
     </category>
 
     <category>
         <pattern>CÂU HAY</pattern>
         <template>
-            <srai># CHÂM NGÔN *</srai>
+            <srai>_ CHÂM NGÔN *</srai>
         </template>
     </category>
 
     <category>
-        <pattern>* CÂU * HAY *</pattern>
+        <pattern>_ CÂU * HAY * *</pattern>
         <template>
-            <srai># CHÂM NGÔN *</srai>
+            <srai>_ CHÂM NGÔN *</srai>
         </template>
     </category>
 </aiml>

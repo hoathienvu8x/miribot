@@ -204,18 +204,37 @@ class Nodemapper
     }
 
     /**
-     * @param $word
+     * @param $id
      * @return mixed|Nodemapper
      */
-    public function getChild($word)
+    public function getChild($id)
     {
-        foreach($this->children as $child) {
-            if ($child->getWord() == $word) {
-                return $child;
-            }
+        if (!isset($this->children[$id])) {
+            return false;
         }
 
-        return false;
+        return $this->children[$id];
+    }
+
+    /**
+     * @param $word
+     * @return array
+     */
+    public function getChildrenByWord($word)
+    {
+        return array_filter($this->children, function(Nodemapper $child) use ($word) {
+            return $child->getWord() == $word;
+        });
+    }
+
+    /**
+     * Get first child of a node
+     * @return mixed|Nodemapper
+     */
+    public function getFirstChild()
+    {
+        $tmp = $this->children;
+        return array_shift($tmp);
     }
 
     /**

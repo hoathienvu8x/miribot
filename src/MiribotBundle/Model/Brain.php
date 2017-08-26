@@ -10,6 +10,7 @@ namespace MiribotBundle\Model;
 
 use MiribotBundle\Helper\Helper;
 use MiribotBundle\Model\Graphmaster\Nodemapper;
+use Twig\Node\Node;
 
 class Brain
 {
@@ -41,14 +42,8 @@ class Brain
      */
     public function getAnswer($userInput)
     {
-        // Get last sentence of the bot as <that>
-        $lastBotSentence = $this->helper->memory->recallLastSentence();
-
-        // Append last bot sentence to user input
-        $queryString = $userInput . " " . $lastBotSentence;
-
         // Pre-process user input to break it into sentences
-        $sentences = $this->helper->string->sentenceSplitting($queryString);
+        $sentences = $this->helper->string->sentenceSplitting($userInput);
 
         // Think for answer
         $answer = $this->thinkForAnswer($sentences);
@@ -70,15 +65,28 @@ class Brain
 
         // The sentences serve as query string for the brain to get its answer
         foreach ($sentences as $sentence) {
+
+            // Get last sentence of the bot as <that>
+            $that = $this->helper->memory->recallLastSentence();
+
+            // Get <topic> of the bot
+            $topic = $this->helper->memory->recallTopic();
+
             // Produce a query for the bot
-            $query = $this->helper->string->produceQueries($sentence);
+            $query = $this->helper->string->produceQueries($sentence, $that, $topic);
 
             // Think for an answer and get a match answer template
-            $matchedAnswerTemplate = $this->queryKnowledge($query, $sentence);
+            $matchedAnswerTemplate = $this->queryKnowledge($query, $sentence, $that, $topic);
 
             // Combine all answer templates to get final answers
             if (!empty($matchedAnswerTemplate)) {
-                $answer .= $matchedAnswerTemplate . " ";
+                if (!empty($answer)) {
+                    $lastChar = substr($answer, -1);
+                    if (ctype_alnum($lastChar)) {
+                        $answer .= "."; // Add a period to the answer before moving on
+                    }
+                }
+                $answer .= " " . $matchedAnswerTemplate;
             }
         }
 
@@ -91,20 +99,42 @@ class Brain
      * @param string $queryString Original query string
      * @return string
      */
-    protected function queryKnowledge($query, $queryString)
+    protected function queryKnowledge($query, $queryString, $that, $topic)
     {
-        // 1. Find a word node that has template matches the query pattern
-        $wordNode = $this->knowledge->matchQueryPattern($query);
+        // Find a word node that has template matches the query pattern
+        $node = $this->knowledge->matchQueryPattern($query);
 
         // Return blank answer if we cannot find the node
-        if (!$wordNode) {
+        if (!$node) {
             return "";
         }
 
-        // 2. Process the node template to get final response
         $tokenizedInput = $this->helper->string->tokenize($queryString);
-        $answer = $this->helper->template->getResponseFromTemplate($wordNode, $tokenizedInput);
+        $node = $this->produceResponse($node, $tokenizedInput, $that, $topic);
+        $answer = $node->getTemplate()->textContent;
 
         return ucfirst(trim($answer));
+    }
+
+    protected function produceResponse(Nodemapper $node, $tokenizedInput, $that, $topic)
+    {
+        $referenceNodes = array();
+
+        // Collect srai reference nodes
+        if ($node->getTemplate()->getElementsByTagName("srai")->length > 0) {
+            $srais = $node->getTemplate()->getElementsByTagName("srai");
+            $noOfSrais = $srais->length;
+            for($i = 0; $i < $noOfSrais; $i++) {
+                $srai = $srais->item(0);
+                $this->helper->template->replaceWildcards($srai, $node, $tokenizedInput);
+                $referenceNode = $this->knowledge->getReferenceNode($srai, $that, $topic);
+                $referenceNodes[] = $this->produceResponse($referenceNode, $tokenizedInput, $that, $topic);
+            }
+        }
+
+        // Process the node template to get final response
+        $this->helper->template->processNodeTemplate($node, $referenceNodes, $tokenizedInput);
+
+        return $node;
     }
 }

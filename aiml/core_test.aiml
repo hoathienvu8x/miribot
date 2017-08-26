@@ -63,23 +63,6 @@
     </category>
 
     <category>
-        <pattern>TÔI THÍCH UỐNG CÀ PHÊ</pattern>
-        <template>Bạn có hay cho kem hay đường vào cà phê không?</template>
-    </category>
-
-    <category>
-        <pattern>CÓ</pattern>
-        <that>BẠN CÓ HAY CHO KEM HAY ĐƯỜNG VÀO CÀ PHÊ KHÔNG</that>
-        <template>Tôi cũng thế.</template>
-    </category>
-
-    <category>
-        <pattern>KHÔNG</pattern>
-        <that>BẠN CÓ HAY CHO KEM HAY ĐƯỜNG VÀO CÀ PHÊ KHÔNG</that>
-        <template>Thế à? Tôi thích uống ngọt với ngậy.</template>
-    </category>
-
-    <category>
         <pattern>I LIKE DRINKING COFFEE</pattern>
         <template>Do you usually put cream or sugar to your coffee?</template>
     </category>
@@ -99,7 +82,7 @@
     <category>
         <pattern>MY NAME IS *</pattern>
         <template>
-            <set name="somename"><star index="1"/></set>I will remember your name.
+            <set name="somename"><star index="1"/></set>, I will remember your name.
         </template>
     </category>
 
@@ -142,9 +125,16 @@
         </template>
     </category>
 
+    <category>
+        <pattern>LET US TALK ABOUT *</pattern>
+        <template>
+            OK, I like <set name="topic"><star /></set>
+        </template>
+    </category>
+
     <topic name="coffee">
         <category>
-            <pattern>HOW DO YOU DRINK COFFEE?</pattern>
+            <pattern>HOW DO YOU DRINK COFFEE</pattern>
             <template>I prefer mine with cream and sugar.</template>
         </category>
 
@@ -153,6 +143,4 @@
             <template>I guess plain is good.</template>
         </category>
     </topic>
-
-    <span>This is <star/> and <star index="2" /></span>
 </aiml>

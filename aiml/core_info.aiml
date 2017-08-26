@@ -2,31 +2,31 @@
 <aiml version="2.0" encoding="UTF-8">
     <!-- Core patterns -->
     <category>
-        <pattern>BOT_VERSION</pattern>
+        <pattern>BOT VERSION</pattern>
         <template>1.0</template>
     </category>
 
     <category>
         <pattern>PHIÊN BẢN BOT</pattern>
         <template>
-            <srai>BOT_VERSION</srai>
+            <srai>BOT VERSION</srai>
         </template>
     </category>
 
     <category>
-        <pattern>BOT_AUTHOR</pattern>
+        <pattern>BOT AUTHOR</pattern>
         <template>Khue Quang Nguyen</template>
     </category>
 
     <category>
         <pattern>TÁC GIẢ BOT</pattern>
         <template>
-            <srai>BOT_AUTHOR</srai>
+            <srai>BOT AUTHOR</srai>
         </template>
     </category>
 
     <category>
-        <pattern>BOT_ALIAS</pattern>
+        <pattern>BOT ALIAS</pattern>
         <template>Miribot</template>
     </category>
 
@@ -38,14 +38,14 @@
     </category>
 
     <category>
-        <pattern>BOT_HUMAN_NAME</pattern>
+        <pattern>BOT HUMAN NAME</pattern>
         <template>Nguyễn Quỳnh Như</template>
     </category>
 
     <category>
         <pattern>TÊN BOT</pattern>
         <template>
-            <srai>BOT_HUMAN_NAME</srai>
+            <srai>BOT HUMAN NAME</srai>
         </template>
     </category>
 

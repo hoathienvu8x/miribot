@@ -11,6 +11,7 @@ namespace MiribotBundle\Helper;
 
 use MiribotBundle\Model\Graphmaster\Nodemapper;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Twig\Node\Node;
 
 class TemplateHelper
 {
@@ -23,27 +24,47 @@ class TemplateHelper
 
     /**
      * Process template logics
-     * @param Nodemapper $wordNode
+     * @param Nodemapper $node
+     * @param array $referenceNodes
      * @param array $userInputTokens
-     * @return string
      */
-    public function getResponseFromTemplate($wordNode, $userInputTokens)
+    public function processNodeTemplate(&$node, $referenceNodes, $userInputTokens)
     {
         // Retrieve node's template
-        $template = $wordNode->getTemplate();
-
-        // Extract wildcard data
-        $wildcardData = $this->extractWildcardData(explode(" ", $wordNode->getPattern()), $userInputTokens);
+        $template = $node->getTemplate();
 
         // Process template data
         $this->processRandomResponse($template)// Select random response if necessary
         ->processConditions($template)// Process conditional tags
-        ->replaceWildcards($template, $wildcardData)// Replace all template wildcards with user input
+        ->processReferences($template, $referenceNodes)// Get all references
+        ->replaceWildcards($template, $node, $userInputTokens)// Replace all template wildcards with user input
         ->handleGetters($template)// Handle get tags
         ->handleSetters($template)// Handle set tags
-        ->handleThinks($template);
+        ->handleThinks($template);// Handle think tags
 
-        return $template->textContent;
+        // Set the processed template back to the node
+        $node->setTemplate($template);
+    }
+
+    /**
+     * @param \DOMElement $template
+     * @param array $referenceNodes
+     * @return $this
+     */
+    public function processReferences(&$template, $referenceNodes)
+    {
+        $srais = $template->getElementsByTagName("srai");
+        $noOfSrais = $srais->length;
+
+        for ($i = 0; $i < $noOfSrais; $i++) {
+            $srai = $srais->item(0);
+            if (isset($referenceNodes[$i]) && $referenceNodes[$i]) {
+                $ref = $srai->ownerDocument->createTextNode($referenceNodes[$i]->getTemplate()->textContent);
+                $srai->parentNode->replaceChild($ref, $srai);
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -51,7 +72,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this
      */
-    protected function processConditions(&$template)
+    public function processConditions(&$template)
     {
         /** @var \DOMElement $condition */
         if ($condition = $template->getElementsByTagName("condition")->item(0)) {
@@ -90,7 +111,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this
      */
-    protected function processRandomResponse(&$template)
+    public function processRandomResponse(&$template)
     {
         /** @var \DOMElement $random */
         if ($random = $template->getElementsByTagName("random")->item(0)) {
@@ -112,7 +133,7 @@ class TemplateHelper
      * @param array $userInputTokens
      * @return array
      */
-    protected function extractWildcardData($pattern, $userInputTokens)
+    public function extractWildcardData($pattern, $userInputTokens)
     {
         // Filter out wildcard data
         foreach ($userInputTokens as $id => $token) {
@@ -129,11 +150,15 @@ class TemplateHelper
     /**
      * Replace all wildcards in template with user input values
      * @param \DOMElement $template
-     * @param $wildcardData
+     * @param Nodemapper $node
+     * @param array $userInputTokens
      * @return $this
      */
-    protected function replaceWildcards(&$template, $wildcardData)
+    public function replaceWildcards(&$template, $node, $userInputTokens)
     {
+        // Extract wildcard data
+        $wildcardData = $this->extractWildcardData(explode(" ", $node->getPattern()), $userInputTokens);
+
         $stars = $template->getElementsByTagName("star");
         $noOfStars = $stars->length;
         for ($i = 0; $i < $noOfStars; $i++) {
@@ -150,7 +175,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this
      */
-    protected function handleGetters(&$template)
+    public function handleGetters(&$template)
     {
         $getters = $template->getElementsByTagName("get");
         $noOfGetters = $getters->length;
@@ -170,7 +195,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this
      */
-    protected function handleSetters(&$template)
+    public function handleSetters(&$template)
     {
         if ($template->getElementsByTagName("set")->length > 0) {
             $setters = $template->getElementsByTagName("set");
@@ -179,8 +204,11 @@ class TemplateHelper
                 $setter = $setters->item(0);
                 $variableName = $setter->getAttribute("name");
                 $variableData = $setter->textContent;
-                $this->memory->rememberUserData("variables.{$variableName}", $variableData);
-                $setter->parentNode->removeChild($setter);
+                if ($variableName == 'topic') { // Save topic in separate memory cache
+                    $this->memory->rememberTopic($variableData);
+                } else {
+                    $this->memory->rememberUserData("variables.{$variableName}", $variableData);
+                }
             }
         }
 
@@ -188,10 +216,11 @@ class TemplateHelper
     }
 
     /**
+     * Handle <think> tags
      * @param \DOMElement $template
      * @return $this
      */
-    protected function handleThinks(&$template)
+    public function handleThinks(&$template)
     {
         if ($template->getElementsByTagName("think")->length > 0) {
             $thinks = $template->getElementsByTagName("think");

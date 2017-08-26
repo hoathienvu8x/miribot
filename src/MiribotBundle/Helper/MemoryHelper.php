@@ -44,6 +44,25 @@ class MemoryHelper extends FilesystemCache
     }
 
     /**
+     * Remember bot's topic
+     * @param $topic
+     */
+    public function rememberTopic($topic)
+    {
+        $this->set('bot_topic', $topic);
+    }
+
+    /**
+     * Recall the last topic of bot's response
+     * @return mixed|null|string
+     */
+    public function recallTopic()
+    {
+        $topic = $this->get('bot_topic');
+        return $topic ? $topic : "";
+    }
+
+    /**
      * Remember user data
      * @param $name
      * @param $data
