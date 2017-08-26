@@ -51,6 +51,7 @@ class TemplateHelper
         ->processReferences($template, $referenceNodes)// Get all references
         ->replaceWildcards($template, $node, $userInputTokens)// Replace all template wildcards with user input
         ->processEmotions($node, $template)// Handle emotion tags
+        ->processBotData($template)// Handle bot tags
         ->handleGetters($template)// Handle get tags
         ->handleSetters($template)// Handle set tags
         ->handleThinks($template)// Handle think tags
@@ -298,6 +299,27 @@ class TemplateHelper
 
         $learnAiml->save($learnPath);
 
+        return $this;
+    }
+
+    /**
+     * Handle <bot> tag
+     * @param \DOMElement $template
+     * @return $this
+     */
+    public function processBotData(&$template)
+    {
+        if ($template->getElementsByTagName("bot")->length > 0) {
+            $botProps = $template->getElementsByTagName("bot");
+            $noOfBotProps = $botProps->length;
+            for ($i = 0; $i < $noOfBotProps; $i++) {
+                $botProp = $botProps->item(0);
+                $propName = $botProp->getAttribute("name");
+                $propValue = $this->memory->recallUserData("bot.{$propName}");
+                $replacement = $template->ownerDocument->createTextNode($propValue);
+                $botProp->parentNode->replaceChild($replacement, $botProp);
+            }
+        }
         return $this;
     }
 

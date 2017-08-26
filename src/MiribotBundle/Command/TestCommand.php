@@ -22,22 +22,13 @@ class TestCommand extends ContainerAwareCommand
     {
         $this->setName('miribot:test')
             ->setDescription('Test a function of Miribot.')
-            ->setHelp('Nope!!!')
-            ->addArgument('input', InputArgument::REQUIRED, 'User input to the bot');
+            ->setHelp('Nope!!!');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $aiml = new \DOMDocument();
-        $aiml->load("E:\\Projects\\miribot\\aiml\\core_test.aiml");
-        $span = $aiml->getElementsByTagName("span")->item(0);
-        $replacements = array("Khue", "Vy");
-        $stars = $span->getElementsByTagName("star");
-        for($i = 0; $i < count($replacements); $i++) {
-            $textNode = $span->ownerDocument->createTextNode($replacements[$i]);
-            $star = $stars->item(0);
-            $span->replaceChild($textNode, $star);
-        }
-        echo $span->textContent;
+        $path = "E:\\Projects\\miribot\\core\\system\\miri.json";
+        $json = file_get_contents($path);
+        $properties = json_decode($json, true);
     }
 }

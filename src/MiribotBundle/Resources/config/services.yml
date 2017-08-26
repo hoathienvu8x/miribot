@@ -2,7 +2,7 @@ services:
   # Miribot services
   miribot:
     class: MiribotBundle\Model\Miribot
-    arguments: ["@miribot_brain", "@helper"]
+    arguments: ["@kernel", "@miribot_brain", "@helper"]
 
   miribot_brain:
     class: MiribotBundle\Model\Brain
