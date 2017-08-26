@@ -12,6 +12,8 @@ use MiribotBundle\Helper\Helper;
 
 class Miribot
 {
+    const BOT_ALIAS = "miri";
+
     protected $brain;
     protected $helper;
 
@@ -19,6 +21,12 @@ class Miribot
     {
         $this->brain = $brain;
         $this->helper = $helper;
+        $this->init();
+    }
+
+    protected function init()
+    {
+
     }
 
     /**

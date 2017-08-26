@@ -37,6 +37,7 @@ function inputMessage(el, event) {
                 data: {input: userInput},
                 dataType: 'json',
                 success: function(data) {
+                    console.log(data.answer);
                     botres.append("[Miri] >>> <span class='bot-answer'>" + data.answer + "</span><br/>");
                     var portrait = data.emotion + ".png";
                     botport.css("background", 'url(../assets/portraits/' + portrait + ')');

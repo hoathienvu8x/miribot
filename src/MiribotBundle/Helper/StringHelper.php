@@ -66,4 +66,116 @@ class StringHelper
         $tokens = array_map('trim', $tokens);
         return array_filter($tokens);
     }
+
+    /**
+     * Obtain allowed HTML tags
+     * @return string
+     */
+    public function getAllowedHTMLTags()
+    {
+        $tagList = array(
+            '<html>',
+            '<a>',
+            '<b>',
+            '<img>',
+            '<br>',
+            '<div>',
+            '<p>',
+            '<span>',
+            '<table>',
+            '<th>',
+            '<tr>',
+            '<td>',
+            '<thead>',
+            '<tbody>',
+            '<strong>',
+            '<em>',
+            '<i>',
+            '<fieldset>',
+            '<legend>',
+            '<iframe>',
+            '<embed>',
+            '<script>'
+        );
+
+        return implode("", $tagList);
+    }
+
+    /**
+     * Obtain allowed AIML tags
+     * @return string
+     */
+    public function getAllowedAIMLTagList()
+    {
+        $tagList = array(
+            '<bot>',
+            '<category>',
+            '<condition>',
+            '<date>',
+            '<denormalize>',
+            '<eval>',
+            '<explode>',
+            '<first>',
+            '<formal>',
+            '<gender>',
+            '<get>',
+            '<id>',
+            '<input>',
+            '<interval>',
+            '<learn>',
+            '<li>',
+            '<loop>',
+            '<lowercase>',
+            '<map>',
+            '<normalize>',
+            '<pattern>',
+            '<person>',
+            '<person2>',
+            '<program>',
+            '<random>',
+            '<request>',
+            '<response>',
+            '<rest>',
+            '<sentence>',
+            '<set>',
+            '<size>',
+            '<sr>',
+            '<srai>',
+            '<sraix>',
+            '<star>',
+            '<template>',
+            '<that>',
+            '<thatstar>',
+            '<think>',
+            '<topic>',
+            '<topicstar>',
+            '<uppercase>',
+            '<emotion>',
+            // HTML tags
+            '<html>',
+            '<a>',
+            '<b>',
+            '<img>',
+            '<br>',
+            '<div>',
+            '<p>',
+            '<span>',
+            '<table>',
+            '<th>',
+            '<tr>',
+            '<td>',
+            '<thead>',
+            '<tbody>',
+            '<strong>',
+            '<em>',
+            '<i>',
+            '<fieldset>',
+            '<legend>',
+            '<iframe>',
+            '<embed>',
+            '<script>'
+        );
+
+        return implode("", $tagList);
+    }
 }

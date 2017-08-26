@@ -14,8 +14,6 @@ use Twig\Node\Node;
 
 class Brain
 {
-    const BOT_ALIAS = "miri";
-
     /**
      * @var Graphmaster
      */
@@ -43,8 +41,6 @@ class Brain
      */
     protected function init()
     {
-        // Initialize bot's personality
-
         // Build bot's knowledge
         $this->knowledge->build();
     }
@@ -116,9 +112,13 @@ class Brain
             $answer = "...";
         }
 
+        if (!$emotion || !in_array($emotion, $this->getAllowedEmotions())) {
+            $emotion = "default";
+        }
+
         return array(
-            'answer' => trim($answer),
-            'emotion' => $emotion ? $emotion : 'default'
+            'answer' => $answer,
+            'emotion' => $emotion
         );
     }
 
@@ -140,10 +140,11 @@ class Brain
 
         $tokenizedInput = $this->helper->string->tokenize($queryString);
         $node = $this->produceResponse($node, $tokenizedInput, $that, $topic);
-        $answer = ucfirst(trim($node->getTemplate()->textContent));
+        $template = $node->getTemplate();
+        $answer = strip_tags($template->ownerDocument->saveHTML($template), $this->helper->string->getAllowedHTMLTags());
 
         return array(
-            'answer' => $answer,
+            'answer' => trim($answer),
             'emotion' => $node->getExtraData("emotion")
         );
     }
@@ -176,5 +177,28 @@ class Brain
         $this->helper->template->processNodeTemplate($node, $referenceNodes, $tokenizedInput);
 
         return $node;
+    }
+
+    /**
+     * Get a list of allowed emotions
+     * @return array
+     */
+    protected function getAllowedEmotions()
+    {
+        return array(
+            "angry",
+            "cute",
+            "default",
+            "doubtful",
+            "happy",
+            "joyful",
+            "neutral",
+            "nope",
+            "sad",
+            "scared",
+            "surprise",
+            "thoughtful",
+            "serious"
+        );
     }
 }

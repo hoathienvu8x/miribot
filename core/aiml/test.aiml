@@ -152,4 +152,19 @@
             </learn>
         </template>
     </category>
+
+    <!-- <html> test -->
+    <category>
+        <pattern>SHOW LINK</pattern>
+        <template>
+            <a href="google.com">Google</a>
+        </template>
+    </category>
+
+    <category>
+        <pattern>SHOW CUTE</pattern>
+        <template>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/EFnv8az8cVE" frameborder="0" allowfullscreen="true"></iframe>
+        </template>
+    </category>
 </aiml>

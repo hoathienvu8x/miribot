@@ -268,7 +268,7 @@ class Graphmaster
 
         // Read and merge all AIML file contents into one raw XML string
         foreach ($files as $aimlFile) {
-            $fileContent = strip_tags(file_get_contents($aimlFile), $this->getAimlTagList());
+            $fileContent = strip_tags(file_get_contents($aimlFile), $this->helper->string->getAllowedAIMLTagList());
             $aimlString .= trim($fileContent) . "\n";
         }
 
@@ -310,60 +310,5 @@ class Graphmaster
         }
 
         return $changed;
-    }
-
-    /**
-     * Obtain allowed AIML tags
-     * @return string
-     */
-    protected function getAimlTagList()
-    {
-        $tagList = array(
-            '<bot>',
-            '<category>',
-            '<condition>',
-            '<date>',
-            '<denormalize>',
-            '<eval>',
-            '<explode>',
-            '<first>',
-            '<formal>',
-            '<gender>',
-            '<get>',
-            '<id>',
-            '<input>',
-            '<interval>',
-            '<learn>',
-            '<li>',
-            '<loop>',
-            '<lowercase>',
-            '<map>',
-            '<normalize>',
-            '<pattern>',
-            '<person>',
-            '<person2>',
-            '<program>',
-            '<random>',
-            '<request>',
-            '<response>',
-            '<rest>',
-            '<sentence>',
-            '<set>',
-            '<size>',
-            '<sr>',
-            '<srai>',
-            '<sraix>',
-            '<star>',
-            '<template>',
-            '<that>',
-            '<thatstar>',
-            '<think>',
-            '<topic>',
-            '<topicstar>',
-            '<uppercase>',
-            '<emotion>'
-        );
-
-        return implode("", $tagList);
     }
 }
