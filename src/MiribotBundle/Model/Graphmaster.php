@@ -30,8 +30,7 @@ class Graphmaster
         $this->kernel = $kernel;
         $this->helper = $helper;
         $this->graph = new Nodemapper('[root]', '[root]', null);
-        $this->aimlPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'aiml';
-        $this->build();
+        $this->aimlPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml';
     }
 
     /**
@@ -49,15 +48,28 @@ class Graphmaster
      */
     public function build()
     {
+        // Get all AIML files
+        $aimlFiles = glob($this->aimlPath . DIRECTORY_SEPARATOR . "*.aiml");
+
+        // Check if graphmaster was built and nothing has changed since then
+        $graph = $this->helper->memory->recallGraphmasterData();
+        if ($graph && !$this->isAimlDataChanged($aimlFiles)) {
+            $this->graph = $graph;
+            return $this;
+        }
+
         // Fetch AIML data
         $aiml = new \DOMDocument();
-        $aiml->loadXML($this->loadAimlData());
+        $aiml->loadXML($this->loadAimlData($aimlFiles));
 
         /** @var \SimpleXMLElement $categories */
         $categories = $aiml->getElementsByTagName("category");
 
         // Map AIML data to bot's Graphmaster knowledge
         $this->mapToNodemapper($categories);
+
+        // Save graphmaster data to cache
+        $this->helper->memory->rememberGraphmasterData($graph);
 
         return $this;
     }
@@ -80,6 +92,29 @@ class Graphmaster
     }
 
     /**
+     * Search for reference node
+     * @param \DOMElement $srai
+     * @return bool|Nodemapper
+     */
+    public function getReferenceNode($srai, $that, $topic)
+    {
+        // Replace <star/> in srai
+        if ($srai->getElementsByTagName("star")->length > 0) {
+            $stars = $srai->getElementsByTagName("star");
+            $noOfStars = $stars->length;
+            for ($i = 0; $i < $noOfStars; $i++) {
+                $asterisk = $srai->ownerDocument->createTextNode("*");
+                $star = $stars->item(0);
+                $srai->replaceChild($asterisk, $star);
+            }
+        }
+        $sraiTxt = $srai->textContent;
+        $sraiQuery = $this->helper->string->produceQueries($sraiTxt, $that, $topic);
+
+        return $this->matchQueryPattern($sraiQuery);
+    }
+
+    /**
      * @param Nodemapper|bool|mixed $node
      * @param $query
      * @return bool|Nodemapper|mixed
@@ -90,12 +125,19 @@ class Graphmaster
             return $node;
         } else {
 
-            // Handle empty <that>
-            if ($node->getWord() == "<that>" && ($child = $node->getFirstChild())) {
-                if ($child->getWord() == "<topic>") {
+            // Handle empty <that> and <topic> responses
+            if ($child = $node->getFirstChild()) {
+                if ($node->getWord() == "<that>") {
+                    if ($child->getWord() == "<topic>") {
+                        return $this->match($child, $query);
+                    }
+                }
+
+                if ($node->getWord() == "<topic>") {
                     return $this->match($child, $query);
                 }
             }
+
 
             // Get the first word of the query
             $word = array_shift($query);
@@ -131,29 +173,6 @@ class Graphmaster
             }
         }
         return false;
-    }
-
-    /**
-     * Search for reference node
-     * @param \DOMElement $srai
-     * @return bool|Nodemapper
-     */
-    public function getReferenceNode($srai, $that, $topic)
-    {
-        // Replace <star/> in srai
-        if ($srai->getElementsByTagName("star")->length > 0) {
-            $stars = $srai->getElementsByTagName("star");
-            $noOfStars = $stars->length;
-            for ($i = 0; $i < $noOfStars; $i++) {
-                $asterisk = $srai->ownerDocument->createTextNode("*");
-                $star = $stars->item(0);
-                $srai->replaceChild($asterisk, $star);
-            }
-        }
-        $sraiTxt = $srai->textContent;
-        $sraiQuery = $this->helper->string->produceQueries($sraiTxt, $that, $topic);
-
-        return $this->matchQueryPattern($sraiQuery);
     }
 
     /**
@@ -237,13 +256,13 @@ class Graphmaster
      * Load AIML data to memory
      * @return string
      */
-    protected function loadAimlData()
+    protected function loadAimlData($files)
     {
         // Initialize AIML header
         $aimlString = "<?xml version = \"1.0\" encoding = \"UTF-8\"?>\n<aiml version=\"2.0\" encoding=\"UTF-8\">\n";
 
         // Read and merge all AIML file contents into one raw XML string
-        foreach (glob($this->aimlPath . DIRECTORY_SEPARATOR . "*.aiml") as $aimlFile) {
+        foreach ($files as $aimlFile) {
             $fileContent = strip_tags(file_get_contents($aimlFile), $this->getAimlTagList());
             $aimlString .= trim($fileContent) . "\n";
         }
@@ -251,6 +270,41 @@ class Graphmaster
         $aimlString .= "</aiml>";
 
         return $aimlString;
+    }
+
+    /**
+     * Check if AIML data has changed
+     * @param $aimlFiles
+     * @return bool
+     */
+    protected function isAimlDataChanged($aimlFiles)
+    {
+        // Initialize a flag to detect file changes
+        $changed = false;
+
+        // Count the number of AIML files
+        $noOfFiles = count($aimlFiles);
+        // Compare between the cached number of AIML files and the number of files we are having
+        $cachedNoOfFiles = $this->helper->memory->recallUserData("aiml_files.no_of_files");
+        if ($cachedNoOfFiles != $noOfFiles) {
+            $changed = true;
+            $this->helper->memory->rememberUserData("aiml_files.no_of_files", $noOfFiles);
+        }
+
+        // Check if any of the AIML files were modified
+        foreach($aimlFiles as $aimlFile) {
+            $fileId = md5($aimlFile);
+            clearstatcache(true, $aimlFiles);
+            $modifiedTime = filemtime($aimlFiles);
+            $cachedModifiedTime = $this->helper->memory->recallUserData("aiml_files.{$fileId}.mtime");
+            if ($cachedModifiedTime != $modifiedTime) {
+                $changed = true;
+                $this->helper->memory->rememberUserData("aiml_files.{$fileId}.mtime", $modifiedTime);
+                break;
+            }
+        }
+
+        return $changed;
     }
 
     /**

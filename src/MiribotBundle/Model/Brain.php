@@ -14,6 +14,8 @@ use Twig\Node\Node;
 
 class Brain
 {
+    const BOT_ALIAS = "miri";
+
     /**
      * @var Graphmaster
      */
@@ -33,6 +35,19 @@ class Brain
     {
         $this->knowledge = $graph;
         $this->helper = $helper;
+        $this->init();
+    }
+
+    /**
+     * Initialize bot's brain
+     */
+    protected function init()
+    {
+        // Initialize bot's personality
+        
+
+        // Build bot's knowledge
+        $this->knowledge->build();
     }
 
     /**

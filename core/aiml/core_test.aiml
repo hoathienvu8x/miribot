@@ -1,67 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0" encoding="UTF-8">
-    <!-- GREETINGS -->
+    <!-- simple test -->
     <category>
-        <pattern>XIN CHÀO</pattern>
-        <template>
-            <random>
-                <li>Xin chào!</li>
-                <li>Chao xìn!</li>
-                <li>Chào nhưng không xin :v</li>
-                <li>Xin nhưng không chào ^_^</li>
-            </random>
-        </template>
+        <pattern>HEY MIRI</pattern>
+        <template>Hey user!</template>
     </category>
 
+    <!-- wildcard test -->
     <category>
         <pattern>HELLO *</pattern>
         <template>
+            <li>Hello <star index="1"/>!</li>
+        </template>
+    </category>
+
+    <!-- <random> test -->
+    <category>
+        <pattern>GOOD MORNING</pattern>
+        <template>
             <random>
-                <li>Hello <star index="1"/>!</li>
-                <li>Ciao <star index="1"/>.</li>
-                <li>Good day <star index="1"/>!</li>
-                <li>Hi <star index="1"/>.</li>
+                <li>Hello new day!</li>
+                <li>Good morning to you.</li>
+                <li>Hey, how's it going?</li>
+                <li>What's up bro?</li>
+                <li>Cheers!</li>
             </random>
         </template>
     </category>
 
-    <category>
-        <pattern>_ IS *</pattern>
-        <template>
-            Yes, <star index="1"/> is <star index="2"/>.
-        </template>
-    </category>
-
-    <category>
-        <pattern>* LÀ *</pattern>
-        <template>
-            <srai>* IS *</srai>
-        </template>
-    </category>
-
-    <category>
-        <pattern>CHÀO *</pattern>
-        <template>
-            <think>
-                <set name="subject"><star index="1"/></set>
-            </think>
-            <condition name="subject">
-                <li value="miribot">Chào <get name="user" /></li>
-                <li>Bạn chào ai đấy?</li>
-            </condition>
-        </template>
-    </category>
-
-    <category>
-        <pattern>CHÀO BUỔI SÁNG</pattern>
-        <template>
-            <random>
-                <li>Chào ngày mới!</li>
-                <li>Chào buổi sáng</li>
-            </random>
-        </template>
-    </category>
-
+    <!-- <that> test -->
     <category>
         <pattern>I LIKE DRINKING COFFEE</pattern>
         <template>Do you usually put cream or sugar to your coffee?</template>
@@ -79,6 +46,7 @@
         <template>Really? I like drinking sweet coffee.</template>
     </category>
 
+    <!-- <get>/<set> test-->
     <category>
         <pattern>MY NAME IS *</pattern>
         <template>
@@ -93,6 +61,7 @@
         </template>
     </category>
 
+    <!-- <think> test -->
     <category>
         <pattern>THINK ABOUT *</pattern>
         <template>
@@ -107,6 +76,7 @@
         </template>
     </category>
 
+    <!-- <condition> test -->
     <category>
         <pattern>MY GENDER IS *</pattern>
         <template>
@@ -125,6 +95,7 @@
         </template>
     </category>
 
+    <!-- <topic> test -->
     <category>
         <pattern>LET US TALK ABOUT *</pattern>
         <template>
@@ -143,4 +114,32 @@
             <template>I guess plain is good.</template>
         </category>
     </topic>
+
+    <!-- <srai> test -->
+    <category>
+        <pattern>THE CAT</pattern>
+        <template>You are talking about the cat.</template>
+    </category>
+    <category>
+        <pattern>LE CHAT</pattern>
+        <template><srai>THE CAT</srai></template>
+    </category>
+    <category>
+        <pattern>I HAVE LE CHAT</pattern>
+        <template><srai>THE CAT</srai> I understand some French.</template>
+    </category>
+
+    <!-- <emotion> test -->
+    <category>
+        <pattern>HAPPY</pattern>
+        <template>
+            <emotion value="happy"/> I am really happy.
+        </template>
+    </category>
+    <category>
+        <pattern>ANGRY</pattern>
+        <template>
+            <emotion value="angry"/> I feel angry.
+        </template>
+    </category>
 </aiml>

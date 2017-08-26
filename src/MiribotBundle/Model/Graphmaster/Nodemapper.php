@@ -180,10 +180,6 @@ class Nodemapper
             throw new Exception('Nodemapper word cannot be emptied!');
         }
 
-        if (isset($this->children[$child->getId()])) {
-            return $this;
-        }
-
         $child->parentId = $this->id;
         $this->children[$child->getId()] = $child;
         return $this;

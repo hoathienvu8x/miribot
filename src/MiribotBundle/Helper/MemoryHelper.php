@@ -93,12 +93,38 @@ class MemoryHelper extends FilesystemCache
     }
 
     /**
+     * Remember graphmaster
+     * @param $knowledge
+     */
+    public function rememberGraphmasterData($knowledge)
+    {
+        $this->set("bot_graphmaster", $knowledge, 7200);
+    }
+
+    /**
+     * Recall graphmaster
+     * @return mixed|null
+     */
+    public function recallGraphmasterData()
+    {
+        return $this->get("bot_graphmaster", false);
+    }
+
+    /**
+     * Forget graphmaster
+     */
+    public function forgetGraphmasterData()
+    {
+        $this->delete("bot_graphmaster");
+    }
+
+    /**
      * Split the input text into sentences
      * @param $text
      * @return array
      */
     protected function sentenceSplitting($text)
     {
-        return preg_split("/[.!?\n]/", trim($text), -1, PREG_SPLIT_NO_EMPTY);
+        return preg_split("/[\.\!\?\;\:\n\t]/", trim($text), -1, PREG_SPLIT_NO_EMPTY);
     }
 }
