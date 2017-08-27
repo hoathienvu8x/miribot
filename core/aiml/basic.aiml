@@ -8,7 +8,7 @@
             <condition name="who">
                 <li value="bố">Bố <bot name="name"/> tên là <bot name="father"/><emotion value="happy"/>.</li>
                 <li value="mẹ"><bot name="name"/> không có mẹ<emotion value="sad"/>.</li>
-                <li value="botref"><map name="who"><star/></map> tên là <bot name="name"/>.</li>
+                <li value="botref"><map name="pronouns"><star/></map> tên là <bot name="name"/>.</li>
                 <li>Làm sao mà <bot name="name"/> biết được ạ?<emotion value="sad"/></li>
             </condition>
         </template>
@@ -28,10 +28,6 @@
                 <li><bot name="name"/> không biết ạ.</li>
             </condition>
         </template>
-    </category>
-    <category>
-        <pattern>_ TÊN ĐẦY ĐỦ CỦA CÔ VY LÀ GÌ</pattern>
-        <template>Tên đầy đủ của cô Vy là Trần Khánh Vy ạ.</template>
     </category>
 
     <!-- GIỚI TÍNH -->
@@ -55,6 +51,14 @@
                 <li value="botref"><srai>SINH NHẬT BOTREF</srai></li>
                 <li><bot name="name"/> chịu thôi.<emotion value="sad"/></li>
             </condition>
+        </template>
+    </category>
+
+    <!-- CUNG HOÀNG ĐẠO -->
+    <category>
+        <pattern>CUNG HOÀNG ĐẠO BOTREF</pattern>
+        <template>
+            Cung Hoàng Đạo của <bot name="name"/> là <bot name="sign" />.<emotion value="neutral"/>
         </template>
     </category>
 </aiml>

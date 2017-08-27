@@ -56,7 +56,7 @@ class Graphmaster
         $aiml = new \DOMDocument();
         $aiml->loadXML($this->loadAimlData($aimlFiles));
 
-        /** @var \SimpleXMLElement $categories */
+        /** @var \DOMNodeList $categories */
         $categories = $aiml->getElementsByTagName("category");
 
         // Map AIML data to bot's Graphmaster knowledge

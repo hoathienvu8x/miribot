@@ -200,7 +200,11 @@
 
     <!-- <keep> test -->
     <category>
-        <pattern>VIETNAM</pattern>
-        <template>Success</template>
+        <pattern>THE JASON BORNE NAME</pattern>
+        <template>Dunno.</template>
+    </category>
+    <category>
+        <pattern>THE * NAME</pattern>
+        <template>The name is Bond. James Bond.</template>
     </category>
 </aiml>
