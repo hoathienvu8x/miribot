@@ -53,15 +53,15 @@ class TemplateHelper
 
         // Process template data
         $this->handleRandomResponse($template)// Select random response if necessary
+        ->handleWildcards($template, $node, $userInputTokens)// Replace all template wildcards with user input
+        ->handleSetters($template)// Handle set tags
+        ->handleThinks($template)// Handle think tags
+        ->handleGetters($template)// Handle get tags
         ->handleConditions($template)// Process conditional tags
         ->handleReferences($template, $referenceNodes)// Get all references
-        ->handleWildcards($template, $node, $userInputTokens)// Replace all template wildcards with user input
         ->handleEmotions($node, $template)// Handle emotion tags
         ->handleMapData($template)// Handle map tags
         ->handleBotData($template)// Handle bot tags
-        ->handleGetters($template)// Handle get tags
-        ->handleSetters($template)// Handle set tags
-        ->handleThinks($template)// Handle think tags
         ->handleLearning($template);// Learn from template
 
         // Set the processed template back to the node
@@ -100,6 +100,7 @@ class TemplateHelper
         if ($condition = $template->getElementsByTagName("condition")->item(0)) {
             $variableName = $condition->getAttribute("name");
             $variableData = $this->memory->recallUserData("variables.{$variableName}");
+            $variableData = $this->string->substituteWords($variableData);
 
             $default = $template;
             $matched = false;
@@ -110,7 +111,8 @@ class TemplateHelper
                     if (!$li->hasAttribute("value")) {
                         $default = $li;
                     } else {
-                        if ($li->getAttribute("value") == $variableData) {
+                        $val = $li->getAttribute("value");
+                        if (mb_strpos($variableData, $val) !== FALSE) {
                             $template = $li;
                             $matched = true;
                             break;
@@ -168,9 +170,10 @@ class TemplateHelper
             $patternToken = isset($pattern[$patternTokenId]) ? $pattern[$patternTokenId] : "";
             $nextPatternToken = isset($pattern[$patternTokenId + 1]) ? $pattern[$patternTokenId + 1] : "";
 
+
             if (in_array($patternToken, $wildcards)) {
                 $collect = true;
-                if (strcasecmp($nextPatternToken, $token) == 0) {
+                if ($this->string->stringcmp($nextPatternToken, $token) == 0) {
                     $collect = false;
 
                     if (!empty($words)) {
@@ -211,8 +214,7 @@ class TemplateHelper
      * @param array $userInputTokens
      * @return $this
      */
-    public
-    function handleWildcards(&$template, $node, $userInputTokens)
+    public function handleWildcards(&$template, $node, $userInputTokens)
     {
         // Extract wildcard data
         $wildcardData = $this->extractWildcardData(explode(" ", $node->getPattern()), $userInputTokens);
@@ -222,18 +224,26 @@ class TemplateHelper
         for ($i = 0; $i < $noOfStars; $i++) {
             $star = $stars->item(0);
             $index = $star->getAttribute("index");
+
             if (empty($index)) {
                 $index = 0;
             } else {
                 $index = intval($index);
             }
-            if ($star->parentNode->tagName == "map") {
-                $wildcardValue = $wildcardData[$index]["replaced"];
+
+            if (isset($wildcardData[$index])) {
+                if ($star->parentNode->tagName == "map") {
+                    $wildcardValue = $wildcardData[$index]["replaced"];
+                } else {
+                    $wildcardValue = $wildcardData[$index]["original"];
+                }
+                $wildcardNode = $template->ownerDocument->createTextNode($wildcardValue);
             } else {
-                $wildcardValue = $wildcardData[$index]["original"];
+                $wildcardNode = $template->ownerDocument->createTextNode("");
             }
-            $wildcardNode = $template->ownerDocument->createTextNode($wildcardValue);
+
             $star->parentNode->replaceChild($wildcardNode, $star);
+
         }
 
         return $this;
@@ -244,8 +254,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this
      */
-    public
-    function handleGetters(&$template)
+    public function handleGetters(&$template)
     {
         $getters = $template->getElementsByTagName("get");
         $noOfGetters = $getters->length;
@@ -265,8 +274,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this
      */
-    public
-    function handleSetters(&$template)
+    public function handleSetters(&$template)
     {
         if ($template->getElementsByTagName("set")->length > 0) {
             $setters = $template->getElementsByTagName("set");
@@ -291,8 +299,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this
      */
-    public
-    function handleThinks(&$template)
+    public function handleThinks(&$template)
     {
         if ($template->getElementsByTagName("think")->length > 0) {
             $thinks = $template->getElementsByTagName("think");
@@ -312,8 +319,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this;
      */
-    public
-    function handleEmotions(Nodemapper &$node, &$template)
+    public function handleEmotions(Nodemapper &$node, &$template)
     {
         if ($template->getElementsByTagName("emotion")->length > 0) {
             $emotionTag = $template->getElementsByTagName("emotion")->item(0);
@@ -327,8 +333,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this
      */
-    public
-    function handleLearning(&$template)
+    public function handleLearning(&$template)
     {
         // Get learn document
         $learnPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . "learn.aiml";
@@ -362,8 +367,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this
      */
-    public
-    function handleBotData(&$template)
+    public function handleBotData(&$template)
     {
         if ($template->getElementsByTagName("bot")->length > 0) {
             $botProps = $template->getElementsByTagName("bot");
@@ -384,8 +388,7 @@ class TemplateHelper
      * @param \DOMElement $template
      * @return $this;
      */
-    public
-    function handleMapData(&$template)
+    public function handleMapData(&$template)
     {
         if ($template->getElementsByTagName("map")->length > 0) {
             $maps = $template->getElementsByTagName("map");
@@ -416,8 +419,7 @@ class TemplateHelper
      * @param $filename
      * @return mixed
      */
-    private
-    function mapData($originalValue, $filename)
+    private function mapData($originalValue, $filename)
     {
         $path = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . "core" . DIRECTORY_SEPARATOR . "map" . DIRECTORY_SEPARATOR . $filename . ".json";
         $content = @file_get_contents($path);
@@ -435,17 +437,20 @@ class TemplateHelper
      * @param \DOMNodeList $categories
      * @param \DOMDocument $learnAiml
      */
-    private
-    function addToLearnedData($categories, &$learnAiml)
+    private function addToLearnedData($categories, &$learnAiml)
     {
         if ($categories->length > 0) {
             $noOfCategories = $categories->length;
             for ($i = 0; $i < $noOfCategories; $i++) {
                 $category = $categories->item(0);
                 $pattern = $category->getElementsByTagName('pattern')->item(0);
-                if ($pattern && !$this->hasPatternString($learnAiml, $pattern)) {
+                if ($pattern) {
                     $importedNode = $learnAiml->importNode($category, true);
-                    $learnAiml->documentElement->appendChild($importedNode);
+                    if ($oldNode = $this->hasPatternString($learnAiml, $pattern)) {
+                        $learnAiml->documentElement->replaceChild($importedNode, $oldNode);
+                    } else {
+                        $learnAiml->documentElement->appendChild($importedNode);
+                    }
                 }
             }
         }
@@ -455,18 +460,17 @@ class TemplateHelper
      * Check if an AIML DOM Document already has a pattern
      * @param \DOMDocument $aiml
      * @param \DOMNode $pattern
-     * @return bool
+     * @return bool|\DOMNode
      */
-    private
-    function hasPatternString($aiml, $pattern)
+    private function hasPatternString($aiml, $pattern)
     {
         $patterns = $aiml->getElementsByTagName('pattern');
         $nPatterns = $patterns->length;
 
         for ($i = 0; $i < $nPatterns; $i++) {
             $aimlPattern = $patterns->item(0);
-            if (strcasecmp($aimlPattern->textContent, $pattern->textContent) == 0) {
-                return true;
+            if ($this->string->stringcmp($aimlPattern->textContent, $pattern->textContent) == 0) {
+                return $aimlPattern->parentNode;
             }
         }
         return false;

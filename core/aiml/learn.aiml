@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0" encoding="UTF-8">
     <!-- LEARN CONTENT -->
-    <category>
-        <pattern>WHAT DO I LIKE</pattern>
-        <template>You like cat.</template>
-    </category>
-</aiml>
+<category>
+                    <pattern>WHAT DO I LIKE</pattern>
+                    <template>You like cat.</template>
+                </category></aiml>

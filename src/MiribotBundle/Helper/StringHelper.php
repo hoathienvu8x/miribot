@@ -34,9 +34,10 @@ class StringHelper
             // Read and decode file
             $json = @file_get_contents($subsFile);
             if ($json && $substitutes = json_decode($json, true)) {
-                $pat = array_keys($substitutes);
-                $rep = array_values($substitutes);
-                $string = str_ireplace($pat, $rep, $string);
+                foreach ($substitutes as $o => $r) {
+                    $o = "({$o})";
+                    $string = mb_eregi_replace($o, $r, $string, 'i');
+                }
             }
         }
 
@@ -141,6 +142,17 @@ class StringHelper
         );
 
         return implode("", $tagList);
+    }
+
+    /**
+     * @param $str1
+     * @param $str2
+     * @param null $encoding
+     * @return int
+     */
+    public function stringcmp($str1, $str2, $encoding = null) {
+        if (null === $encoding) { $encoding = mb_internal_encoding(); }
+        return strcmp(mb_strtoupper($str1, $encoding), mb_strtoupper($str2, $encoding));
     }
 
     /**

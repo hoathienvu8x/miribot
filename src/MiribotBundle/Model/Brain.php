@@ -118,7 +118,7 @@ class Brain
         }
 
         return array(
-            'answer' => $answer,
+            'answer' => ucfirst(trim($answer)),
             'emotion' => $emotion
         );
     }
@@ -172,7 +172,9 @@ class Brain
                 $srai = $srais->item(0);
                 $this->helper->template->handleWildcards($srai, $node, $tokenizedInput);
                 $referenceNode = $this->knowledge->getReferenceNode($srai, $that, $topic);
-                $referenceNodes[] = $this->produceResponse($referenceNode, $tokenizedInput, $that, $topic);
+                if ($referenceNode) {
+                    $referenceNodes[] = $this->produceResponse($referenceNode, $tokenizedInput, $that, $topic);
+                }
             }
         }
 

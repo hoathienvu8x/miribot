@@ -8,9 +8,10 @@
 
 namespace MiribotBundle\Helper;
 
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 
-class MemoryHelper extends FilesystemCache
+class MemoryHelper extends FilesystemAdapter
 {
     /**
      * MemoryHelper constructor.
@@ -30,7 +31,9 @@ class MemoryHelper extends FilesystemCache
     public function rememberLastSentence($answer)
     {
         $sentences = $this->sentenceSplitting($answer);
-        $this->set('bot_last_sentence', end($sentences));
+        $lastSentence = $this->getItem('bot_last_sentence');
+        $lastSentence->set(end($sentences));
+        $this->save($lastSentence);
     }
 
     /**
@@ -39,8 +42,8 @@ class MemoryHelper extends FilesystemCache
      */
     public function recallLastSentence()
     {
-        $sentence = $this->get('bot_last_sentence');
-        return $sentence ? $sentence : "";
+        $lastSentence = $this->getItem('bot_last_sentence');
+        return $lastSentence->get();
     }
 
     /**
@@ -49,7 +52,9 @@ class MemoryHelper extends FilesystemCache
      */
     public function rememberTopic($topic)
     {
-        $this->set('bot_topic', $topic);
+        $botTopic = $this->getItem('bot_topic');
+        $botTopic->set($topic);
+        $this->save($botTopic);
     }
 
     /**
@@ -58,8 +63,8 @@ class MemoryHelper extends FilesystemCache
      */
     public function recallTopic()
     {
-        $topic = $this->get('bot_topic');
-        return $topic ? $topic : "";
+        $botTopic = $this->getItem('bot_topic');
+        return $botTopic->get();
     }
 
     /**
@@ -69,7 +74,9 @@ class MemoryHelper extends FilesystemCache
      */
     public function rememberUserData($name, $data)
     {
-        $this->set("user_data.{$name}", $data);
+        $userData = $this->getItem("user_data.{$name}");
+        $userData->set($data);
+        $this->save($userData);
     }
 
     /**
@@ -79,43 +86,17 @@ class MemoryHelper extends FilesystemCache
      */
     public function recallUserData($name)
     {
-        return $this->get("user_data.{$name}");
+        $userData = $this->getItem("user_data.{$name}");
+        return $userData->get();
     }
 
     /**
      * Forget a user data
      * @param $name
-     * @return bool
      */
     public function forgetUserData($name)
     {
-        return $this->delete("user_data.{$name}");
-    }
-
-    /**
-     * Remember graphmaster
-     * @param $knowledge
-     */
-    public function rememberGraphmasterData($knowledge)
-    {
-        $this->set("bot_graphmaster", $knowledge, 7200);
-    }
-
-    /**
-     * Recall graphmaster
-     * @return mixed|null
-     */
-    public function recallGraphmasterData()
-    {
-        return $this->get("bot_graphmaster", false);
-    }
-
-    /**
-     * Forget graphmaster
-     */
-    public function forgetGraphmasterData()
-    {
-        $this->delete("bot_graphmaster");
+        $this->deleteItem("user_data.{$name}");
     }
 
     /**

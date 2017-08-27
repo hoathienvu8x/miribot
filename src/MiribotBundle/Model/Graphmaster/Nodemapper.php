@@ -247,7 +247,7 @@ class Nodemapper
     public function getChildrenByWord($word)
     {
         return array_filter($this->children, function (Nodemapper $child) use ($word) {
-            return $child->getWord() == $word;
+            return ($this->stringcmp($child->getWord(), $word) == 0);
         });
     }
 
@@ -301,5 +301,10 @@ class Nodemapper
     public function hasChild($id)
     {
         return isset($this->children[$id]);
+    }
+
+    private function stringcmp($str1, $str2, $encoding = null) {
+        if (null === $encoding) { $encoding = mb_internal_encoding(); }
+        return strcmp(mb_strtoupper($str1, $encoding), mb_strtoupper($str2, $encoding));
     }
 }

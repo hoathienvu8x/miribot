@@ -1,0 +1,60 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+    <!-- TÊN -->
+    <category>
+        <pattern>* TÊN LÀ GÌ</pattern>
+        <template>
+            <think><set name="who"><star/></set></think>
+            <condition name="who">
+                <li value="bố">Bố <bot name="name"/> tên là <bot name="father"/><emotion value="happy"/>.</li>
+                <li value="mẹ"><bot name="name"/> không có mẹ<emotion value="sad"/>.</li>
+                <li value="botref"><map name="who"><star/></map> tên là <bot name="name"/>.</li>
+                <li>Làm sao mà <bot name="name"/> biết được ạ?<emotion value="sad"/></li>
+            </condition>
+        </template>
+    </category>
+
+    <!-- HỌ VÀ TÊN -->
+    <category>
+        <pattern>HỌ TÊN BOTREF</pattern>
+        <template>Họ và tên của <bot name="name" /> là <bot name="familyname" /> <bot name="middlename" /> <bot name="firstname" />.<emotion value="neutral"/></template>
+    </category>
+    <category>
+        <pattern>TÊN ĐẦY ĐỦ CỦA * LÀ GÌ</pattern>
+        <template>
+            <think><set name="who"><star/></set></think>
+            <condition name="who">
+                <li value="botref"><srai>HỌ TÊN BOTREF</srai></li>
+                <li><bot name="name"/> không biết ạ.</li>
+            </condition>
+        </template>
+    </category>
+    <category>
+        <pattern>_ TÊN ĐẦY ĐỦ CỦA CÔ VY LÀ GÌ</pattern>
+        <template>Tên đầy đủ của cô Vy là Trần Khánh Vy ạ.</template>
+    </category>
+
+    <!-- GIỚI TÍNH -->
+    <category>
+        <pattern>GIỚI TÍNH BOTREF</pattern>
+        <template>Giới tính của <bot name="name"/> là <bot name="gender"/>.<emotion value="cute"/></template>
+    </category>
+
+    <!-- SINH NHẬT -->
+    <category>
+        <pattern>SINH NHẬT BOTREF</pattern>
+        <template>
+            <bot name="name"/> sinh ngày <bot name="birthday" /> tại <bot name="birthplace" />.<emotion value="happy"/>
+        </template>
+    </category>
+    <category>
+        <pattern>SINH NHẬT CỦA * LÀ NGÀY NÀO</pattern>
+        <template>
+            <think><set name="who"><star/></set></think>
+            <condition name="who">
+                <li value="botref"><srai>SINH NHẬT BOTREF</srai></li>
+                <li><bot name="name"/> chịu thôi.<emotion value="sad"/></li>
+            </condition>
+        </template>
+    </category>
+</aiml>

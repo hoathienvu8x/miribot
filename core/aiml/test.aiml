@@ -21,6 +21,13 @@
         </template>
     </category>
 
+    <category>
+        <pattern>* IS THE CAPITAL CITY OF *</pattern>
+        <template>
+            The city <star/> is the capital city of <star index="1"/>
+        </template>
+    </category>
+
     <!-- <random> test -->
     <category>
         <pattern>GOOD MORNING</pattern>
@@ -57,7 +64,7 @@
     <category>
         <pattern>MY NAME IS *</pattern>
         <template>
-            <set name="somename"><star index="1"/></set>, I will remember your name.
+            <set name="somename"><star /></set>, I will remember your name.
         </template>
     </category>
 
@@ -72,7 +79,7 @@
     <category>
         <pattern>THINK ABOUT *</pattern>
         <template>
-            I will think about it. <think><set name="somevar"><star index="1"/></set></think>
+            I will think about it. <think><set name="somevar"><star/></set></think>
         </template>
     </category>
 
@@ -87,7 +94,7 @@
     <category>
         <pattern>MY GENDER IS *</pattern>
         <template>
-            I will remember your gender. <think><set name="gender"><star index="1"/></set></think>
+            I will remember your gender. <think><set name="gender"><star/></set></think>
         </template>
     </category>
 

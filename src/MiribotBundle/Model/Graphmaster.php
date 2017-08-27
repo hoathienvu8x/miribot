@@ -52,13 +52,6 @@ class Graphmaster
         // Get all AIML files
         $aimlFiles = glob($aimlPath . DIRECTORY_SEPARATOR . "*.aiml");
 
-        // Check if graphmaster was built and nothing has changed since then
-        $graph = $this->helper->memory->recallGraphmasterData();
-        if ($graph && !$this->isAimlDataChanged($aimlFiles)) {
-            $this->graph = $graph;
-            return $this;
-        }
-
         // Fetch AIML data
         $aiml = new \DOMDocument();
         $aiml->loadXML($this->loadAimlData($aimlFiles));
@@ -68,9 +61,6 @@ class Graphmaster
 
         // Map AIML data to bot's Graphmaster knowledge
         $this->mapToNodemapper($categories);
-
-        // Save graphmaster data to cache
-        $this->helper->memory->rememberGraphmasterData($graph);
 
         return $this;
     }
@@ -125,35 +115,16 @@ class Graphmaster
         if ($node->getTemplate() !== null) {
             return $node;
         } else {
-
-            // Handle empty <that> and <topic> responses
-            if ($child = $node->getFirstChild()) {
-                if (in_array($child->getWord(), array("#", "_", "^", "*"))) {
-                    array_shift($query);
-                }
-
-                // In case we are in a middle of a specific topic, we continue with it first
-                if ($node->getWord() == "<topic>") {
-                    return $this->match($child, $query);
+            while (!empty($query)) {
+                $word = array_shift($query);
+                $matchingTokens = array("#", "_", $word, "^", "*");
+                foreach ($matchingTokens as $token) {
+                    $matched = $this->matchToken($node, $token, $query);
+                    if ($matched) {
+                        return $matched;
+                    }
                 }
             }
-
-            // Get the first word of the query
-            $word = array_shift($query);
-
-            // Gather matching tokens by priority
-            // Here <that> comes first in higher priority
-            // <topic> comes after for the case that we just starts discussing a topic
-            $matchingTokens = array("#", "_", $word, "^", "*", "<that>", "<topic>");
-
-            //print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
-
-            foreach ($matchingTokens as $token) {
-                if ($matchNode = $this->matchToken($node, $token, $query)) {
-                    return $matchNode;
-                }
-            }
-
             return false;
         }
     }
@@ -281,37 +252,12 @@ class Graphmaster
     }
 
     /**
-     * Check if AIML data has changed
-     * @param $aimlFiles
+     * Check if a word is wildcard
+     * @param $word
      * @return bool
      */
-    protected function isAimlDataChanged($aimlFiles)
+    protected function isWildcard($word)
     {
-        // Initialize a flag to detect file changes
-        $changed = false;
-
-        // Count the number of AIML files
-        $noOfFiles = count($aimlFiles);
-        // Compare between the cached number of AIML files and the number of files we are having
-        $cachedNoOfFiles = $this->helper->memory->recallUserData("aiml_files.no_of_files");
-        if ($cachedNoOfFiles != $noOfFiles) {
-            $changed = true;
-            $this->helper->memory->rememberUserData("aiml_files.no_of_files", $noOfFiles);
-        }
-
-        // Check if any of the AIML files were modified
-        foreach($aimlFiles as $aimlFile) {
-            $fileId = md5($aimlFile);
-            clearstatcache(true, $aimlFiles);
-            $modifiedTime = filemtime($aimlFiles);
-            $cachedModifiedTime = $this->helper->memory->recallUserData("aiml_files.{$fileId}.mtime");
-            if ($cachedModifiedTime != $modifiedTime) {
-                $changed = true;
-                $this->helper->memory->rememberUserData("aiml_files.{$fileId}.mtime", $modifiedTime);
-                break;
-            }
-        }
-
-        return $changed;
+        return in_array($word, array("#", "_", "^", "*"));
     }
 }

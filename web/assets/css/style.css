@@ -4,6 +4,26 @@ body {
     background-size: 30%;
 }
 
+.panel-danger {
+    border-color: #964a58;
+}
+
+.panel-danger > .panel-heading {
+    background-image: -webkit-linear-gradient(top, #f2dede 0%, #ebcccc 100%);
+    background-image: -o-linear-gradient(top, #f2dede 0%, #ebcccc 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f2dede), to(#ebcccc));
+    background-image: linear-gradient(to bottom, #3d2432 0%, #964a58 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2dede', endColorstr='#ffebcccc', GradientType=0);
+    background-repeat: repeat-x;
+}
+
+#tenor {
+    background: url('tenor.gif') center no-repeat;
+    background-size: 150px 150px;
+    width: 32px;
+    height: 32px;
+}
+
 .starter-template {
     padding: 3rem 1.5rem;
     text-align: center;
@@ -14,15 +34,25 @@ body {
 
 }
 
+.bot-part {
+    height: 380px;
+}
+
 .bot {
     float: left;
     margin: 5px;
 }
 
+@font-face {
+    font-family: Saira;
+    src: url('../fonts/Saira-Bold.ttf');
+    font-weight: bold;
+}
+
 .bot-name {
-    font-family: 'Permanent Marker', cursive;
+    font-family: 'Saira', cursive;
     font-size: 2.5em;
-    text-shadow: 0 0 10px red;
+    text-shadow: 0 0 10px orangered;
     color: white;
 }
 
@@ -34,7 +64,7 @@ body {
 
 .bot-response {
     width: 75.09138%;
-    height: 256px;
+    height: 100%;
     border: 1px solid #ddd;
     border-radius: 10px 0 0 10px;
     -moz-border-radius: 10px 0 0 10px;
@@ -42,12 +72,35 @@ body {
     padding: 10px;
     word-wrap: break-word;
     overflow-y: scroll;
-    font-size: 2em;
+    font-size: 1.2em;
+}
+
+@font-face {
+    font-family: Nunito;
+    src: url('../fonts/Nunito-Regular.ttf');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: NunitoBold;
+    src: url('../fonts/Nunito-Bold.ttf');
+    font-weight: bold;
+}
+
+.conversation {
+    font-family: NunitoBold, serif;
+}
+
+.user-text {
+    min-height: 200px;
+}
+
+.user-input {
+    color: #696868;
 }
 
 .bot-answer {
-    font-family: 'Shadows Into Light Two', cursive;
-    font-weight: bolder;
+    color: rgb(255, 156, 145);
 }
 
 @media only screen and (max-width: 1200px) {

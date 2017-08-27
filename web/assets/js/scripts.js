@@ -27,10 +27,12 @@ function inputMessage(el, event) {
             event.preventDefault();
 
             // Send the message to server and request for answer
-            botres.append("[User] >>> " + userInput + "<br/>");
+            botres.append("<span class='conversation user-input'><b>[User] >>></b> " + userInput + "</span><br/>");
+            botres.append("<div id='tenor'></div>");
             botres.scrollTop(botres.scrollHeight);
             botres.animate({ scrollTop: botres[0].scrollHeight}, 500);
 
+            // Bot response
             jQuery.ajax({
                 method: 'POST',
                 url: jQuery("#answer-url").val(),
@@ -38,8 +40,10 @@ function inputMessage(el, event) {
                 dataType: 'json',
                 success: function(data) {
                     console.log(data.answer);
-                    botres.append("[Miri] >>> <span class='bot-answer'>" + data.answer + "</span><br/>");
+                    botres.append("<span class='conversation bot-answer'><b>[Miri] >>></b> " + data.answer + "</span><br/>");
                     var portrait = data.emotion + ".png";
+                    jQuery("#tenor").remove();
+                    botres.animate({ scrollTop: botres[0].scrollHeight}, 500);
                     botport.css("background", 'url(../assets/portraits/' + portrait + ')');
                 }
             });
