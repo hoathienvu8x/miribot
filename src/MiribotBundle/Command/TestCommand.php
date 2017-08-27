@@ -9,6 +9,7 @@
 namespace MiribotBundle\Command;
 
 
+use MiribotBundle\Helper\StringHelper;
 use MiribotBundle\Model\Miribot;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -27,8 +28,9 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $path = "E:\\Projects\\miribot\\core\\system\\miri.json";
-        $json = file_get_contents($path);
-        $properties = json_decode($json, true);
+        $string = "Cậu tên là gì?";
+        /** @var StringHelper $stringHelper */
+        $stringHelper = $this->getContainer()->get('helper_string');
+        echo $stringHelper->substituteWords($string);
     }
 }

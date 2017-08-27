@@ -15,7 +15,7 @@ services:
 
   helper_string:
     class: MiribotBundle\Helper\StringHelper
-    arguments: []
+    arguments: ["@kernel"]
 
   helper_memory:
     class: MiribotBundle\Helper\MemoryHelper
@@ -23,7 +23,7 @@ services:
 
   helper_template:
     class: MiribotBundle\Helper\TemplateHelper
-    arguments: ["@kernel", "@helper_memory"]
+    arguments: ["@kernel", "@helper_memory", "@helper_string"]
 
   # Others
   graphmaster:

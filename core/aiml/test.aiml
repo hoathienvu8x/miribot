@@ -10,7 +10,14 @@
     <category>
         <pattern>HELLO *</pattern>
         <template>
-            <li>Hello <star index="1"/>!</li>
+            <li>Hello <star/>!</li>
+        </template>
+    </category>
+
+    <category>
+        <pattern>THE CAPITAL CITY OF * IS *</pattern>
+        <template>
+            <star index="1"/> is the capital city of <star />
         </template>
     </category>
 
@@ -174,5 +181,19 @@
             <b>Version:</b> <bot name="version" /><br/>
             <b>Name:</b> <bot name="name" />
         </template>
+    </category>
+
+    <!-- <map> test -->
+    <category>
+        <pattern>WHAT IS THE CAPITAL CITY OF *</pattern>
+        <template>
+            The capital city of <star/> is <map name="country2capital"><star/></map>
+        </template>
+    </category>
+
+    <!-- <keep> test -->
+    <category>
+        <pattern>VIETNAM</pattern>
+        <template>Success</template>
     </category>
 </aiml>

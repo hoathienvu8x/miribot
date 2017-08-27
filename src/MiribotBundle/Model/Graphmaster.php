@@ -17,7 +17,6 @@ class Graphmaster
 {
     protected $kernel;
     protected $graph;
-    protected $aimlPath;
     protected $helper;
 
     /**
@@ -30,7 +29,6 @@ class Graphmaster
         $this->kernel = $kernel;
         $this->helper = $helper;
         $this->graph = new Nodemapper('[root]', '[root]', null);
-        $this->aimlPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml';
     }
 
     /**
@@ -48,8 +46,11 @@ class Graphmaster
      */
     public function build()
     {
+        // Build AIML path
+        $aimlPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml';
+
         // Get all AIML files
-        $aimlFiles = glob($this->aimlPath . DIRECTORY_SEPARATOR . "*.aiml");
+        $aimlFiles = glob($aimlPath . DIRECTORY_SEPARATOR . "*.aiml");
 
         // Check if graphmaster was built and nothing has changed since then
         $graph = $this->helper->memory->recallGraphmasterData();
@@ -127,21 +128,23 @@ class Graphmaster
 
             // Handle empty <that> and <topic> responses
             if ($child = $node->getFirstChild()) {
-                if ($node->getWord() == "<that>") {
-                    if ($child->getWord() == "<topic>") {
-                        return $this->match($child, $query);
-                    }
+                if (in_array($child->getWord(), array("#", "_", "^", "*"))) {
+                    array_shift($query);
                 }
 
+                // In case we are in a middle of a specific topic, we continue with it first
                 if ($node->getWord() == "<topic>") {
                     return $this->match($child, $query);
                 }
             }
 
-
             // Get the first word of the query
             $word = array_shift($query);
-            $matchingTokens = array("#", "_", $word, "^", "*");
+
+            // Gather matching tokens by priority
+            // Here <that> comes first in higher priority
+            // <topic> comes after for the case that we just starts discussing a topic
+            $matchingTokens = array("#", "_", $word, "^", "*", "<that>", "<topic>");
 
             //print_r($word . "|" . $node->__toString() . ' --> ' . implode("|", $query) . "\n");
 

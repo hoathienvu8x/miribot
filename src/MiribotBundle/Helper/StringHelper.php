@@ -9,11 +9,45 @@
 namespace MiribotBundle\Helper;
 
 
+use Symfony\Component\HttpKernel\Kernel;
+
 class StringHelper
 {
+    protected $kernel;
+
+    public function __construct(Kernel $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
+    /**
+     * Substitute words in the user input
+     * @param $string
+     * @return mixed
+     */
+    public function substituteWords($string)
+    {
+        $subsPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'substitute';
+        $subsFiles = glob($subsPath . DIRECTORY_SEPARATOR . "*.json");
+
+        foreach ($subsFiles as $subsFile) {
+            // Read and decode file
+            $json = @file_get_contents($subsFile);
+            if ($json && $substitutes = json_decode($json, true)) {
+                $pat = array_keys($substitutes);
+                $rep = array_values($substitutes);
+                $string = str_ireplace($pat, $rep, $string);
+            }
+        }
+
+        return $string;
+    }
+
     /**
      * Standardize user input and produce queries for the bot
      * @param $input
+     * @param $that
+     * @param $topic
      * @return array
      */
     public function produceQueries($input, $that, $topic)
@@ -26,8 +60,16 @@ class StringHelper
         return $query;
     }
 
+    /**
+     * Standardize a text
+     * @param $string
+     * @return array
+     */
     protected function standardize($string)
     {
+        // 0. Substitute words
+        $string = $this->substituteWords($string);
+
         // 1. Normalize the input to produce a string of text in uppercase
         $string = $this->normalize($string);
 
@@ -150,7 +192,7 @@ class StringHelper
             '<topic>',
             '<topicstar>',
             '<uppercase>',
-            '<emotion>',
+            '<emotion>', // Bot's emotion
             // HTML tags
             '<html>',
             '<a>',

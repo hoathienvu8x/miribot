@@ -69,7 +69,8 @@ class Brain
      * @param $sentences
      * @return array
      */
-    protected function thinkForAnswer($sentences) {
+    protected function thinkForAnswer($sentences)
+    {
 
         $answer = "";
         $emotion = false;
@@ -126,6 +127,8 @@ class Brain
      * Query the knowledge
      * @param array $query A set of query tokens
      * @param string $queryString Original query string
+     * @param string $that
+     * @param string $topic
      * @return array|bool
      */
     protected function queryKnowledge($query, $queryString, $that, $topic)
@@ -165,9 +168,9 @@ class Brain
         if ($node->getTemplate()->getElementsByTagName("srai")->length > 0) {
             $srais = $node->getTemplate()->getElementsByTagName("srai");
             $noOfSrais = $srais->length;
-            for($i = 0; $i < $noOfSrais; $i++) {
+            for ($i = 0; $i < $noOfSrais; $i++) {
                 $srai = $srais->item(0);
-                $this->helper->template->replaceWildcards($srai, $node, $tokenizedInput);
+                $this->helper->template->handleWildcards($srai, $node, $tokenizedInput);
                 $referenceNode = $this->knowledge->getReferenceNode($srai, $that, $topic);
                 $referenceNodes[] = $this->produceResponse($referenceNode, $tokenizedInput, $that, $topic);
             }
