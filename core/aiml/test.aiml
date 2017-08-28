@@ -200,11 +200,19 @@
 
     <!-- <keep> test -->
     <category>
-        <pattern>THE JASON BORNE NAME</pattern>
-        <template>Dunno.</template>
+        <pattern>THE *</pattern>
+        <template>Lucky <star/></template>
     </category>
     <category>
         <pattern>THE * NAME</pattern>
-        <template>The name is Bond. James Bond.</template>
+        <template>The name is Bond. James Bond. <star/></template>
+    </category>
+    <category>
+        <pattern>THE * BORNE NAME</pattern>
+        <template>Borne. <star/></template>
+    </category>
+    <category>
+        <pattern>THE JASON CORRECT NAME</pattern>
+        <template>Correct.</template>
     </category>
 </aiml>

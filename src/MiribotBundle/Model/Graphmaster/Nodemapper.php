@@ -54,7 +54,7 @@ class Nodemapper
      */
     public function __construct($word, $pattern, $template)
     {
-        $this->id = md5($pattern) . "_" . $word;
+        $this->id = md5($word);
         $this->pattern = $pattern;
         $this->word = $word;
         $this->template = $template;
@@ -208,9 +208,30 @@ class Nodemapper
             throw new Exception('Nodemapper word cannot be emptied!');
         }
 
+        if ($internal = $this->getChild($child->getId())) {
+            if ($internal->countChildren() > 0) {
+                $this->mergeChildren($child, $internal);
+            }
+            if ($internal->getTemplate() !== null) {
+                $child->setPattern($internal->getPattern());
+                $child->setTemplate($internal->getTemplate());
+            }
+        }
+
         $child->parentId = $this->id;
         $this->children[$child->getId()] = $child;
         return $this;
+    }
+
+    /**
+    * Merge the children of 2 nodes
+    */
+    protected function mergeChildren(Nodemapper &$node1, Nodemapper &$node2) {
+        $node2Children = $node2->getChildren();
+
+        foreach($node2Children as $child) {
+            $node1->addChild($child);
+        }
     }
 
     /**

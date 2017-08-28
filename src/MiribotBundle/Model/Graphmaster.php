@@ -61,7 +61,6 @@ class Graphmaster
 
         // Map AIML data to bot's Graphmaster knowledge
         $this->mapToNodemapper($categories);
-
         return $this;
     }
 
@@ -112,7 +111,7 @@ class Graphmaster
      */
     protected function match($node, $query)
     {
-        if ($node->getTemplate() !== null) {
+        if (empty($query) && $node->getTemplate() !== null) {
             return $node;
         } else {
             while (!empty($query)) {
