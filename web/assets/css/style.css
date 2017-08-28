@@ -112,3 +112,34 @@ body {
         width: 100%;
     }
 }
+
+@media screen and (max-height: 810px) {
+    .user-text {
+        min-height: 100px;
+    }
+
+    .bot-part {
+        height: 256px;
+    }
+}
+
+@media screen and (max-height: 600px) {
+    .user-text {
+        min-height: 60px;
+    }
+
+    .bot-part {
+        height: 150px;
+    }
+}
+
+
+@media screen and (max-width: 1100px) and (max-height: 500px) {
+    .user-text {
+        min-height: 80px;
+    }
+
+    .bot-part {
+        height: 160px;
+    }
+}
