@@ -62,10 +62,54 @@ class TemplateHelper
         ->handleEmotions($node, $template)// Handle emotion tags
         ->handleMapData($template)// Handle map tags
         ->handleBotData($template)// Handle bot tags
-        ->handleLearning($template);// Learn from template
+        ->handleLearning($template)// Learn from template
+        ->handleWikiSearch($template);// Search for info from wikipedia
 
         // Set the processed template back to the node
         $node->setTemplate($template);
+    }
+
+    /**
+     * Handle wikipedia search
+     * @param \DOMElement $template
+     * @return $this
+     */
+    public function handleWikiSearch(&$template)
+    {
+        $wikis = $template->getElementsByTagName("wiki");
+        $noOfWikis = $wikis->length;
+
+        for ($i = 0; $i < $noOfWikis; $i++) {
+            $wiki = $wikis->item(0);
+            $keyword = $wiki->textContent;
+            $language = $wiki->getAttribute("lang");
+            $random = ($this->string->stringcmp($keyword, "random") == 0);
+
+            if (empty($keyword)) {
+                return $this;
+            }
+
+            if (empty($language)) {
+                $language = "vi";
+            }
+
+            if ($info = $this->searchWikipedia($keyword, $language, $random)) {
+                $infoNode = $wiki->ownerDocument->createTextNode($info);
+
+                $escKeyword = mb_eregi_replace("\W", "_", $keyword);
+                $keyword = ucwords($keyword);
+                $linkNode = $wiki->ownerDocument->createElement('a', "(Wikipedia - {$keyword})");
+                $linkNode->setAttribute("href", "https://{$language}.wikipedia.org/wiki/{$escKeyword}");
+                $linkNode->setAttribute("target", "_blank");
+
+                $wiki->parentNode->appendChild($linkNode);
+                $wiki->parentNode->replaceChild($infoNode, $wiki);
+            } else {
+                $blank = $wiki->ownerDocument->createTextNode("");
+                $wiki->parentNode->replaceChild($blank, $wiki);
+            }
+        }
+        return $this;
     }
 
     /**
@@ -81,7 +125,7 @@ class TemplateHelper
         for ($i = 0; $i < $noOfSrais; $i++) {
             $srai = $srais->item(0);
             if (isset($referenceNodes[$i]) && $referenceNodes[$i]) {
-                $ref = $srai->ownerDocument->createTextNode($referenceNodes[$i]->getTemplate()->textContent);
+                $ref = $srai->ownerDocument->importNode($referenceNodes[$i]->getTemplate());
                 $srai->parentNode->replaceChild($ref, $srai);
             }
         }
@@ -276,21 +320,18 @@ class TemplateHelper
      */
     public function handleSetters(&$template)
     {
-        if ($template->getElementsByTagName("set")->length > 0) {
-            $setters = $template->getElementsByTagName("set");
-            $noOfSetters = $setters->length;
-            for ($i = 0; $i < $noOfSetters; $i++) {
-                $setter = $setters->item(0);
-                $variableName = $setter->getAttribute("name");
-                $variableData = $setter->textContent;
-                if ($variableName == 'topic') { // Save topic in separate memory cache
-                    $this->memory->rememberTopic($variableData);
-                } else {
-                    $this->memory->rememberUserData("variables.{$variableName}", $variableData);
-                }
+        $setters = $template->getElementsByTagName("set");
+        $noOfSetters = $setters->length;
+        for ($i = 0; $i < $noOfSetters; $i++) {
+            $setter = $setters->item(0);
+            $variableName = $setter->getAttribute("name");
+            $variableData = $setter->nodeValue;
+            if ($variableName == 'topic') { // Save topic in separate memory cache
+                $this->memory->rememberTopic($variableData);
+            } else {
+                $this->memory->rememberUserData("variables.{$variableName}", $variableData);
             }
         }
-
         return $this;
     }
 
@@ -301,13 +342,11 @@ class TemplateHelper
      */
     public function handleThinks(&$template)
     {
-        if ($template->getElementsByTagName("think")->length > 0) {
-            $thinks = $template->getElementsByTagName("think");
-            $noOfThinks = $thinks->length;
-            for ($i = 0; $i < $noOfThinks; $i++) {
-                $think = $thinks->item(0);
-                $think->parentNode->removeChild($think);
-            }
+        $thinks = $template->getElementsByTagName("think");
+        $noOfThinks = $thinks->length;
+        for ($i = 0; $i < $noOfThinks; $i++) {
+            $think = $thinks->item(0);
+            $think->parentNode->removeChild($think);
         }
 
         return $this;
@@ -321,8 +360,7 @@ class TemplateHelper
      */
     public function handleEmotions(Nodemapper &$node, &$template)
     {
-        if ($template->getElementsByTagName("emotion")->length > 0) {
-            $emotionTag = $template->getElementsByTagName("emotion")->item(0);
+        if ($emotionTag = $template->getElementsByTagName("emotion")->item(0)) {
             $emotion = $emotionTag->getAttribute("value");
             $node->setExtraData("emotion", $emotion);
         }
@@ -369,16 +407,14 @@ class TemplateHelper
      */
     public function handleBotData(&$template)
     {
-        if ($template->getElementsByTagName("bot")->length > 0) {
-            $botProps = $template->getElementsByTagName("bot");
-            $noOfBotProps = $botProps->length;
-            for ($i = 0; $i < $noOfBotProps; $i++) {
-                $botProp = $botProps->item(0);
-                $propName = $botProp->getAttribute("name");
-                $propValue = $this->memory->recallUserData("bot.{$propName}");
-                $replacement = $template->ownerDocument->createTextNode($propValue);
-                $botProp->parentNode->replaceChild($replacement, $botProp);
-            }
+        $botProps = $template->getElementsByTagName("bot");
+        $noOfBotProps = $botProps->length;
+        for ($i = 0; $i < $noOfBotProps; $i++) {
+            $botProp = $botProps->item(0);
+            $propName = $botProp->getAttribute("name");
+            $propValue = $this->memory->recallUserData("bot.{$propName}");
+            $replacement = $template->ownerDocument->createTextNode($propValue);
+            $botProp->parentNode->replaceChild($replacement, $botProp);
         }
         return $this;
     }
@@ -390,27 +426,67 @@ class TemplateHelper
      */
     public function handleMapData(&$template)
     {
-        if ($template->getElementsByTagName("map")->length > 0) {
-            $maps = $template->getElementsByTagName("map");
-            $noOfMaps = $maps->length;
-            for ($i = 0; $i < $noOfMaps; $i++) {
-                $map = $maps->item(0);
-                $filename = $map->getAttribute("name");
-                $originalValue = $map->textContent;
-                if ($filename == "successor") {
-                    $originalValue = intval($originalValue);
-                    $mappedValue = $originalValue + 1;
-                } elseif ($filename == "predecessor") {
-                    $originalValue = intval($originalValue);
-                    $mappedValue = $originalValue - 1;
-                } else {
-                    $mappedValue = $this->mapData($originalValue, $filename);
-                }
-                $mappedNode = $template->ownerDocument->createTextNode($mappedValue);
-                $map->parentNode->replaceChild($mappedNode, $map);
+        $maps = $template->getElementsByTagName("map");
+        $noOfMaps = $maps->length;
+        for ($i = 0; $i < $noOfMaps; $i++) {
+            $map = $maps->item(0);
+            $filename = $map->getAttribute("name");
+            $originalValue = $map->textContent;
+            if ($filename == "successor") {
+                $originalValue = intval($originalValue);
+                $mappedValue = $originalValue + 1;
+            } elseif ($filename == "predecessor") {
+                $originalValue = intval($originalValue);
+                $mappedValue = $originalValue - 1;
+            } else {
+                $mappedValue = $this->mapData($originalValue, $filename);
             }
+            $mappedValue = mb_eregi_replace("userref", "", $mappedValue);
+            $mappedValue = mb_eregi_replace("botref", "", $mappedValue);
+            $mappedNode = $template->ownerDocument->createTextNode($mappedValue);
+            $map->parentNode->replaceChild($mappedNode, $map);
         }
         return $this;
+    }
+
+    /**
+     * @param $keyword
+     * @param string $language
+     * @param bool $random
+     * @return bool|string
+     */
+    public function searchWikipedia($keyword, $language = "vi", $random = false)
+    {
+        $queries = array(
+            'action' => 'query',
+            'prop' => 'extracts',
+            'exintro' => '',
+            'explaintext' => '',
+            'format' => 'json',
+            'redirects' => '1',
+            'titles' => $keyword
+        );
+
+        if ($random) {
+            $queries['generator'] = 'random';
+        }
+
+        $queries = http_build_query($queries);
+        $url = "http://{$language}.wikipedia.org/w/api.php?{$queries}";
+        $data = @file_get_contents($url);
+
+        if (!$data) {
+            return false;
+        }
+
+        $data = json_decode($data, true);
+        $pageData = array_shift($data['query']['pages']);
+
+        if (isset($pageData['extract'])) {
+            return mb_substr($pageData['extract'], 0, 700) . "... ";
+        }
+
+        return "";
     }
 
     /**
@@ -439,18 +515,21 @@ class TemplateHelper
      */
     private function addToLearnedData($categories, &$learnAiml)
     {
-        if ($categories->length > 0) {
-            $noOfCategories = $categories->length;
-            for ($i = 0; $i < $noOfCategories; $i++) {
-                $category = $categories->item(0);
-                $pattern = $category->getElementsByTagName('pattern')->item(0);
-                if ($pattern) {
-                    $importedNode = $learnAiml->importNode($category, true);
-                    if ($oldNode = $this->hasPatternString($learnAiml, $pattern)) {
+        $noOfCategories = $categories->length;
+        for ($i = 0; $i < $noOfCategories; $i++) {
+            $category = $categories->item(0);
+            $pattern = $category->getElementsByTagName('pattern')->item(0);
+            $template = $category->getElementsByTagName('template')->item(0);
+            $same = ($this->string->stringcmp(trim($pattern->nodeValue), trim($template->nodeValue)) == 0);
+            if ($pattern) {
+                $pattern->nodeValue = mb_strtoupper($pattern->nodeValue);
+                $importedNode = $learnAiml->importNode($category, true);
+                if ($oldNode = $this->hasPatternString($learnAiml, $pattern)) {
+                    if(!$same) {
                         $learnAiml->documentElement->replaceChild($importedNode, $oldNode);
-                    } else {
-                        $learnAiml->documentElement->appendChild($importedNode);
                     }
+                } else {
+                    $learnAiml->documentElement->appendChild($importedNode);
                 }
             }
         }

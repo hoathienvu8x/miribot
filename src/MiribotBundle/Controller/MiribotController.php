@@ -20,4 +20,11 @@ class MiribotController extends Controller
         $answer = $this->get('miribot')->answer($request->get('input'));
         return $this->json($answer);
     }
+
+    public function wikiAction(Request $request)
+    {
+        $keyword = $request->get('keyword');
+        $text = $this->get('helper')->template->searchWikipedia($keyword, "en", true);
+        return new Response($text);
+    }
 }

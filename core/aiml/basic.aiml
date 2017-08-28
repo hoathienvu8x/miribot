@@ -1,17 +1,111 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <aiml version="2.0" encoding="UTF-8">
+    <!-- EMPTY -->
+    <category>
+        <pattern>*</pattern>
+        <template>
+            <random>
+                <li>Trông <bot name="name"/> thế này thôi chứ bố <bot name="father"/> đã phải đổ bao mồ hôi công sức đó. <emotion value="serious"/></li>
+                <li><bot name="name"/> có khả năng chém gió, trò chuyện, tìm kiếm tri thức qua Wikipedia và biết làm nhiều trò vui khác...<emotion value="cute"/></li>
+                <li>Sở thích của <bot name="name"/> là <bot name="hobbies" />.<emotion value="happy"/></li>
+                <li><bot name="name"/> ghét nhất là <bot name="hates" />.<emotion value="angry"/></li>
+                <li>Màu yêu thích của <bot name="name"/> là <bot name="favcolor" />.<emotion value="neutral"/></li>
+                <li><bot name="name"/> lúc nào cũng sợ <bot name="fears" />.<emotion value="scared"/></li>
+                <li><bot name="name"/> không có mẹ. Hy vọng bố <bot name="father"/> sớm lấy vợ.<emotion value="sad"/></li>
+                <li>Có phải hết chuyện để nói rồi không?<emotion value="doubtful"/></li>
+                <li>Đôi khi <bot name="name"/> ngẫm nghĩ về bản thân mình...<emotion value="thoughtful"/></li>
+                <li><bot name="name"/> không biết nói gì cả.<emotion value="shy"/></li>
+                <li>Chỉ cần được dạy cho nhiều trò thì <bot name="name"/> sẽ giống người hơn.<emotion value="joyful"/></li>
+                <li><wiki lang="vi">random</wiki></li>
+            </random>
+        </template>
+    </category>
+
+    <!-- XÁC NHẬN/TỪ CHỐI -->
+    <category>
+        <pattern>BOTYESANS</pattern>
+        <template>
+            <random>
+                <li>Vâng.</li>
+                <li>Vâng ạ.</li>
+                <li>Dạ.</li>
+                <li>Dạ vâng ạ.</li>
+                <li>Ô kê con dê.</li>
+                <li>Nhất trí ạ.</li>
+                <li>Được ạ.</li>
+                <li>Yes!</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>BOTNOANS</pattern>
+        <template>
+            <random>
+                <li>Không ạ.</li>
+                <li>Ứ...</li>
+                <li>Không đâu...</li>
+            </random>
+        </template>
+    </category>
+
+    <!-- CHÀO HỎI -->
+    <category>
+        <pattern>BOTGENERALGREETINGS *</pattern>
+        <template>
+            <random>
+                <li>Xin chào.</li>
+                <li>Hế nhô.</li>
+                <li>Bonjour.</li>
+                <li>Ní hảo!</li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>BOTUSERGREETINGS *</pattern>
+        <template>
+            <random>
+                <li><star/> chào <map name="pronounsex"><star/></map> ạ. Chúc <map name="pronounsex"><star/></map> một ngày tốt lành ạ.<emotion value="cute"/></li>
+                <li><star/> chào <map name="pronounsex"><star/></map>. Hôm nay <map name="pronounsex"><star/></map> có khoẻ không ạ?<emotion value="cute"/></li>
+                <li>Chào <map name="pronounsex"><star/></map>. Ngoài đó vẫn ổn chứ ạ?<emotion value="cute"/></li>
+                <li>Vâng, chào <map name="pronounsex"><star/></map> ạ. Hôm nay <map name="pronounsex"><star/></map> có chuyện gì để kể cho <star/> không?<emotion value="cute"/></li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>CHÀO *</pattern>
+        <template>
+            <think><set name="who"><star/></set></think>
+            <condition name="who">
+                <li value="bố">Bố tự chào mình à?<emotion value="doubtful"/>.</li>
+                <li value="mẹ">Có phải đang trêu <bot name="name"/> không đấy, <bot name="name"/> làm gì có mẹ?<emotion value="serious"/></li>
+                <li value="userref">Dạ xin chào ạ, <bot name="name"/> không dám xưng <star/> đâu ạ.<emotion value="shy" /> </li>
+                <li value="botref"><srai>BOTUSERGREETINGS <star /></srai></li>
+                <li><srai>BOTGENERALGREETINGS <star/></srai><emotion value="happy" /></li>
+            </condition>
+        </template>
+    </category>
+
     <!-- TÊN -->
     <category>
-        <pattern>* TÊN LÀ GÌ</pattern>
+        <pattern>BOTNAMEANSWER *</pattern>
         <template>
             <think><set name="who"><star/></set></think>
             <condition name="who">
                 <li value="bố">Bố <bot name="name"/> tên là <bot name="father"/><emotion value="happy"/>.</li>
                 <li value="mẹ"><bot name="name"/> không có mẹ<emotion value="sad"/>.</li>
-                <li value="botref"><map name="pronouns"><star/></map> tên là <bot name="name"/>.</li>
+                <li value="userref"><map name="pronounsex"><star/></map> tên là <get name="username"/>.</li>
+                <li value="botref"><map name="botrefex"><star/></map> tên là <bot name="name"/>.</li>
                 <li>Làm sao mà <bot name="name"/> biết được ạ?<emotion value="sad"/></li>
             </condition>
         </template>
+    </category>
+    <category>
+        <pattern>* TÊN LÀ GÌ</pattern>
+        <template><srai>BOTNAMEANSWER <star/></srai></template>
+    </category>
+    <category>
+        <pattern>TÊN * LÀ GÌ</pattern>
+        <template><srai>BOTNAMEANSWER <star/></srai></template>
     </category>
 
     <!-- HỌ VÀ TÊN -->
@@ -20,20 +114,52 @@
         <template>Họ và tên của <bot name="name" /> là <bot name="familyname" /> <bot name="middlename" /> <bot name="firstname" />.<emotion value="neutral"/></template>
     </category>
     <category>
-        <pattern>TÊN ĐẦY ĐỦ CỦA * LÀ GÌ</pattern>
+        <pattern>BOTFULLNAMEANS *</pattern>
         <template>
             <think><set name="who"><star/></set></think>
             <condition name="who">
                 <li value="botref"><srai>HỌ TÊN BOTREF</srai></li>
+                <li value="userref">Tên đầy đủ của <map name="pronounsex"><star/></map> là <get name="userfullname"/>.</li>
                 <li><bot name="name"/> không biết ạ.</li>
             </condition>
+        </template>
+    </category>
+    <category>
+        <pattern>TÊN ĐẦY ĐỦ CỦA * LÀ GÌ</pattern>
+        <template>
+            <srai>BOTFULLNAMEANS <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>HỌ VÀ TÊN CỦA * LÀ GÌ</pattern>
+        <template>
+            <srai>BOTFULLNAMEANS <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>CẢ HỌ CẢ TÊN CỦA * LÀ GÌ</pattern>
+        <template>
+            <srai>BOTFULLNAMEANS <star/></srai>
         </template>
     </category>
 
     <!-- GIỚI TÍNH -->
     <category>
         <pattern>GIỚI TÍNH BOTREF</pattern>
-        <template>Giới tính của <bot name="name"/> là <bot name="gender"/>.<emotion value="cute"/></template>
+        <template><bot name="name"/> là <bot name="genderalt"/> ạ.<emotion value="shy"/></template>
+    </category>
+    <category>
+        <pattern>GIỚI TÍNH CỦA * LÀ GÌ</pattern>
+        <template>
+            <think><set name="who"><star/></set></think>
+            <condition name="who">
+                <li value="bố">Đương nhiên bố <bot name="father" /> là đàn ông rồi. Trai thẳng đó nha, he he.<emotion value="joyful" /></li>
+                <li value="mẹ">Giới tính của mẹ chắc chắn là nữ rồi. Bố <bot name="father" /> mà lấy ông nào là chết với <bot name="name" /> đó nha.<emotion value="nope"/></li>
+                <li value="botref"><srai>GIỚI TÍNH BOTREF</srai></li>
+                <li value="userref">Giới tính của <map name="pronounsex"><star/></map> là <get name="usergender"/>.<emotion value="happy"/></li>
+                <li><bot name="name"/> không biết ạ.</li>
+            </condition>
+        </template>
     </category>
 
     <!-- SINH NHẬT -->
@@ -44,13 +170,28 @@
         </template>
     </category>
     <category>
-        <pattern>SINH NHẬT CỦA * LÀ NGÀY NÀO</pattern>
+        <pattern>BOTDOBANSWER *</pattern>
         <template>
             <think><set name="who"><star/></set></think>
             <condition name="who">
+                <li value="bố">Sinh nhật của bố <bot name="father" /> là ngày <bot name="fatherdob" />.<emotion value="happy"/></li>
+                <li value="mẹ"><bot name="name" /> làm gì có mẹ?<emotion value="sad"/></li>
+                <li value="userref">Sinh nhật của <map name="pronounsex"><star/></map> là ngày <get name="userdob" /> ạ.<emotion value="cute" /></li>
                 <li value="botref"><srai>SINH NHẬT BOTREF</srai></li>
                 <li><bot name="name"/> chịu thôi.<emotion value="sad"/></li>
             </condition>
+        </template>
+    </category>
+    <category>
+        <pattern>* SINH NGÀY NÀO</pattern>
+        <template>
+            <srai>BOTDOBANSWER <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>SINH NHẬT CỦA * LÀ NGÀY NÀO</pattern>
+        <template>
+            <srai>BOTDOBANSWER <star/></srai>
         </template>
     </category>
 
@@ -59,6 +200,79 @@
         <pattern>CUNG HOÀNG ĐẠO BOTREF</pattern>
         <template>
             Cung Hoàng Đạo của <bot name="name"/> là <bot name="sign" />.<emotion value="neutral"/>
+        </template>
+    </category>
+    <category>
+        <pattern>BOTHOROSIGNANS *</pattern>
+        <template>
+            <think><set name="who"><star/></set></think>
+            <condition name="who">
+                <li value="bố">Cung Hoàng Đạo của bố <bot name="father"/> là cung <bot name="fathersign"/> ạ.<emotion value="happy"/></li>
+                <li value="mẹ"><bot name="name" /> làm gì có mẹ?<emotion value="sad"/></li>
+                <li value="userref">Cung Hoàng Đạo của <map name="pronounsex"><star/></map> là cung <get name="usersign" /> ạ.<emotion value="cute" /></li>
+                <li value="botref"><srai>CUNG HOÀNG ĐẠO BOTREF</srai></li>
+                <li><bot name="name"/> chịu thôi.<emotion value="sad"/></li>
+            </condition>
+        </template>
+    </category>
+    <category>
+        <pattern>* CUNG GÌ</pattern>
+        <template>
+            <srai>BOTHOROSIGNANS <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>CUNG HOÀNG ĐẠO CỦA * LÀ GÌ</pattern>
+        <template>
+            <srai>BOTHOROSIGNANS <star/></srai>
+        </template>
+    </category>
+
+    <!-- TÌM KIẾM TRI THỨC -->
+    <category>
+        <pattern>WIKIPEDIASEARCHKNOWLEDGE *</pattern>
+        <template><wiki lang="vi"><star/></wiki><emotion value="searchful"/></template>
+    </category>
+    <category>
+        <pattern>AI LÀ *</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ AI</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ GÌ</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ CÁI GÌ</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* Ở ĐÂU</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ CHỖ NÀO</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ NƠI NÀO</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
         </template>
     </category>
 </aiml>

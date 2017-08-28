@@ -1,0 +1,32 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+
+    <!-- LEARN NEW KNOWLEDGE -->
+    <category>
+        <pattern>LEARNQ * LEARNA *</pattern>
+        <template>
+            Đã học xong!<emotion value="happy" />
+            <learn>
+                <category>
+                    <pattern><star/></pattern>
+                    <template><star index="1"/></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+
+    <!-- SEARCH WIKIPEDIA -->
+    <category>
+        <pattern>WIKI * LANG *</pattern>
+        <template>
+            <think><set name="wiki_lang"><star index="1"/></set></think>
+            <condition name="wiki_lang">
+                <li value="en"><wiki lang="en"><star/></wiki><emotion value="searchful" /></li>
+                <li value="vi"><wiki lang="vi"><star/></wiki><emotion value="searchful" /></li>
+                <li value="fr"><wiki lang="fr"><star/></wiki><emotion value="searchful" /></li>
+                <li value="jp"><wiki lang="jp"><star/></wiki><emotion value="searchful" /></li>
+                <li><wiki lang="en"><star/></wiki><emotion value="searchful" /></li>
+            </condition>
+        </template>
+    </category>
+</aiml>

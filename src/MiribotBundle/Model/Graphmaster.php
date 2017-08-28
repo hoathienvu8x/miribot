@@ -88,19 +88,7 @@ class Graphmaster
      */
     public function getReferenceNode($srai, $that, $topic)
     {
-        // Replace <star/> in srai
-        if ($srai->getElementsByTagName("star")->length > 0) {
-            $stars = $srai->getElementsByTagName("star");
-            $noOfStars = $stars->length;
-            for ($i = 0; $i < $noOfStars; $i++) {
-                $asterisk = $srai->ownerDocument->createTextNode("*");
-                $star = $stars->item(0);
-                $srai->replaceChild($asterisk, $star);
-            }
-        }
-        $sraiTxt = $srai->textContent;
-        $sraiQuery = $this->helper->string->produceQueries($sraiTxt, $that, $topic);
-
+        $sraiQuery = $this->helper->string->produceQueries($srai->textContent, $that, $topic);
         return $this->matchQueryPattern($sraiQuery);
     }
 

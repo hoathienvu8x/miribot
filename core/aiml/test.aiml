@@ -198,21 +198,9 @@
         </template>
     </category>
 
-    <!-- <keep> test -->
+    <!-- <wiki> test -->
     <category>
-        <pattern>THE *</pattern>
-        <template>Lucky <star/></template>
-    </category>
-    <category>
-        <pattern>THE * NAME</pattern>
-        <template>The name is Bond. James Bond. <star/></template>
-    </category>
-    <category>
-        <pattern>THE * BORNE NAME</pattern>
-        <template>Borne. <star/></template>
-    </category>
-    <category>
-        <pattern>THE JASON CORRECT NAME</pattern>
-        <template>Correct.</template>
+        <pattern>WHO IS *</pattern>
+        <template><wiki lang="en"><star/></wiki></template>
     </category>
 </aiml>

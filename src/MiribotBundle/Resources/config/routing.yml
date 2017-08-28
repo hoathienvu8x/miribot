@@ -4,3 +4,7 @@ miribot_homepage:
 miribot_answer:
     path:     /answer
     defaults: { _controller: MiribotBundle:Miribot:answer }
+
+wiki:
+    path:     /wiki
+    defaults: { _controller: MiribotBundle:Miribot:wiki }

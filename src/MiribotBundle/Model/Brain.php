@@ -173,7 +173,8 @@ class Brain
                 $this->helper->template->handleWildcards($srai, $node, $tokenizedInput);
                 $referenceNode = $this->knowledge->getReferenceNode($srai, $that, $topic);
                 if ($referenceNode) {
-                    $referenceNodes[] = $this->produceResponse($referenceNode, $tokenizedInput, $that, $topic);
+                    $tokenizedSrai = $this->helper->string->tokenize($srai->textContent);
+                    $referenceNodes[] = $this->produceResponse($referenceNode, $tokenizedSrai, $that, $topic);
                 }
             }
         }
@@ -203,7 +204,9 @@ class Brain
             "scared",
             "surprise",
             "thoughtful",
-            "serious"
+            "serious",
+            "searchful",
+            "shy"
         );
     }
 }

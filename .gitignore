@@ -43,3 +43,4 @@
 .idea/
 web/miribot/
 core/aiml/learn.aiml
+/vendor/

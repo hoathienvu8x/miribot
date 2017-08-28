@@ -205,6 +205,7 @@ class StringHelper
             '<topicstar>',
             '<uppercase>',
             '<emotion>', // Bot's emotion
+            '<wiki>', // Wikipedia search
             // HTML tags
             '<html>',
             '<a>',

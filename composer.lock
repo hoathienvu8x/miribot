@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "112f5315dc4c3105c274f6a2de8175dd",
+    "content-hash": "28d859175a71554d3134b7d1d0eed599",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -1067,6 +1067,59 @@
             "time": "2017-06-19T01:22:40+00:00"
         },
         {
+            "name": "mrcore/text_wiki",
+            "version": "1.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mrcore5/Text_Wiki.git",
+                "reference": "75558193c293c3ed2f8ee0629cf6ea612cee32fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mrcore5/Text_Wiki/zipball/75558193c293c3ed2f8ee0629cf6ea612cee32fc",
+                "reference": "75558193c293c3ed2f8ee0629cf6ea612cee32fc",
+                "shasum": ""
+            },
+            "require": {
+                "pear/pear_exception": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Text": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "./"
+            ],
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Jones",
+                    "email": "pmjones@ciaweb.net",
+                    "role": "Lead"
+                },
+                {
+                    "name": "Justin Patrin",
+                    "email": "papercrane@reversefold.com",
+                    "role": "Lead"
+                },
+                {
+                    "name": "Del Elson",
+                    "email": "del@babel.com.au",
+                    "role": "Developer"
+                }
+            ],
+            "description": "More info available on: http://pear.php.net/package/Text_Wiki",
+            "time": "2016-09-28T18:50:48+00:00"
+        },
+        {
             "name": "paragonie/random_compat",
             "version": "v2.0.10",
             "source": {
@@ -1113,6 +1166,61 @@
                 "random"
             ],
             "time": "2017-03-13T16:27:32+00:00"
+        },
+        {
+            "name": "pear/pear_exception",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pear/PEAR_Exception.git",
+                "reference": "8c18719fdae000b690e3912be401c76e406dd13b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/8c18719fdae000b690e3912be401c76e406dd13b",
+                "reference": "8c18719fdae000b690e3912be401c76e406dd13b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=4.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "class",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "PEAR": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "."
+            ],
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Helgi Thormar",
+                    "email": "dufuz@php.net"
+                },
+                {
+                    "name": "Greg Beaver",
+                    "email": "cellog@php.net"
+                }
+            ],
+            "description": "The PEAR Exception base class.",
+            "homepage": "https://github.com/pear/PEAR_Exception",
+            "keywords": [
+                "exception"
+            ],
+            "time": "2015-02-10T20:07:52+00:00"
         },
         {
             "name": "psr/cache",
@@ -2375,8 +2483,5 @@
     "platform": {
         "php": ">=5.5.9"
     },
-    "platform-dev": [],
-    "platform-overrides": {
-        "php": "5.5.9"
-    }
+    "platform-dev": []
 }

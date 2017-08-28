@@ -27,13 +27,20 @@
                 {% if botname is defined %}
                     {{ botname }}
                 {% else %}
-                    <span class="glyphicon glyphicon-star"></span> MIRI <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star rotate-left"></span>&nbsp;&nbsp;&nbsp;MIRI&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-star rotate-right"></span>
                 {% endif %}
             </h1>
         </div>
         <div class="panel-body">
             <div class="part bot-part">
-                <div class="bot bot-portrait img-thumbnail img-responsive" id="botport"></div>
+                <div class="bot">
+                    <div class="bot-portrait img-thumbnail img-responsive" id="botport"></div>
+                    <div class="text-center func-btn">
+                        <div><button class="btn btn-danger" onclick="clearChat()">Xoá hội thoại</button></div>
+                        <div><button class="btn btn-danger" onclick="randomEmotion()">Biểu cảm đi</button></div>
+                        <div><button class="btn btn-danger" id="toggle-tts" onclick="ttsToggle()">Im đi coi</button></div>
+                    </div>
+                </div>
                 <div class="bot bot-response" id="botres">
                     <!-- Bot responses goes here -->
                 </div>
@@ -61,6 +68,7 @@
     <script type="text/javascript" src="{{ asset('assets/js/popper.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/ie10-viewport-bug-workaround.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/responsivevoice.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/scripts.js') }}"></script>
 {% endblock %}
 
