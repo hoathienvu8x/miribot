@@ -1,12 +1,16 @@
 miribot_homepage:
     path:     /
     defaults: { _controller: MiribotBundle:Miribot:index }
+    schemes:  ['%httpProtocol%']
 miribot_answer:
     path:     /answer
     defaults: { _controller: MiribotBundle:Miribot:answer }
+    schemes:  ['%httpProtocol%']
 miribot_userdataexist:
     path:     /userdataexist
     defaults: { _controller: MiribotBundle:Miribot:userdataexist }
+    schemes:  ['%httpProtocol%']
 miribot_save_userdata:
     path:     /saveuserdata
     defaults: { _controller: MiribotBundle:Miribot:saveuserdata }
+    schemes:  ['%httpProtocol%']
