@@ -1,0 +1,4 @@
+All reserved keywords are listed here, when adding knowledge to the bot, these keywords must be treated carefully.
+
+userref
+botref

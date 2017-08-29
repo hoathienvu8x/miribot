@@ -323,7 +323,7 @@ class TemplateHelper
         $setters = $template->getElementsByTagName("set");
         $noOfSetters = $setters->length;
         for ($i = 0; $i < $noOfSetters; $i++) {
-            $setter = $setters->item(0);
+            $setter = $setters->item($i);
             $variableName = $setter->getAttribute("name");
             $variableData = $setter->nodeValue;
             if ($variableName == 'topic') { // Save topic in separate memory cache
@@ -374,7 +374,7 @@ class TemplateHelper
     public function handleLearning(&$template)
     {
         // Get learn document
-        $learnPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . "learn.aiml";
+        $learnPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . "1_learn.aiml";
 
         $learnContent = @file_get_contents($learnPath);
         $learnAiml = new \DOMDocument();
@@ -388,8 +388,7 @@ class TemplateHelper
         }
 
         // Append learned data
-        if ($template->getElementsByTagName("learn")->length > 0) {
-            $learnTag = $template->getElementsByTagName("learn")->item(0);
+        if ($learnTag = $template->getElementsByTagName("learn")->item(0)) {
             $categories = $learnTag->getElementsByTagName("category");
             $this->addToLearnedData($categories, $learnAiml);
             $learnTag->parentNode->removeChild($learnTag);
@@ -497,7 +496,7 @@ class TemplateHelper
      */
     private function mapData($originalValue, $filename)
     {
-        $path = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . "core" . DIRECTORY_SEPARATOR . "map" . DIRECTORY_SEPARATOR . $filename . ".json";
+        $path = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . "core" . DIRECTORY_SEPARATOR . "maps" . DIRECTORY_SEPARATOR . $filename . ".json";
         $content = @file_get_contents($path);
         if ($content && $maps = json_decode($content, true)) {
             $originalValue = mb_strtolower($originalValue);
@@ -517,19 +516,34 @@ class TemplateHelper
     {
         $noOfCategories = $categories->length;
         for ($i = 0; $i < $noOfCategories; $i++) {
-            $category = $categories->item(0);
+            // Get category
+            $category = $categories->item($i);
+
+            // Get pattern
             $pattern = $category->getElementsByTagName('pattern')->item(0);
-            $template = $category->getElementsByTagName('template')->item(0);
-            $same = ($this->string->stringcmp(trim($pattern->nodeValue), trim($template->nodeValue)) == 0);
+
             if ($pattern) {
+                // Remove wildcard characters
+                $tmpPattern = mb_eregi_replace("[\#\_\^\*]", "", $pattern->nodeValue);
+
+                // Get template
+                $template = $category->getElementsByTagName('template')->item(0);
+
+                // Check if pattern an template are the same, if they are identical, bot won't learn anything
+                $same = ($this->string->stringcmp(trim($tmpPattern), trim($template->nodeValue)) == 0);
+
                 $pattern->nodeValue = mb_strtoupper($pattern->nodeValue);
+
                 $importedNode = $learnAiml->importNode($category, true);
-                if ($oldNode = $this->hasPatternString($learnAiml, $pattern)) {
-                    if(!$same) {
+
+                if ($oldNode = $this->hasPatternString($learnAiml, $tmpPattern)) {
+                    if (!$same) {
                         $learnAiml->documentElement->replaceChild($importedNode, $oldNode);
                     }
                 } else {
-                    $learnAiml->documentElement->appendChild($importedNode);
+                    if (!$same) {
+                        $learnAiml->documentElement->appendChild($importedNode);
+                    }
                 }
             }
         }
@@ -538,7 +552,7 @@ class TemplateHelper
     /**
      * Check if an AIML DOM Document already has a pattern
      * @param \DOMDocument $aiml
-     * @param \DOMNode $pattern
+     * @param string $pattern
      * @return bool|\DOMNode
      */
     private function hasPatternString($aiml, $pattern)
@@ -547,8 +561,8 @@ class TemplateHelper
         $nPatterns = $patterns->length;
 
         for ($i = 0; $i < $nPatterns; $i++) {
-            $aimlPattern = $patterns->item(0);
-            if ($this->string->stringcmp($aimlPattern->textContent, $pattern->textContent) == 0) {
+            $aimlPattern = $patterns->item($i);
+            if ($this->string->stringcmp($aimlPattern->textContent, $pattern) == 0) {
                 return $aimlPattern->parentNode;
             }
         }

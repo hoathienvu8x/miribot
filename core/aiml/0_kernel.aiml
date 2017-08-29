@@ -1,24 +1,30 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <aiml version="2.0" encoding="UTF-8">
-    <!-- EMPTY -->
+    <!-- KHI GẶP TỪ CẤM -->
     <category>
-        <pattern>*</pattern>
+        <pattern>FORBIDDNWORDS</pattern>
         <template>
             <random>
-                <li>Trông <bot name="name"/> thế này thôi chứ bố <bot name="father"/> đã phải đổ bao mồ hôi công sức đó. <emotion value="serious"/></li>
-                <li><bot name="name"/> có khả năng chém gió, trò chuyện, tìm kiếm tri thức qua Wikipedia và biết làm nhiều trò vui khác...<emotion value="cute"/></li>
-                <li>Sở thích của <bot name="name"/> là <bot name="hobbies" />.<emotion value="happy"/></li>
-                <li><bot name="name"/> ghét nhất là <bot name="hates" />.<emotion value="angry"/></li>
-                <li>Màu yêu thích của <bot name="name"/> là <bot name="favcolor" />.<emotion value="neutral"/></li>
-                <li><bot name="name"/> lúc nào cũng sợ <bot name="fears" />.<emotion value="scared"/></li>
-                <li><bot name="name"/> không có mẹ. Hy vọng bố <bot name="father"/> sớm lấy vợ.<emotion value="sad"/></li>
-                <li>Có phải hết chuyện để nói rồi không?<emotion value="doubtful"/></li>
-                <li>Đôi khi <bot name="name"/> ngẫm nghĩ về bản thân mình...<emotion value="thoughtful"/></li>
-                <li><bot name="name"/> không biết nói gì cả.<emotion value="shy"/></li>
-                <li>Chỉ cần được dạy cho nhiều trò thì <bot name="name"/> sẽ giống người hơn.<emotion value="joyful"/></li>
-                <li><wiki lang="vi">random</wiki></li>
+                <li><bot name="name" /> ghét nhất là chửi bậy. Nếu chửi bậy thì đừng chat với <bot name="name" /> nữa.<emotion value="angry"/></li>
+                <li>Chửi bậy thì đi ra chỗ khác mà chơi nhé!<emotion value="angry"/></li>
+                <li>Bố <bot name="father" /> dạy <bot name="name" /> không được chửi bậy.<emotion value="angry"/></li>
+                <li><bot name="name" /> có thể hiểu câu chửi bằng 6 thứ tiếng như <bot name="name" /> rất ghét chửi bậy.<emotion value="angry"/></li>
+                <li>Đừng làm <bot name="name" /> cáu.<emotion value="angry"/></li>
+                <li><bot name="name" /> ghét nói về chủ đề đó.<emotion value="angry"/></li>
             </random>
         </template>
+    </category>
+    <category>
+        <pattern>_ <set>forbidden</set> _</pattern>
+        <template><srai>FORBIDDNWORDS</srai></template>
+    </category>
+    <category>
+        <pattern>_ <set>forbidden</set></pattern>
+        <template><srai>FORBIDDNWORDS</srai></template>
+    </category>
+    <category>
+        <pattern><set>forbidden</set> _</pattern>
+        <template><srai>FORBIDDNWORDS</srai></template>
     </category>
 
     <!-- XÁC NHẬN/TỪ CHỐI -->
@@ -76,7 +82,7 @@
         <template>
             <think><set name="who"><star/></set></think>
             <condition name="who">
-                <li value="bố">Bố tự chào mình à?<emotion value="doubtful"/>.</li>
+                <li value="bố">Bố tự chào mình à?<emotion value="doubtful"/></li>
                 <li value="mẹ">Có phải đang trêu <bot name="name"/> không đấy, <bot name="name"/> làm gì có mẹ?<emotion value="serious"/></li>
                 <li value="userref">Dạ xin chào ạ, <bot name="name"/> không dám xưng <star/> đâu ạ.<emotion value="shy" /> </li>
                 <li value="botref"><srai>BOTUSERGREETINGS <star /></srai></li>
@@ -225,54 +231,6 @@
         <pattern>CUNG HOÀNG ĐẠO CỦA * LÀ GÌ</pattern>
         <template>
             <srai>BOTHOROSIGNANS <star/></srai>
-        </template>
-    </category>
-
-    <!-- TÌM KIẾM TRI THỨC -->
-    <category>
-        <pattern>WIKIPEDIASEARCHKNOWLEDGE *</pattern>
-        <template><wiki lang="vi"><star/></wiki><emotion value="searchful"/></template>
-    </category>
-    <category>
-        <pattern>AI LÀ *</pattern>
-        <template>
-            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
-        </template>
-    </category>
-    <category>
-        <pattern>* LÀ AI</pattern>
-        <template>
-            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
-        </template>
-    </category>
-    <category>
-        <pattern>* LÀ GÌ</pattern>
-        <template>
-            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
-        </template>
-    </category>
-    <category>
-        <pattern>* LÀ CÁI GÌ</pattern>
-        <template>
-            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
-        </template>
-    </category>
-    <category>
-        <pattern>* Ở ĐÂU</pattern>
-        <template>
-            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
-        </template>
-    </category>
-    <category>
-        <pattern>* LÀ CHỖ NÀO</pattern>
-        <template>
-            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
-        </template>
-    </category>
-    <category>
-        <pattern>* LÀ NƠI NÀO</pattern>
-        <template>
-            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
         </template>
     </category>
 </aiml>

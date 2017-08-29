@@ -28,9 +28,8 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $string = "Cậu tên là gì?";
-        /** @var StringHelper $stringHelper */
-        $stringHelper = $this->getContainer()->get('helper_string');
-        echo $stringHelper->substituteWords($string);
+        $string = "forbidden";
+        $match = mb_ereg_match("<set\b[^>]*>(.*?)</set>", $string);
+        var_dump($match);
     }
 }

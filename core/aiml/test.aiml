@@ -203,4 +203,10 @@
         <pattern>WHO IS *</pattern>
         <template><wiki lang="en"><star/></wiki></template>
     </category>
+
+    <!-- pattern <set> test -->
+    <category>
+        <pattern>THE <set>forbidden</set> IS FORBIDDEN</pattern>
+        <template>Yeah</template>
+    </category>
 </aiml>

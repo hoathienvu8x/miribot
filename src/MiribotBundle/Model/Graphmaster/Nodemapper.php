@@ -18,16 +18,18 @@ class Nodemapper
     protected $id = null;
 
     /**
-     * @var string|null
+     * @var null|Nodemapper
      */
-    protected $parentId = null;
+    protected $parent = null;
 
     /**
      * @var string|null
      */
     protected $word = null;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     */
     protected $pattern = null;
 
     /**
@@ -87,20 +89,20 @@ class Nodemapper
     }
 
     /**
-     * @return null|string
+     * @return Nodemapper
      */
-    public function getParentId()
+    public function getParent()
     {
-        return $this->parentId;
+        return $this->parent;
     }
 
     /**
-     * @param $parentId
+     * @param $parent
      * @return $this
      */
-    public function setParentId($parentId)
+    public function setParent($parent)
     {
-        $this->parentId = $parentId;
+        $this->parent = &$parent;
         return $this;
     }
 
@@ -218,14 +220,16 @@ class Nodemapper
             }
         }
 
-        $child->parentId = $this->id;
+        $child->parent = &$this;
         $this->children[$child->getId()] = $child;
         return $this;
     }
 
     /**
-    * Merge the children of 2 nodes
-    */
+     * Merge the children of 2 nodes
+     * @param Nodemapper $node1
+     * @param Nodemapper $node2
+     */
     protected function mergeChildren(Nodemapper &$node1, Nodemapper &$node2) {
         $node2Children = $node2->getChildren();
 

@@ -61,6 +61,9 @@ class Graphmaster
 
         // Map AIML data to bot's Graphmaster knowledge
         $this->mapToNodemapper($categories);
+
+        //dump($this->graph);die;
+
         return $this;
     }
 
@@ -70,7 +73,6 @@ class Graphmaster
      */
     public function matchQueryPattern($query)
     {
-        //dump($this->graph);die;
         // Find the node that matches query pattern
         $node = $this->match($this->graph, $query);
 
@@ -104,14 +106,28 @@ class Graphmaster
         } else {
             while (!empty($query)) {
                 $word = array_shift($query);
+
+                // Check if the word is a reserved keyword
+                if (($this->helper->string->stringcmp($word, 'userref') == 0)
+                    || ($this->helper->string->stringcmp($word, 'botref') == 0)) {
+                    continue;
+                }
+
                 $matchingTokens = array("#", "_", $word, "^", "*");
+                //print_r(htmlentities($word) . "|" . htmlentities($node->getWord()) . ' --> ' . htmlentities(implode("|", $query)) . "<br/>");
+
                 foreach ($matchingTokens as $token) {
                     $matched = $this->matchToken($node, $token, $query);
                     if ($matched) {
-                        return $matched;
+                        return $this->match($matched, $query);
                     }
                 }
             }
+
+            if ($node->getTemplate() !== null) {
+                return $node;
+            }
+
             return false;
         }
     }
@@ -125,15 +141,47 @@ class Graphmaster
      */
     protected function matchToken(Nodemapper $node, $token, $query)
     {
-        $possibleMatch = $node->getChildrenByWord($token);
-        if (count($possibleMatch) > 0) {
-            foreach ($possibleMatch as $match) {
-                if ($matchBranch = $this->match($match, $query)) {
+        /** @var Nodemapper $child */
+        foreach($node->getChildren() as $child) {
+            // If the current node has <set> tag
+            if (strpos($child->getWord(), "<set>") !== FALSE) {
+                // Get all words in the set
+                $setWords = $this->getSetWords(strip_tags($child->getWord()));
+
+                // If the set contains current token then a match is found
+                if (in_array(mb_strtolower($token), $setWords)) {
+                    // Proceed to next word
+                    if ($matchBranch = $this->match($child, $query)) {
+                        return $matchBranch;
+                    }
+                }
+            }
+
+            // If the current node contains normal word
+            if ($this->helper->string->stringcmp($child->getWord(), $token) == 0) {
+                if ($matchBranch = $this->match($child, $query)) {
                     return $matchBranch;
                 }
             }
         }
+
         return false;
+    }
+
+    /**
+     * Get words in a set
+     * @param $set
+     * @return array|mixed
+     */
+    protected function getSetWords($set) {
+        $setPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'sets' . DIRECTORY_SEPARATOR . $set . '.json';
+        $setWordsJson = @file_get_contents($setPath);
+
+        if ($setWordsJson) {
+            return json_decode($setWordsJson, true);
+        }
+
+        return array();
     }
 
     /**
@@ -151,37 +199,57 @@ class Graphmaster
             }
 
             // Get pattern string
-            $pattern = $category->getElementsByTagName("pattern")->item(0)->textContent;
-
-            // Add that to the pattern
-            /** @var \SimpleXMLElement $that */
-            if ($category->getElementsByTagName("that")->length > 0) {
-                // In case the category contains that, add it to the pattern
-                $pattern .= " <that> " . $category->getElementsByTagName("that")->item(0)->textContent;
-            } else {
-                $pattern .= " <that>";
-            }
-
-            // Add topic to the pattern
-            if ($parent = $category->parentNode) {
-                if ($parent->tagName == "topic") {
-                    $pattern .= " <topic> " . mb_strtoupper($parent->getAttribute("name"));
-                } else {
-                    $pattern .= " <topic>";
-                }
-            } else {
-                $pattern .= " <topic>";
-            }
+            $pattern = $this->extractPatternString($category);
 
             // Build pattern tokens
-            $patternTokens = explode(" ", $pattern);
+            $patternTokens = mb_split("\s", $pattern);
+            $patternTokens = array_filter($patternTokens);
 
             // Create a category branch that contains word Nodemappers lead to a specific template
             // then add to the knowledge Graphmaster
             /** @var Nodemapper $categoryBranchNode */
-            $categoryBranchNode = $this->buildCategoryBranch($category, $pattern, $patternTokens);
+            $categoryBranchNode = $this->buildCategoryBranch($category, $pattern, array_values($patternTokens));
             $this->graph->addChild($categoryBranchNode);
         }
+    }
+
+    /**
+     * Extract pattern string from a category
+     * @param \DOMElement $category
+     * @return string
+     */
+    protected function extractPatternString(\DOMElement $category)
+    {
+        $string = "";
+
+        $pattern = $category->getElementsByTagName("pattern")->item(0);
+
+        /** @var \DOMNode $node */
+        foreach($pattern->childNodes as $node) {
+            $string .= $pattern->ownerDocument->saveXML($node);
+        }
+
+        // Add that to the pattern
+        /** @var \SimpleXMLElement $that */
+        if ($category->getElementsByTagName("that")->length > 0) {
+            // In case the category contains that, add it to the pattern
+            $string .= " <that> " . $category->getElementsByTagName("that")->item(0)->nodeValue;
+        } else {
+            $string .= " <that>";
+        }
+
+        // Add topic to the pattern
+        if ($parent = $category->parentNode) {
+            if ($parent->tagName == "topic") {
+                $string .= " <topic> " . mb_strtoupper($parent->getAttribute("name"));
+            } else {
+                $string .= " <topic>";
+            }
+        } else {
+            $string .= " <topic>";
+        }
+
+        return $string;
     }
 
     /**

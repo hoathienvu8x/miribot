@@ -1,0 +1,50 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+    <!-- TÌM KIẾM TRI THỨC -->
+    <category>
+        <pattern>WIKIPEDIASEARCHKNOWLEDGE *</pattern>
+        <template><wiki lang="vi"><star/></wiki><emotion value="searchful"/></template>
+    </category>
+    <category>
+        <pattern>AI LÀ *</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ AI</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ GÌ</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ CÁI GÌ</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* Ở ĐÂU</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ CHỖ NÀO</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+    <category>
+        <pattern>* LÀ NƠI NÀO</pattern>
+        <template>
+            <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>
+        </template>
+    </category>
+</aiml>

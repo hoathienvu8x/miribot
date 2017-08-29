@@ -3,7 +3,7 @@
  */
 
 var lastUserInput = "";
-var textToSpeech = true;
+var textToSpeech = false;
 var timeout = setTimeout(bluffing, 120000);
 
 function bluffing() {

@@ -1,0 +1,23 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+    <!-- KHI KHÔNG BIẾT NÓI GÌ -->
+    <category>
+        <pattern>*</pattern>
+        <template>
+            <random>
+                <li>Trông <bot name="name"/> thế này thôi chứ bố <bot name="father"/> đã phải đổ bao mồ hôi công sức đó. <emotion value="serious"/></li>
+                <li><bot name="name"/> có khả năng chém gió, trò chuyện, tìm kiếm tri thức qua Wikipedia và biết làm nhiều trò vui khác...<emotion value="cute"/></li>
+                <li>Sở thích của <bot name="name"/> là <bot name="hobbies" />.<emotion value="happy"/></li>
+                <li><bot name="name"/> ghét nhất là <bot name="hates" />.<emotion value="angry"/></li>
+                <li>Màu yêu thích của <bot name="name"/> là <bot name="favcolor" />.<emotion value="neutral"/></li>
+                <li><bot name="name"/> lúc nào cũng sợ <bot name="fears" />.<emotion value="scared"/></li>
+                <li><bot name="name"/> không có mẹ. Hy vọng bố <bot name="father"/> sớm lấy vợ.<emotion value="sad"/></li>
+                <li>Có phải hết chuyện để nói rồi không?<emotion value="doubtful"/></li>
+                <li>Đôi khi <bot name="name"/> ngẫm nghĩ về bản thân mình...<emotion value="thoughtful"/></li>
+                <li><bot name="name"/> không biết nói gì cả.<emotion value="shy"/></li>
+                <li>Chỉ cần được dạy cho nhiều trò thì <bot name="name"/> sẽ giống người hơn.<emotion value="joyful"/></li>
+                <li><wiki lang="vi">random</wiki></li>
+            </random>
+        </template>
+    </category>
+</aiml>

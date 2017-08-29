@@ -1,0 +1,51 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+    <category>
+        <pattern>HÃY NHỚ * LÀ * NGƯỜI *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> LÀ <star index="1" /> NGƯỜI NHƯ THẾ NÀO</pattern>
+                    <template><star/> là <star index="1" /> người <star index="2" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ CON * LÀ *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> LÀ CON GÌ</pattern>
+                    <template><star/> là <star index="1" /></template>
+                </category>
+                <category>
+                    <pattern>HÃY NÓI VỀ CON <star/></pattern>
+                    <template><star/> là <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * Ở *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> Ở ĐÂU</pattern>
+                    <template><star/> ở <star index="1" /></template>
+                </category>
+                <category>
+                    <pattern><star/> NẰM Ở ĐÂU</pattern>
+                    <template><star/> nằm ở <star index="1" /></template>
+                </category>
+                <category>
+                    <pattern><star/> Ở CHỖ NÀO</pattern>
+                    <template><star/> nằm ở <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+</aiml>
