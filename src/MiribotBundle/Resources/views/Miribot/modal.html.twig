@@ -1,5 +1,5 @@
 <div id="user-info-box" class="text-center">
-    <form method="post" id="user-info-form" action="{{ url('miribot_save_userdata') }}" enctype="multipart/form-data">
+    <form method="post" id="user-info-form" action="{{ path('miribot_save_userdata') }}" enctype="multipart/form-data">
         <div class="form-group">
             <label for="name">Tên Của Bạn</label>
             <input type="text" class="form-control" id="name" required="required" name="userdata[username]">

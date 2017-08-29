@@ -39,5 +39,3 @@ monolog:
 
 #swiftmailer:
 #    delivery_addresses: ['me@example.com']
-parameters:
-    httpProtocol: http
