@@ -5,7 +5,35 @@
 var lastUserInput = "";
 var textToSpeech = false;
 var timeout = setTimeout(bluffing, 120000);
+var userDataInput;
 
+jQuery(document).ready(function () {
+    // Bot response
+    jQuery.ajax({
+        method: 'GET',
+        url: jQuery("#userdataexist-url").val(),
+        dataType: 'json',
+        success: function (data) {
+            if (parseInt(data.has_user_data) === 0) {
+                userDataInput = new jBox('Modal', {
+                    width: 400,
+                    height: 450,
+                    title: 'Hãy cho M.I.R.I biết bạn là ai',
+                    animation: 'tada',
+                    theme: 'NoticeFancy',
+                    closeOnEsc: false,
+                    closeOnClick: false,
+                    content: jQuery("#user-info-box")
+                });
+                userDataInput.open();
+            }
+        }
+    });
+});
+
+/**
+ * Talk some nonsense
+ */
 function bluffing() {
     requestAnswer("*");
     clearTimeout(timeout);
@@ -73,6 +101,31 @@ function requestAnswer(userInput) {
             if (textToSpeech) {
                 responsiveVoice.speak(data.answer, "Vietnamese Male", {pitch: 1.3, volume: 3});
             }
+        }
+    });
+}
+
+/**
+ * Post user data
+ */
+function postUserData() {
+    var form = jQuery('#user-info-form');
+    var url = form.attr('action');
+
+    jQuery.ajax({
+        method: 'GET',
+        url: url,
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (data) {
+            if (userDataInput !== undefined && parseInt(data.done) === 1) {
+                userDataInput.close();
+            } else {
+                alert("Đã xảy ra lỗi!");
+            }
+        },
+        failed: function (data) {
+            alert("Đã xảy ra lỗi!");
         }
     });
 }

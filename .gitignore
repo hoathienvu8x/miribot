@@ -42,6 +42,6 @@
 
 .idea/
 web/miribot/
-core/aiml/1_learn.aiml
+core/aiml/learn.aiml
 /vendor/
 /web/chatlog.txt

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Miribot">
+    <meta name="description" content="Trò chuyện cùng Miribot">
     <meta name="author" content="Khue Quang Nguyen">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
@@ -13,50 +13,26 @@
     {% block stylesheets %}
         <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/css/bootstrap-theme.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/jBox.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/plugins/Confirm/jBox.Confirm.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/plugins/Image/jBox.Image.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/plugins/Notice/jBox.Notice.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/NoticeFancy.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipBorder.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipBorderThick.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipDark.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipError.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipSmall.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipSmallGray.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     {% endblock %}
 </head>
 
 <body>
 
-<!-- Main content -->
-<div class="container">
-    <div class="panel panel-danger chatbox">
-        <div class="panel-heading">
-            <h1 class="panel-title text-center bot-name">
-                {% if botname is defined %}
-                    {{ botname }}
-                {% else %}
-                    <span class="glyphicon glyphicon-star rotate-left"></span>&nbsp;&nbsp;&nbsp;MIRI&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-star rotate-right"></span>
-                {% endif %}
-            </h1>
-        </div>
-        <div class="panel-body">
-            <div class="part bot-part">
-                <div class="bot">
-                    <div class="bot-portrait img-thumbnail img-responsive" id="botport"></div>
-                    <div class="text-center func-btn">
-                        <div><button class="btn btn-danger" onclick="clearChat()">Xoá hội thoại</button></div>
-                        <div><button class="btn btn-danger" onclick="randomEmotion()">Biểu cảm đi</button></div>
-                        <div><button class="btn btn-default" id="toggle-tts" onclick="ttsToggle()">Nói đi coi</button></div>
-                    </div>
-                </div>
-                <div class="bot bot-response" id="botres">
-                    <!-- Bot responses goes here -->
-                </div>
-            </div>
-            <span class="clearfix"></span>
-            <div class="part user-part">
-                <div class="user">
-                    <textarea name="user_input" rows="2" class="user-text form-control" onkeydown="inputMessage(this, event)" placeholder="Viết gì đó vào đây..."></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="urls">
-        <input type="hidden" name="answer_url" id="answer-url" value="{{ url('miribot_answer') }}"/>
-    </div>
-</div><!-- /.container -->
+{{ include('@Miribot/Miribot/content.html.twig') }}
+
+{{ include('@Miribot/Miribot/modal.html.twig') }}
 
 <footer>
     <div class="text-center">Created by Khue Quang Nguyen, {{ "now"|date('Y') }}</div>
@@ -65,6 +41,10 @@
 <!-- JavaScripts -->
 {% block javascripts %}
     <script type="text/javascript" src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jBox/jBox.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jBox/plugins/Confirm/jBox.Confirm.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jBox/plugins/Image/jBox.Image.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jBox/plugins/Notice/jBox.Notice.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/popper.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/ie10-viewport-bug-workaround.js') }}"></script>

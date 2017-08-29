@@ -9,6 +9,7 @@
 namespace MiribotBundle\Helper;
 
 use MiribotBundle\Model\Graphmaster\Nodemapper;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Kernel;
 
 class TemplateHelper
@@ -29,15 +30,23 @@ class TemplateHelper
     protected $kernel;
 
     /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
      * TemplateHelper constructor.
      * @param Kernel $kernel
      * @param MemoryHelper $memory
+     * @param StringHelper $string
+     * @param Session $session
      */
-    public function __construct(Kernel $kernel, MemoryHelper $memory, StringHelper $string)
+    public function __construct(Kernel $kernel, Session $session, MemoryHelper $memory, StringHelper $string)
     {
         $this->memory = $memory;
         $this->kernel = $kernel;
         $this->string = $string;
+        $this->session = $session;
     }
 
     /**
@@ -57,6 +66,7 @@ class TemplateHelper
         ->handleSetters($template)// Handle set tags
         ->handleThinks($template)// Handle think tags
         ->handleGetters($template)// Handle get tags
+        ->handleUserData($template)// Handle user tags
         ->handleConditions($template)// Process conditional tags
         ->handleReferences($template, $referenceNodes)// Get all references
         ->handleEmotions($node, $template)// Handle emotion tags
@@ -67,6 +77,27 @@ class TemplateHelper
 
         // Set the processed template back to the node
         $node->setTemplate($template);
+    }
+
+    /**
+     * @param \DOMElement $template
+     * @return $this
+     */
+    public function handleUserData(&$template)
+    {
+        $userTags = $template->getElementsByTagName('user');
+        $noOfUserTags = $userTags->length;
+        $userData = $this->session->get('userdata');
+
+        for ($i = 0; $i < $noOfUserTags; $i++) {
+            $user = $userTags->item(0);
+            $userAttrName = $user->getAttribute('name');
+            $userAttrValue = isset($userData[$userAttrName]) ? $userData[$userAttrName] : "";
+            $userDataNode = $user->ownerDocument->createTextNode($userAttrValue);
+            $user->parentNode->replaceChild($userDataNode, $user);
+        }
+
+        return $this;
     }
 
     /**
@@ -377,7 +408,7 @@ class TemplateHelper
     public function handleLearning(&$template)
     {
         // Get learn document
-        $learnPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . "1_learn.aiml";
+        $learnPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . "learn.aiml";
 
         $learnContent = @file_get_contents($learnPath);
         $learnAiml = new \DOMDocument();
@@ -529,27 +560,68 @@ class TemplateHelper
                 // Remove wildcard characters
                 $tmpPattern = mb_eregi_replace("[\#\_\^\*]", "", $pattern->nodeValue);
 
-                // Get template
-                $template = $category->getElementsByTagName('template')->item(0);
-
-                // Check if pattern an template are the same, if they are identical, bot won't learn anything
-                $same = ($this->string->stringcmp(trim($tmpPattern), trim($template->nodeValue)) == 0);
-
-                $pattern->nodeValue = mb_strtoupper($pattern->nodeValue);
-
-                $importedNode = $learnAiml->importNode($category, true);
-
-                if ($oldNode = $this->hasPatternString($learnAiml, $tmpPattern)) {
-                    if (!$same) {
-                        $learnAiml->documentElement->replaceChild($importedNode, $oldNode);
-                    }
+                if ($this->containsForbiddenWords($tmpPattern)) {
+                    $error = "Không thể học được vì chứa từ cấm!";
+                    $errorNode = $category->ownerDocument->createTextNode($error);
+                    $learnNode = $category->parentNode;
+                    $learnNode->parentNode->appendChild($errorNode);
                 } else {
-                    if (!$same) {
-                        $learnAiml->documentElement->appendChild($importedNode);
+                    // Get template
+                    $template = $category->getElementsByTagName('template')->item(0);
+
+                    // Check if pattern an template are the same, if they are identical, bot won't learn anything
+                    $same = ($this->string->stringcmp(trim($tmpPattern), trim($template->nodeValue)) == 0);
+
+                    // Convert pattern value to uppercase for saving
+                    $pattern->nodeValue = mb_strtoupper($pattern->nodeValue);
+
+                    $importedNode = $learnAiml->importNode($category, true);
+
+                    if ($oldNode = $this->hasPatternString($learnAiml, $tmpPattern)) {
+                        if (!$same) {
+                            $learnAiml->documentElement->replaceChild($importedNode, $oldNode);
+                        }
+                    } else {
+                        if (!$same) {
+                            $learnAiml->documentElement->appendChild($importedNode);
+                        }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Get words in a set
+     * @param $set
+     * @return array|mixed
+     */
+    public function getSetWords($set)
+    {
+        $setPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'sets' . DIRECTORY_SEPARATOR . $set . '.json';
+        $setWordsJson = @file_get_contents($setPath);
+
+        if ($setWordsJson) {
+            return json_decode($setWordsJson, true);
+        }
+
+        return array();
+    }
+
+    /**
+     * @param $pattern
+     * @return bool
+     */
+    private function containsForbiddenWords($pattern)
+    {
+        $forbiddenWords = $this->getSetWords('forbidden');
+        $patternTokens = mb_split("\s", $pattern);
+        foreach($patternTokens as $token) {
+            if (in_array($token, $forbiddenWords)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

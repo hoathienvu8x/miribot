@@ -99,7 +99,7 @@
             <condition name="who">
                 <li value="bố">Bố <bot name="name"/> tên là <bot name="father"/><emotion value="happy"/>.</li>
                 <li value="mẹ"><bot name="name"/> không có mẹ<emotion value="sad"/>.</li>
-                <li value="userref"><map name="pronounsex"><star/></map> tên là <get name="username"/>.</li>
+                <li value="userref"><map name="pronounsex"><star/></map> tên là <user name="username"/>.</li>
                 <li value="botref"><map name="botrefex"><star/></map> tên là <bot name="name"/>.</li>
                 <li>Làm sao mà <bot name="name"/> biết được ạ?<emotion value="sad"/></li>
             </condition>
@@ -116,16 +116,12 @@
 
     <!-- HỌ VÀ TÊN -->
     <category>
-        <pattern>HỌ TÊN BOTREF</pattern>
-        <template>Họ và tên của <bot name="name" /> là <bot name="familyname" /> <bot name="middlename" /> <bot name="firstname" />.<emotion value="neutral"/></template>
-    </category>
-    <category>
         <pattern>BOTFULLNAMEANS *</pattern>
         <template>
             <think><set name="who"><star/></set></think>
             <condition name="who">
-                <li value="botref"><srai>HỌ TÊN BOTREF</srai></li>
-                <li value="userref">Tên đầy đủ của <map name="pronounsex"><star/></map> là <get name="userfullname"/>.</li>
+                <li value="botref">Họ và tên của <bot name="name" /> là <bot name="familyname" /> <bot name="middlename" /> <bot name="firstname" />.<emotion value="neutral"/></li>
+                <li value="userref">Tên của <map name="pronounsex"><star/></map> là <user name="username"/>.</li>
                 <li><bot name="name"/> không biết ạ.</li>
             </condition>
         </template>
@@ -151,18 +147,14 @@
 
     <!-- GIỚI TÍNH -->
     <category>
-        <pattern>GIỚI TÍNH BOTREF</pattern>
-        <template><bot name="name"/> là <bot name="genderalt"/> ạ.<emotion value="shy"/></template>
-    </category>
-    <category>
         <pattern>GIỚI TÍNH CỦA * LÀ GÌ</pattern>
         <template>
             <think><set name="who"><star/></set></think>
             <condition name="who">
                 <li value="bố">Đương nhiên bố <bot name="father" /> là đàn ông rồi. Trai thẳng đó nha, he he.<emotion value="joyful" /></li>
                 <li value="mẹ">Giới tính của mẹ chắc chắn là nữ rồi. Bố <bot name="father" /> mà lấy ông nào là chết với <bot name="name" /> đó nha.<emotion value="nope"/></li>
-                <li value="botref"><srai>GIỚI TÍNH BOTREF</srai></li>
-                <li value="userref">Giới tính của <map name="pronounsex"><star/></map> là <get name="usergender"/>.<emotion value="happy"/></li>
+                <li value="botref"><bot name="name"/> là <bot name="genderalt"/> ạ.<emotion value="shy"/></li>
+                <li value="userref">Giới tính của <map name="pronounsex"><star/></map> là <user name="usergender"/>.<emotion value="happy"/></li>
                 <li><bot name="name"/> không biết ạ.</li>
             </condition>
         </template>
@@ -170,20 +162,14 @@
 
     <!-- SINH NHẬT -->
     <category>
-        <pattern>SINH NHẬT BOTREF</pattern>
-        <template>
-            <bot name="name"/> sinh ngày <bot name="birthday" /> tại <bot name="birthplace" />.<emotion value="happy"/>
-        </template>
-    </category>
-    <category>
         <pattern>BOTDOBANSWER *</pattern>
         <template>
             <think><set name="who"><star/></set></think>
             <condition name="who">
                 <li value="bố">Sinh nhật của bố <bot name="father" /> là ngày <bot name="fatherdob" />.<emotion value="happy"/></li>
                 <li value="mẹ"><bot name="name" /> làm gì có mẹ?<emotion value="sad"/></li>
-                <li value="userref">Sinh nhật của <map name="pronounsex"><star/></map> là ngày <get name="userdob" /> ạ.<emotion value="cute" /></li>
-                <li value="botref"><srai>SINH NHẬT BOTREF</srai></li>
+                <li value="userref">Sinh nhật của <map name="pronounsex"><star/></map> là ngày <user name="userdob" /> ạ.<emotion value="cute" /></li>
+                <li value="botref"><bot name="name"/> sinh ngày <bot name="birthday" /> tại <bot name="birthplace" />.<emotion value="happy"/></li>
                 <li><bot name="name"/> chịu thôi.<emotion value="sad"/></li>
             </condition>
         </template>
@@ -203,20 +189,14 @@
 
     <!-- CUNG HOÀNG ĐẠO -->
     <category>
-        <pattern>CUNG HOÀNG ĐẠO BOTREF</pattern>
-        <template>
-            Cung Hoàng Đạo của <bot name="name"/> là <bot name="sign" />.<emotion value="neutral"/>
-        </template>
-    </category>
-    <category>
         <pattern>BOTHOROSIGNANS *</pattern>
         <template>
             <think><set name="who"><star/></set></think>
             <condition name="who">
                 <li value="bố">Cung Hoàng Đạo của bố <bot name="father"/> là cung <bot name="fathersign"/> ạ.<emotion value="happy"/></li>
                 <li value="mẹ"><bot name="name" /> làm gì có mẹ?<emotion value="sad"/></li>
-                <li value="userref">Cung Hoàng Đạo của <map name="pronounsex"><star/></map> là cung <get name="usersign" /> ạ.<emotion value="cute" /></li>
-                <li value="botref"><srai>CUNG HOÀNG ĐẠO BOTREF</srai></li>
+                <li value="userref">Cung Hoàng Đạo của <map name="pronounsex"><star/></map> là cung <user name="usersign" /> ạ.<emotion value="cute" /></li>
+                <li value="botref">Cung Hoàng Đạo của <bot name="name"/> là <bot name="sign" />.<emotion value="neutral"/></li>
                 <li><bot name="name"/> chịu thôi.<emotion value="sad"/></li>
             </condition>
         </template>

@@ -7,7 +7,6 @@ miribot_answer:
 miribot_userdataexist:
     path:     /userdataexist
     defaults: { _controller: MiribotBundle:Miribot:userdataexist }
-
-wiki:
-    path:     /wiki
-    defaults: { _controller: MiribotBundle:Miribot:wiki }
+miribot_save_userdata:
+    path:     /saveuserdata
+    defaults: { _controller: MiribotBundle:Miribot:saveuserdata }

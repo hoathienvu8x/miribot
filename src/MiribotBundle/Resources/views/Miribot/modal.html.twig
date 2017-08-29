@@ -1,0 +1,53 @@
+<div id="user-info-box" class="text-center">
+    <form method="post" id="user-info-form" action="{{ url('miribot_save_userdata') }}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Tên Của Bạn</label>
+            <input type="text" class="form-control" id="name" required="required" name="userdata[username]">
+        </div>
+        <div class="form-group">
+            <label for="dob">Ngày Sinh Của Bạn</label>
+            <input type="text" class="form-control" id="dob" required="required" name="userdata[userdob]">
+        </div>
+        <div class="form-group">
+            <label for="pronoun">Cung Hoàng Đạo Của Bạn</label>
+            <select id="pronoun" class="form-control " required="required" name="userdata[usersign]">
+                <option value="">-- Chọn Cung Hoàng Đạo --</option>
+                <option value="Bạch Dương">Bạch Dương</option>
+                <option value="Kim Ngưu">Kim Ngưu</option>
+                <option value="Song Tử">Song Tử</option>
+                <option value="Cự Giải">Cự Giải</option>
+                <option value="Sư Tử">Sư Tử</option>
+                <option value="Xử Nữ">Xử Nữ</option>
+                <option value="Thiên Bình">Thiên Bình</option>
+                <option value="Bọ Cạp">Bọ Cạp</option>
+                <option value="Nhân Mã">Nhân Mã</option>
+                <option value="Ma Kết">Ma Kết</option>
+                <option value="Bảo Bình">Bảo Bình</option>
+                <option value="Song Ngư">Song Ngư</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="pronoun">Cách Xưng Hô</label>
+            <select id="pronoun" class="form-control " required="required" name="userdata[pronoun]">
+                <option value="">-- Chọn Cách Xưng Hô --</option>
+                <option value="Anh">Anh - Em</option>
+                <option value="Chị">Chị - Em</option>
+                <option value="Mình">Mình - Bạn</option>
+                <option value="Tôi">Tôi - Bạn</option>
+                <option value="Tớ">Tớ - Cậu</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="gender">Giới Tính Của Bạn</label>
+            <select id="gender" class="form-control " required="required" name="userdata[usergender]">
+                <option value="">-- Chọn Giới Tính --</option>
+                <option value="nam">Nam</option>
+                <option value="nữ">Nữ</option>
+                <option value="gay">Gay</option>
+                <option value="lesbian">Lesbian</option>
+                <option value="bisexual">Bisexual</option>
+            </select>
+        </div>
+    </form>
+    <button type="submit" onclick="postUserData()" class="btn btn-danger">Bắt đầu trò chuyện</button>
+</div>

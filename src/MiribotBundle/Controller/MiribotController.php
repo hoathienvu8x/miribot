@@ -21,13 +21,10 @@ class MiribotController extends Controller
         return $this->json($answer);
     }
 
-    public function wikiAction(Request $request)
-    {
-        $keyword = $request->get('keyword');
-        $text = $this->get('helper')->template->searchWikipedia($keyword, "en", true);
-        return new Response($text);
-    }
-
+    /**
+     * Check if user data exist
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
     public function userdataexistAction()
     {
         $userData = $this->get('session')->get('userdata');
@@ -35,5 +32,23 @@ class MiribotController extends Controller
         return $this->json(array(
             'has_user_data' => ($userData) ? 1 : 0
         ));
+    }
+
+    /**
+     * Save user data to session
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function saveuserdataAction(Request $request)
+    {
+        $session = $this->get('session');
+        $userData = $request->get('userdata');
+
+        if (empty($userData)) {
+            return $this->json(array('done' => 0));
+        }
+
+        $session->set('userdata', $userData);
+        return $this->json(array('done' => 1));
     }
 }

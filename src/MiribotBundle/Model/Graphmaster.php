@@ -146,7 +146,7 @@ class Graphmaster
             // If the current node has <set> tag
             if (strpos($child->getWord(), "<set>") !== FALSE) {
                 // Get all words in the set
-                $setWords = $this->getSetWords(strip_tags($child->getWord()));
+                $setWords = $this->helper->template->getSetWords(strip_tags($child->getWord()));
 
                 // If the set contains current token then a match is found
                 if (in_array(mb_strtolower($token), $setWords)) {
@@ -166,22 +166,6 @@ class Graphmaster
         }
 
         return false;
-    }
-
-    /**
-     * Get words in a set
-     * @param $set
-     * @return array|mixed
-     */
-    protected function getSetWords($set) {
-        $setPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'sets' . DIRECTORY_SEPARATOR . $set . '.json';
-        $setWordsJson = @file_get_contents($setPath);
-
-        if ($setWordsJson) {
-            return json_decode($setWordsJson, true);
-        }
-
-        return array();
     }
 
     /**
