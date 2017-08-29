@@ -83,7 +83,7 @@ class TemplateHelper
             $wiki = $wikis->item(0);
             $keyword = $wiki->textContent;
             $language = $wiki->getAttribute("lang");
-            $random = ($this->string->stringcmp($keyword, "random") == 0);
+            $random = ($this->string->stringcmp($keyword, "randomwiki") == 0);
 
             if (empty($keyword)) {
                 return $this;
@@ -98,11 +98,14 @@ class TemplateHelper
 
                 $escKeyword = mb_eregi_replace("\W", "_", $keyword);
                 $keyword = ucwords($keyword);
-                $linkNode = $wiki->ownerDocument->createElement('a', "(Wikipedia - {$keyword})");
-                $linkNode->setAttribute("href", "https://{$language}.wikipedia.org/wiki/{$escKeyword}");
-                $linkNode->setAttribute("target", "_blank");
 
-                $wiki->parentNode->appendChild($linkNode);
+                if (!$random) { // If the keyword is not random
+                    $linkNode = $wiki->ownerDocument->createElement('a', "(Wikipedia - {$keyword})");
+                    $linkNode->setAttribute("href", "https://{$language}.wikipedia.org/wiki/{$escKeyword}");
+                    $linkNode->setAttribute("target", "_blank");
+                    $wiki->parentNode->appendChild($linkNode);
+                }
+
                 $wiki->parentNode->replaceChild($infoNode, $wiki);
             } else {
                 $blank = $wiki->ownerDocument->createTextNode("");

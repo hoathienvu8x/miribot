@@ -8,17 +8,35 @@
 
 namespace MiribotBundle\Helper;
 
+use Symfony\Component\HttpKernel\Kernel;
+
 class Helper
 {
     public $string;
     public $memory;
     public $template;
+    protected $kernel;
 
-    public function __construct(MemoryHelper $memory, StringHelper $string, TemplateHelper $template)
+    public function __construct(Kernel $kernel, MemoryHelper $memory, StringHelper $string, TemplateHelper $template)
     {
         $this->string = $string;
         $this->memory = $memory;
         $this->template = $template;
+        $this->kernel = $kernel;
+    }
+
+    /**
+     * Save user input and bot answer to a chat log
+     * @param $userInput
+     * @param $botAnswer
+     */
+    public function saveToChatLog($userInput, $botAnswer)
+    {
+        $path = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . "web" . DIRECTORY_SEPARATOR . "chatlog.txt";
+        $chatlog = fopen($path, "a+");
+        fwrite($chatlog, "[User] >> {$userInput}\n");
+        fwrite($chatlog, "[Bot] >> {$botAnswer}\n");
+        fclose($chatlog);
     }
 
     /**

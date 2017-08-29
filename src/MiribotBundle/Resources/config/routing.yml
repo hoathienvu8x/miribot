@@ -4,6 +4,9 @@ miribot_homepage:
 miribot_answer:
     path:     /answer
     defaults: { _controller: MiribotBundle:Miribot:answer }
+miribot_userdataexist:
+    path:     /userdataexist
+    defaults: { _controller: MiribotBundle:Miribot:userdataexist }
 
 wiki:
     path:     /wiki

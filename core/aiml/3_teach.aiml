@@ -1,13 +1,13 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <aiml version="2.0" encoding="UTF-8">
     <category>
-        <pattern>HÃY NHỚ * LÀ * NGƯỜI *</pattern>
+        <pattern>HÃY NHỚ * LÀ NGƯỜI *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
                 <category>
-                    <pattern><star/> LÀ <star index="1" /> NGƯỜI NHƯ THẾ NÀO</pattern>
-                    <template><star/> là <star index="1" /> người <star index="2" /></template>
+                    <pattern><star/> LÀ NGƯỜI NHƯ THẾ NÀO</pattern>
+                    <template><star/> là người <star index="1" /></template>
                 </category>
             </learn>
         </template>
@@ -44,6 +44,30 @@
                 <category>
                     <pattern><star/> Ở CHỖ NÀO</pattern>
                     <template><star/> nằm ở <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * LÀ *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> LÀ *</pattern>
+                    <template><star/> là <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ KHI ĐƯỢC HỎI * THÌ TRẢ LỜI *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/></pattern>
+                    <template><star index="1" /></template>
                 </category>
             </learn>
         </template>

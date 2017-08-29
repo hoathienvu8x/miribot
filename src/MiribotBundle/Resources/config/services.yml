@@ -11,7 +11,7 @@ services:
   # Helper services
   helper:
     class: MiribotBundle\Helper\Helper
-    arguments: ["@helper_memory", "@helper_string", "@helper_template"]
+    arguments: ["@kernel", "@helper_memory", "@helper_string", "@helper_template"]
 
   helper_string:
     class: MiribotBundle\Helper\StringHelper

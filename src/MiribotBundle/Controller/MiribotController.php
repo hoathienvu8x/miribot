@@ -27,4 +27,13 @@ class MiribotController extends Controller
         $text = $this->get('helper')->template->searchWikipedia($keyword, "en", true);
         return new Response($text);
     }
+
+    public function userdataexistAction()
+    {
+        $userData = $this->get('session')->get('userdata');
+
+        return $this->json(array(
+            'has_user_data' => ($userData) ? 1 : 0
+        ));
+    }
 }

@@ -61,6 +61,11 @@ class Brain
         // Save bot's last sentence
         $this->helper->memory->rememberLastSentence($response['answer']);
 
+        // Save chat log
+        if ($userInput != "*") { // Do not save bluffings
+            $this->helper->saveToChatLog($userInput, $response['answer']);
+        }
+
         return $response;
     }
 
