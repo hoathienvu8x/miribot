@@ -209,4 +209,11 @@
         <pattern>THE <set>forbidden</set> IS FORBIDDEN</pattern>
         <template>Yeah</template>
     </category>
+
+    <category>
+        <pattern><set>pronouns</set> LIKE YOU</pattern>
+        <template>
+            <star/> like me.
+        </template>
+    </category>
 </aiml>

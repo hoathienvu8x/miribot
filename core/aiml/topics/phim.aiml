@@ -1,0 +1,64 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+    <topic name="phim">
+        <category>
+            <pattern>* THÍCH PHIM GÌ</pattern>
+            <template>
+                <think><set name="who"><star/></set></think>
+                <condition>
+                    <li value="botref"><bot name="name" /> chưa xem phim bao giờ. Thế <user name="pronoun" /> thích phim gì?</li>
+                    <li value="userref"><bot name="name" /> không biết <user name="pronoun"/> <user name="username"/>  thích phim gì. Cho <bot name="name"/> biết <user name="pronoun"/> thích phim gì đi?</li>
+                    <li>Hỏi câu gì dễ hơn được không?</li>
+                </condition>
+            </template>
+        </category>
+        <category>
+            <pattern><set>pronouns</set> THÍCH PHIM *</pattern>
+            <template>
+                <bot name="name"/> nhớ rồi ạ.
+                <learn>
+                    <category>
+                        <pattern><star/> THÍCH PHIM GÌ</pattern>
+                        <template><star/> thích phim <star index="1"/> ạ.<emotion value="happy"/></template>
+                    </category>
+                </learn>
+            </template>
+        </category>
+        <category>
+            <pattern>PHIM * HAY LẮM</pattern>
+            <template>
+                Phim đấy có cảnh nóng hay bậy bạ không ạ?
+                <learn>
+                    <category>
+                        <pattern>PHIM <star/> CÓ HAY KHÔNG</pattern>
+                        <template>Phim <star/> nghe nói hay lắm.<emotion value="joyful"/></template>
+                    </category>
+                </learn>
+            </template>
+        </category>
+
+        <category>
+            <pattern>CÓ *</pattern>
+            <that>PHIM ĐẤY CÓ CẢNH NÓNG HAY BẬY BẠ KHÔNG Ạ</that>
+            <template>Èo, thế thì <bot name="name" /> không xem đâu.<emotion value="doubtful"/></template>
+        </category>
+
+        <category>
+            <pattern>KHÔNG *</pattern>
+            <that>PHIM ĐẤY CÓ CẢNH NÓNG HAY BẬY BẠ KHÔNG Ạ</that>
+            <template>Hoy được rồi, tạm tin <user name="pronoun" /> đấy nhé!<emotion value="happy"/></template>
+        </category>
+
+        <category>
+            <pattern>* MỘT TÍ *</pattern>
+            <that>PHIM ĐẤY CÓ CẢNH NÓNG HAY BẬY BẠ KHÔNG Ạ</that>
+            <template>Dạ thế thì thôi ạ.<emotion value="nope"/></template>
+        </category>
+
+        <category>
+            <pattern>* MỘT CHÚT *</pattern>
+            <that>PHIM ĐẤY CÓ CẢNH NÓNG HAY BẬY BẠ KHÔNG Ạ</that>
+            <template>Thế thì thôi khỏi xem đi ạ.<emotion value="nope"/></template>
+        </category>
+    </topic>
+</aiml>

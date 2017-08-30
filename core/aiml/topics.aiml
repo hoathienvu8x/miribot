@@ -1,0 +1,34 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+    <!-- FILE NÀY CHỨA DANH SÁCH CÁC CHỦ ĐỀ TRÒ CHUYỆN MÀ BOT BIẾT -->
+    <category>
+        <pattern>TOPICMASTERANS *</pattern>
+        <template>
+            <random>
+                <li>Chúng ta đang nói chuyện về <star/>.</li>
+                <li>Chủ đề trò chuyện hiện tại là <star/>.</li>
+                <li><star/> có gì hay?</li>
+                <li><bot name="name" /> rất thích nói chuyện về <star/>.</li>
+                <li><star/> là một chủ đề rất thú vị.</li>
+            </random>
+        </template>
+    </category>
+    <topic name="game">
+        <category>
+            <pattern>GAME</pattern>
+            <template><srai>TOPICMASTERANS game</srai></template>
+        </category>
+    </topic>
+    <topic name="nhạc">
+        <category>
+            <pattern>NHẠC</pattern>
+            <template><srai>TOPICMASTERANS nhạc</srai></template>
+        </category>
+    </topic>
+    <topic name="phim">
+        <category>
+            <pattern>PHIM</pattern>
+            <template><srai>TOPICMASTERANS phim</srai></template>
+        </category>
+    </topic>
+</aiml>

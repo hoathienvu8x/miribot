@@ -237,7 +237,7 @@ class TemplateHelper
      */
     public function extractWildcardData($pattern, $userInputTokens)
     {
-        $wildcards = array("#", "_", "^", "*");
+        $wildcards = ".*[(\#)(\_)(\^)(\*)\b(<set>)\b]";
 
         $results = array();
         $collect = false;
@@ -249,7 +249,7 @@ class TemplateHelper
             $nextPatternToken = isset($pattern[$patternTokenId + 1]) ? $pattern[$patternTokenId + 1] : "";
 
 
-            if (in_array($patternToken, $wildcards)) {
+            if (mb_ereg_match($wildcards, $patternToken)) {
                 $collect = true;
                 if ($this->string->stringcmp($nextPatternToken, $token) == 0) {
                     $collect = false;
@@ -269,7 +269,7 @@ class TemplateHelper
                 $patternTokenId++;
             }
 
-            if ($collect || (!empty($results) && in_array($nextPatternToken, $wildcards))) {
+            if ($collect || (!empty($results) && mb_ereg_match($wildcards, $nextPatternToken))) {
                 $words .= $token . " ";
             }
 
@@ -615,11 +615,8 @@ class TemplateHelper
     private function containsForbiddenWords($pattern)
     {
         $forbiddenWords = $this->getSetWords('forbidden');
-        $patternTokens = mb_split("\s", $pattern);
-        foreach($patternTokens as $token) {
-            if (in_array($token, $forbiddenWords)) {
-                return true;
-            }
+        foreach($forbiddenWords as $word) {
+            return mb_ereg_match(".*\b({$word})\b", $pattern);
         }
         return false;
     }

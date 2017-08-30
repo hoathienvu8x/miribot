@@ -236,4 +236,28 @@
             </learn>
         </template>
     </category>
+    <category>
+        <pattern>HÃY NHỚ * NĂM NAY * TUỔI</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> NĂM NAY BAO NHIÊU TUỔI</pattern>
+                    <template><star/> năm nay <star index="1" /> tuổi ạ.</template>
+                </category>
+                <category>
+                    <pattern><star/> BAO NHIÊU TUỔI</pattern>
+                    <template><star/> năm nay <star index="1" /> tuổi ạ.</template>
+                </category>
+                <category>
+                    <pattern><star/> NĂM NAY MẤY TUỔI</pattern>
+                    <template><star/> năm nay <star index="1" /> tuổi ạ.</template>
+                </category>
+                <category>
+                    <pattern><star/> MẤY TUỔI</pattern>
+                    <template><star/> năm nay <star index="1" /> tuổi ạ.</template>
+                </category>
+            </learn>
+        </template>
+    </category>
 </aiml>

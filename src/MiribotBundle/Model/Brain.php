@@ -52,6 +52,12 @@ class Brain
      */
     public function getAnswer($userInput)
     {
+        // Check user input for conversation topic and load corresponding topic from the AIML data set
+        $this->determineTopic($userInput);
+
+        // Load topic data
+        $this->knowledge->loadTopicData($this->helper->memory->recallTopic());
+
         // Pre-process user input to break it into sentences
         $sentences = $this->helper->string->sentenceSplitting($userInput);
 
@@ -67,6 +73,21 @@ class Brain
         }
 
         return $response;
+    }
+
+    /**
+     * Determine whether the user is talking about certain known topic
+     * @param $userInput
+     */
+    protected function determineTopic($userInput)
+    {
+        $topicList = $this->helper->memory->recallUserData('topic_list');
+
+        foreach ($topicList as $topic) {
+            if (mb_ereg_match(".*\b({$topic})\b", $userInput)) {
+                $this->helper->memory->rememberTopic($topic);
+            }
+        }
     }
 
     /**

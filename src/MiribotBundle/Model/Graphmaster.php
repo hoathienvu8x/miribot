@@ -18,6 +18,7 @@ class Graphmaster
     protected $kernel;
     protected $graph;
     protected $helper;
+    protected $topics;
 
     /**
      * Graphmaster constructor.
@@ -29,6 +30,8 @@ class Graphmaster
         $this->kernel = $kernel;
         $this->helper = $helper;
         $this->graph = new Nodemapper('[root]', '[root]', null);
+        $topicList = $this->helper->memory->recallUserData("topic_list");
+        $this->topics = $topicList ? $topicList : array();
     }
 
     /**
@@ -62,7 +65,34 @@ class Graphmaster
         // Map AIML data to bot's Graphmaster knowledge
         $this->mapToNodemapper($categories);
 
+        // Save the list of known topics to memory
+        $this->helper->memory->rememberUserData('topic_list', $this->topics);
+
         //dump($this->graph);die;
+
+        return $this;
+    }
+
+    /**
+     * Load conversation data of a topic
+     * @param $topicName
+     * @return $this
+     */
+    public function loadTopicData($topicName)
+    {
+        $aimlPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . 'topics' . DIRECTORY_SEPARATOR . "{$topicName}.aiml";
+        $aiml = new \DOMDocument();
+        $data = @file_get_contents($aimlPath);
+
+        if ($data) {
+            $aiml->loadXML($data);
+
+            /** @var \DOMNodeList $categories */
+            $categories = $aiml->getElementsByTagName("category");
+
+            // Map AIML data to bot's Graphmaster knowledge
+            $this->mapToNodemapper($categories);
+        }
 
         return $this;
     }
@@ -225,7 +255,9 @@ class Graphmaster
         // Add topic to the pattern
         if ($parent = $category->parentNode) {
             if ($parent->tagName == "topic") {
-                $string .= " <topic> " . mb_strtoupper($parent->getAttribute("name"));
+                $topicName = $parent->getAttribute("name");
+                $this->topics[] = $topicName; // Add topic to the list of known topics
+                $string .= " <topic> " . mb_strtoupper($topicName);
             } else {
                 $string .= " <topic>";
             }

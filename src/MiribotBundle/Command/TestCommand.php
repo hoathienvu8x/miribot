@@ -28,8 +28,8 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $string = "forbidden";
-        $match = mb_ereg_match("<set\b[^>]*>(.*?)</set>", $string);
+        //$wildcards = ".*[\#\_\^\*\b(set)\b]";
+        $match = mb_ereg_match(".*[(\#)(\_)(\^)(\*)\b(<set>)\b]", 'IS SET');
         var_dump($match);
     }
 }

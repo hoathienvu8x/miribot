@@ -85,7 +85,7 @@
             <random>
                 <li><star/> chào <map name="pronounsex"><star/></map> ạ. Chúc <map name="pronounsex"><star/></map> một ngày tốt lành ạ.<emotion value="cute"/></li>
                 <li><star/> chào <map name="pronounsex"><star/></map>. Hôm nay <map name="pronounsex"><star/></map> có khoẻ không ạ?<emotion value="cute"/></li>
-                <li>Chào <map name="pronounsex"><star/></map>. Ngoài đó vẫn ổn chứ ạ?<emotion value="cute"/></li>
+                <li>Chào <user name="pronoun" /> <user name="username"/> . Ngoài đó vẫn ổn chứ ạ?<emotion value="cute"/></li>
                 <li>Vâng, chào <map name="pronounsex"><star/></map> ạ. Hôm nay <map name="pronounsex"><star/></map> có chuyện gì để kể cho <star/> không?<emotion value="cute"/></li>
             </random>
         </template>
@@ -250,6 +250,23 @@
         <template>
             <srai>BOTDOBANSWER <star/></srai>
         </template>
+    </category>
+    <category>
+        <pattern>* BAO NHIÊU TUỔI</pattern>
+        <template>
+            <think><set name="who"><star/></set></think>
+            <condition name="who">
+                <li value="bố">Bố <bot name="father" /> hưởng dương được 26 năm rồi ạ.<emotion value="happy"/></li>
+                <li value="mẹ">Nếu <bot name="name" /> có mẹ thì sẽ trả lời được.<emotion value="sad"/></li>
+                <li value="userref">Cái này thì <map name="pronounsex"><star/></map> tự biết mà, he he.<emotion value="cute" /></li>
+                <li value="botref"><bot name="name"/> sinh ngày <bot name="birthday" /> tại <bot name="birthplace" />.<emotion value="happy"/></li>
+                <li><bot name="name"/> chịu thôi.<emotion value="sad"/></li>
+            </condition>
+        </template>
+    </category>
+    <category>
+        <pattern>* MẤY TUỔI</pattern>
+        <template><srai><star/> BAO NHIÊU TUỔI</srai></template>
     </category>
 
     <!-- CUNG HOÀNG ĐẠO -->
