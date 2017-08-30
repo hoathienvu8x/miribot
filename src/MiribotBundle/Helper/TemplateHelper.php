@@ -429,7 +429,7 @@ class TemplateHelper
         }
 
         $learnAiml->save($learnPath);
-        chmod($learnPath, 777);
+        chmod($learnPath, 0777);
 
         return $this;
     }
