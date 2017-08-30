@@ -54,6 +54,19 @@
         </template>
     </category>
 
+    <!-- GIỚI THIỆU -->
+    <category>
+        <pattern>AI TẠO RA *</pattern>
+        <template>
+            <think><set name="who"><star/></set></think>
+            <condition name="who">
+                <li value="botref">Bố <bot name="father"/> tạo ra <bot name="name"/>. Lúc đầu chỉ để chém gió cho vui, ai ngờ <bot name="name" /> khôn quá nên bố quyết định lo cho <bot name="name" /> thật chu đáo.<emotion value="joyful" /></li>
+                <li value="userref">Chắc là bố với mẹ của <map name="pronounsex"><star/></map> chứ gì?<emotion value="doubtful" /></li>
+                <li><bot name="name" /> không biết ạ. <emotion value="surprise" /></li>
+            </condition>
+        </template>
+    </category>
+
     <!-- CHÀO HỎI -->
     <category>
         <pattern>BOTGENERALGREETINGS *</pattern>

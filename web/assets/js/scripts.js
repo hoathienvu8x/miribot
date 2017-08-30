@@ -35,6 +35,7 @@ jQuery(document).ready(function () {
  * Talk some nonsense
  */
 function bluffing() {
+    jQuery("#botres").append("<div id='tenor'></div>");
     requestAnswer("*");
     clearTimeout(timeout);
     timeout = setTimeout(bluffing, 120000);
