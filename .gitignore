@@ -45,3 +45,8 @@ web/miribot/
 core/aiml/learn.aiml
 /vendor/
 /web/chatlog.txt
+/.vagrant/
+/Homestead.yaml
+/after.sh
+/Vagrantfile
+/aliases

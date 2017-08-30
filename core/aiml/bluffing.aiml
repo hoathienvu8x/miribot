@@ -25,6 +25,9 @@
                 <li>Nếu muốn <bot name="name" /> trả lời chính xác một câu của người dùng bằng một câu khác, chỉ cần gõ "Hãy nhớ khi được hỏi A thì trả lời B". Mỗi khi có ai hỏi câu A, <bot name="name" /> sẽ trả lời lại bằng câu B.<emotion value="searchful"/></li>
                 <li>"Hãy nhớ" là một từ khoá ma thuật đối với <bot name="name" />.<emotion value="serious"/></li>
                 <li>Xin đừng dạy <bot name="name" /> những điều xấu ạ!<emotion value="serious"/></li>
+                <li>Tại sao "<star/>" ạ?</li>
+                <li>Vì sao "<star/>" ạ?</li>
+                <li>Sao lại nói "<star/>" với <bot name="name" /> ạ?</li>
                 <li><wiki lang="vi">randomwiki</wiki></li>
             </random>
         </template>
