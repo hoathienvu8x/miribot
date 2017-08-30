@@ -33,6 +33,7 @@ class Helper
     public function saveToChatLog($userInput, $botAnswer)
     {
         $file = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . "web" . DIRECTORY_SEPARATOR . "chatlog.txt";
+        chmod($file, 777);
         $chatlog = fopen($file, "a+b");
         $file = "\xEF\xBB\xBF".$file;
         fputs($chatlog, "{$file}\n");
