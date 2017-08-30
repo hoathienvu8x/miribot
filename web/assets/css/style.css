@@ -109,7 +109,7 @@ body {
 }
 
 .user-text {
-    min-height: 200px;
+    min-height: 100px;
 }
 
 .user-input {
@@ -138,7 +138,7 @@ body {
     }
 }
 
-@media only screen and (max-height: 800px) {
+@media only screen and (max-height: 720px) {
     .user-text {
         min-height: 100px;
     }
