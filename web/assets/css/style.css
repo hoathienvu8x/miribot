@@ -124,59 +124,573 @@ body {
     display: none;
 }
 
-@media only screen and (max-width: 1200px) {
+/** Galaxy S5 **/
+@media only screen and (min-width: 360px) and (max-width: 640px) and (min-height: 640px) {
     .bot-portrait {
-        display: none;
+        width: 128px;
+        height: 128px;
+        background: url("../portraits/default.png");
+        background-size: 128px 128px;
+        float: left;
     }
 
-    .bot-response {
-        width: 100%;
-    }
-
-    .func-btn {
-        display: none;
-    }
-}
-
-@media only screen and (max-height: 720px) {
     .user-text {
-        min-height: 100px;
-    }
-
-    .bot-part {
-        height: 256px;
-    }
-
-    .func-btn {
-        display: none;
-    }
-}
-
-@media screen and (max-height: 600px) {
-    .user-text {
-        min-height: 60px;
+        min-height: 110px;
     }
 
     .bot-part {
         height: 150px;
     }
 
-    .func-btn {
+    .bot {
+        width: 100%;
+    }
+
+    .func-btn button {
+        float: left;
+        margin-left: 5px;
+        width: 55%;
+    }
+}
+
+@media only screen and (min-width: 640px) and (max-width: 732px) and (min-height: 360px) and (orientation: landscape) {
+    .bot-portrait {
+        display: none;
+    }
+
+    .user-text {
+        min-height: 50px;
+    }
+
+    .bot-part {
+        height: 80px;
+    }
+
+    .bot {
+        width: 100%;
+    }
+
+    .bot-name {
+        font-size: 1em;
+    }
+
+    .func-btn button {
         display: none;
     }
 }
 
+/** Nexus 5X & Nexus 6P **/
+@media only screen and (min-width: 412px) and (max-width: 640px) and (min-height: 732px) {
+    .bot-portrait {
+        width: 128px;
+        height: 128px;
+        background: url("../portraits/default.png");
+        background-size: 128px 128px;
+        float: left;
+    }
 
-@media screen and (max-width: 1100px) and (max-height: 500px) {
     .user-text {
-        min-height: 800px;
+        min-height: 130px;
     }
 
     .bot-part {
         height: 160px;
     }
 
-    .func-btn {
+    .bot {
+        width: 100%;
+    }
+
+    .func-btn button {
+        float: left;
+        margin-left: 5px;
+        width: 55%;
+    }
+}
+
+@media only screen and (max-width: 732px) and (max-width: 768px) and (orientation: landscape) {
+    .bot-portrait {
         display: none;
+    }
+
+    .func-btn button {
+        display: none;
+    }
+
+    .bot-name {
+        font-size: 1em;
+    }
+
+    .bot-response {
+        width: 98%;
+    }
+
+    .user-text {
+        min-height: 50px;
+    }
+
+    .bot-part {
+        height: 80px;
+    }
+
+    .panel {
+        margin-top: -24px;
+    }
+}
+
+/** iPhone5 **/
+@media only screen and (min-width: 320px) and (max-width: 375px) and (min-height: 568px) {
+    .bot-portrait {
+        width: 110px;
+        height: 110px;
+        background: url("../portraits/default.png");
+        background-size: 110px 110px;
+        float: left;
+    }
+
+    .part {
+        margin: 0 auto;
+    }
+
+    .bot {
+        width: 100%;
+    }
+
+    .func-btn button {
+        float: left;
+        margin-left: 5px;
+        width: 55%;
+    }
+}
+
+/** iPhone4 **/
+@media only screen and (min-width: 320px) and (max-width: 375px) and (min-height: 480px) {
+    .bot-portrait {
+        width: 110px;
+        height: 110px;
+        background: url("../portraits/default.png");
+        background-size: 110px 110px;
+        float: left;
+    }
+
+    .part {
+        margin: 0 auto;
+    }
+
+    .user-text {
+        min-height: 75px;
+    }
+
+    .bot-part {
+        height: 100px;
+    }
+
+    .bot {
+        width: 100%;
+    }
+
+    .func-btn button {
+        float: left;
+        margin-left: 5px;
+        width: 55%;
+    }
+
+    .panel {
+        margin-top: -32px;
+    }
+}
+
+@media only screen and (min-height: 640px) and (orientation: portrait) {
+    .user-text {
+        min-height: 100px;
+    }
+
+    .bot-part {
+        height: 220px;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 375px) {
+    .func-btn button {
+        float: left;
+        margin-left: 5px;
+        width: 55%;
+    }
+}
+
+@media only screen and (min-width: 375px) and (max-width: 412px) {
+    .func-btn button {
+        float: left;
+        margin-left: 5px;
+        width: 60%;
+    }
+}
+
+@media only screen and (min-width: 412px) and (max-width: 414px) and (orientation: portrait){
+    .bot-portrait {
+        width: 128px;
+        height: 128px;
+        background: url("../portraits/default.png");
+        background-size: 128px 128px;
+        float: left;
+    }
+
+    .func-btn {
+        float: left;
+        width: 60%;
+    }
+
+    .func-btn button {
+        float: left;
+        margin-left: 5px;
+        width: 100%;
+    }
+
+    .bot {
+        width: 100%;
+    }
+
+    .bot-part {
+        height: 130px;
+    }
+}
+
+/** iPhone6 **/
+@media only screen and (min-width: 375px) and (max-width: 414px) and (min-height: 667px) {
+    .bot-portrait {
+        width: 128px;
+        height: 128px;
+        background: url("../portraits/default.png");
+        background-size: 128px 128px;
+        float: left;
+    }
+
+    .part {
+        margin: 0 auto;
+    }
+
+    .user-text {
+        min-height: 120px;
+    }
+
+    .bot-part {
+        height: 220px;
+    }
+
+    .bot {
+        width: 100%;
+    }
+
+    .func-btn button {
+        float: left;
+        margin-left: 5px;
+        width: 55%;
+    }
+}
+
+@media only screen and (width: 412px) and (orientation: portrait) {
+    .func-btn button {
+        width: 100%;
+    }
+}
+
+/** iPhone6 Plus **/
+@media only screen and (min-width: 414px) and (max-width: 768px) and (min-height: 736px) {
+    .bot-portrait {
+        width: 170px;
+        height: 170px;
+        background: url("../portraits/default.png");
+        background-size: 170px 170px;
+        float: left;
+    }
+
+    .part {
+        margin: 0 auto;
+    }
+
+    .user-text {
+        min-height: 150px;
+    }
+
+    .bot-part {
+        height: 190px;
+    }
+
+    .bot {
+        width: 100%;
+    }
+
+    .func-btn button {
+        float: left;
+        margin-left: 5px;
+        margin-top: 15px;
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 736px) and (max-width: 768px) and (orientation: landscape) {
+    .bot-portrait {
+        display: none;
+    }
+
+    .func-btn button {
+        display: none;
+    }
+
+    .bot-response {
+        width: 95%;
+    }
+
+    .bot-part {
+        height: 120px;
+    }
+
+    .panel {
+        margin-top: -32px;
+    }
+
+    .bot-name {
+        font-size: 1em;
+    }
+
+    .user-text {
+        min-height: 100px;
+    }
+
+}
+
+/** iPad **/
+@media only screen and (min-width: 768px) and (max-width: 1024px) and (min-height: 1024px) {
+    .bot-portrait {
+        width: 400px;
+        height: 400px;
+        background: url("../portraits/default.png");
+        background-size: 400px 400px;
+        margin: 0 20%;
+    }
+
+    .part {
+        margin: 0 auto;
+    }
+
+    .user-text {
+        min-height: 150px;
+    }
+
+    .bot-part {
+        height: 190px;
+    }
+
+    .bot {
+        width: 100%;
+    }
+
+    .func-btn button {
+        margin-left: 5px;
+        margin-top: 15px;
+        width: 32%;
+        float: left;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+    .bot-portrait {
+        width: 200px;
+        height: 200px;
+        background: url("../portraits/default.png");
+        background-size: 200px 200px;
+        display: block;
+        margin-left: 25%;
+    }
+    .func-btn button {
+        margin-left: 10px;
+        margin-top: 20px;
+        width: 30%;
+        display: block;
+    }
+}
+
+/** iPad Pro **/
+@media only screen and (min-width: 1024px) and (max-width: 1366px) and (min-height: 1366px) {
+    .bot-portrait {
+        width: 512px;
+        height: 512px;
+        background: url("../portraits/default.png");
+        background-size: 512px 512px;
+        margin: 0 20%;
+    }
+
+    .part {
+        margin: 0 auto;
+    }
+
+    .user-text {
+        min-height: 150px;
+    }
+
+    .bot-part {
+        height: 400px;
+    }
+
+    .bot {
+        width: 100%;
+    }
+
+    .func-btn button {
+        margin-left: 5px;
+        margin-top: 15px;
+        width: 32%;
+        float: left;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+    .bot-portrait {
+        width: 200px;
+        height: 200px;
+        background: url("../portraits/default.png");
+        background-size: 200px 200px;
+        display: block;
+        margin: 0;
+    }
+
+    .bot-name {
+        font-size: 2.5em;
+    }
+
+    .func-btn button {
+        width: 80%;
+    }
+}
+
+@media only screen and (min-width: 1366px) and (max-width: 1400px) and (orientation: landscape) {
+    .bot-name {
+        font-size: 2.5em;
+    }
+
+    .bot-portrait {
+        width: 200px;
+        height: 200px;
+        background: url("../portraits/default.png");
+        background-size: 200px 200px;
+        display: block;
+        margin: 0;
+    }
+
+    .func-btn button {
+        margin-left: 10px;
+        margin-top: 20px;
+        width: 80%;
+        display: block;
+    }
+
+    .user-text {
+        min-height: 200px;
+    }
+
+    .bot-part {
+        height: 400px;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1024px) {
+    .bot-name {
+        font-size: 2.5em;
+    }
+
+    .bot-portrait {
+        width: 200px;
+        height: 200px;
+        background: url("../portraits/default.png");
+        background-size: 200px 200px;
+        display: block;
+        margin: 0;
+    }
+
+    .func-btn button {
+        margin-left: 10px;
+        margin-top: 20px;
+        width: 80%;
+        display: block;
+    }
+
+    .user-text {
+        min-height: 80px;
+    }
+
+    .bot-part {
+        height: 370px;
+    }
+
+    .bot-response {
+        width: 75%;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+    .bot-name {
+        font-size: 2.5em;
+    }
+
+    .bot-portrait {
+        width: 200px;
+        height: 200px;
+        background: url("../portraits/default.png");
+        background-size: 200px 200px;
+        display: block;
+        margin: 0;
+    }
+
+    .func-btn button {
+        margin-left: 10px;
+        margin-top: 20px;
+        width: 80%;
+        display: block;
+    }
+
+    .user-text {
+        min-height: 80px;
+    }
+
+    .bot-part {
+        height: 370px;
+    }
+
+    .bot-response {
+        width: 68%;
+    }
+}
+
+@media only screen and (min-width: 640px) and (max-width: 700px) {
+    .bot-name {
+        font-size: 2.5em;
+    }
+
+    .bot-portrait {
+        width: 200px;
+        height: 200px;
+        background: url("../portraits/default.png");
+        background-size: 200px 200px;
+        display: block;
+        margin: 0;
+    }
+
+    .func-btn button {
+        margin-left: 10px;
+        margin-top: 20px;
+        width: 80%;
+        display: block;
+    }
+
+    .user-text {
+        min-height: 80px;
+    }
+
+    .bot-part {
+        height: 370px;
+    }
+
+    .bot-response {
+        width: 63%;
     }
 }

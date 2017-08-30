@@ -429,7 +429,6 @@ class TemplateHelper
         }
 
         $learnAiml->save($learnPath);
-        chmod($learnPath, 0777);
 
         return $this;
     }
@@ -475,8 +474,8 @@ class TemplateHelper
             } else {
                 $mappedValue = $this->mapData($originalValue, $filename);
             }
-            $mappedValue = mb_eregi_replace("userref", "", $mappedValue);
-            $mappedValue = mb_eregi_replace("botref", "", $mappedValue);
+            $mappedValue = mb_eregi_replace("\b(userref)\b", "", $mappedValue);
+            $mappedValue = mb_eregi_replace("\b(botref)\b", "", $mappedValue);
             $mappedNode = $template->ownerDocument->createTextNode($mappedValue);
             $map->parentNode->replaceChild($mappedNode, $map);
         }

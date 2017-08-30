@@ -29,6 +29,22 @@
         </template>
     </category>
     <category>
+        <pattern>HÃY NHỚ * LÀ CON *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> LÀ CON GÌ</pattern>
+                    <template><star/> là <star index="1" /></template>
+                </category>
+                <category>
+                    <pattern>HÃY NÓI VỀ CON <star/></pattern>
+                    <template><star/> là <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
         <pattern>HÃY NHỚ * Ở *</pattern>
         <template>
             <srai>BOTYESANS</srai>
@@ -61,12 +77,160 @@
         </template>
     </category>
     <category>
+        <pattern>HÃY NHỚ * ĐÃ *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> ĐÃ *</pattern>
+                    <template><star/> đã <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * ĐANG *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> ĐANG *</pattern>
+                    <template><star/> đang <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * SẼ *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> SẼ *</pattern>
+                    <template><star/> sẽ <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * TỪNG *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> TỪNG *</pattern>
+                    <template><star/> từng <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * BỊ *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> BỊ *</pattern>
+                    <template><star/> bị <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * KHÔNG *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> KHÔNG *</pattern>
+                    <template><star/> không <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * CÓ *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> CÓ *</pattern>
+                    <template><star/> có <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * GIỐNG *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> GIỐNG *</pattern>
+                    <template><star/> giống <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * KHÁC *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern><star/> KHÁC *</pattern>
+                    <template><star/> khác <star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
         <pattern>HÃY NHỚ KHI ĐƯỢC HỎI * THÌ TRẢ LỜI *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
                 <category>
                     <pattern><star/></pattern>
+                    <template><star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * THÍCH *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern>SỞ THÍCH CỦA <star/> LÀ GÌ</pattern>
+                    <template><star index="1" /></template>
+                </category>
+                <category>
+                    <pattern><star/> THÍCH GÌ</pattern>
+                    <template><star index="1" /></template>
+                </category>
+                <category>
+                    <pattern><star/> THÍCH CÁI GÌ</pattern>
+                    <template><star index="1" /></template>
+                </category>
+            </learn>
+        </template>
+    </category>
+    <category>
+        <pattern>HÃY NHỚ * MUỐN *</pattern>
+        <template>
+            <srai>BOTYESANS</srai>
+            <learn>
+                <category>
+                    <pattern>ƯỚC MUỐN CỦA <star/> LÀ GÌ</pattern>
+                    <template><star index="1" /></template>
+                </category>
+                <category>
+                    <pattern><star/> MUỐN GÌ</pattern>
+                    <template><star index="1" /></template>
+                </category>
+                <category>
+                    <pattern><star/> MUỐN CÁI GÌ</pattern>
                     <template><star index="1" /></template>
                 </category>
             </learn>

@@ -39,7 +39,6 @@ class Helper
         fputs($chatlog, "[User] >> {$userInput}\n");
         fputs($chatlog, "[Bot] >> {$botAnswer}\n");
         fclose($chatlog);
-        chmod($file, 0777);
     }
 
     /**

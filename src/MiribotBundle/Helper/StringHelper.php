@@ -35,7 +35,7 @@ class StringHelper
             $json = @file_get_contents($subsFile);
             if ($json && $substitutes = json_decode($json, true)) {
                 foreach ($substitutes as $o => $r) {
-                    $o = "({$o})";
+                    $o = "\b({$o})\b";
                     $string = mb_eregi_replace($o, $r, $string, 'i');
                 }
             }

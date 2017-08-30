@@ -35,7 +35,7 @@ jQuery(document).ready(function () {
  * Talk some nonsense
  */
 function bluffing() {
-    jQuery("#botres").append("<div id='tenor'></div>");
+    jQuery("#botres").append("<div id='tenor' class='conversation'></div>");
     requestAnswer("*");
     clearTimeout(timeout);
     timeout = setTimeout(bluffing, 120000);
@@ -68,7 +68,7 @@ function inputMessage(el, event) {
 
             // Send the message to server and request for answer
             botres.append("<div class='conversation user-input'><b>[User] >>></b> " + userInput + "</div>");
-            botres.append("<div id='tenor'></div>");
+            botres.append("<div id='tenor' class='conversation'></div>");
             botres.scrollTop(botres.scrollHeight);
             botres.animate({scrollTop: botres[0].scrollHeight}, 500);
             requestAnswer(userInput);
@@ -98,10 +98,14 @@ function requestAnswer(userInput) {
             var portrait = data.emotion + ".png";
             jQuery("#tenor").remove();
             botres.animate({scrollTop: botres[0].scrollHeight}, 500);
-            botport.css("background", 'url(../assets/portraits/' + portrait + ')');
+            botport.css("background", 'url(../assets/portraits/' + portrait + ')')
+                .css("background-size", botport.width() + "px " + botport.height() + "px ");
             if (textToSpeech) {
                 responsiveVoice.speak(data.answer, "Vietnamese Male", {pitch: 1.3, volume: 3});
             }
+        },
+        fail: function(data) {
+            jQuery("#tenor").remove();
         }
     });
 }

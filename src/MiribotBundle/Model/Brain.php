@@ -118,8 +118,10 @@ class Brain
             $answer = "...";
         }
 
-        if (!$emotion || !in_array($emotion, $this->getAllowedEmotions())) {
-            $emotion = "default";
+        $allowedEmo = $this->getAllowedEmotions();
+        if (!$emotion || !in_array($emotion, $allowedEmo)) {
+            $idx = array_rand($allowedEmo);
+            $emotion = $allowedEmo[$idx];
         }
 
         return array(
