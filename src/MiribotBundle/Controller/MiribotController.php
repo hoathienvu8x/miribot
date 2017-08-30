@@ -3,6 +3,7 @@
 namespace MiribotBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,7 +19,7 @@ class MiribotController extends Controller
         //ini_set('memory_limit', '2G');
         //ini_set('max_execution_time', '900');
         $answer = $this->get('miribot')->answer($request->get('input'));
-        return $this->json($answer);
+        return new JsonResponse($answer);
     }
 
     /**
@@ -29,7 +30,7 @@ class MiribotController extends Controller
     {
         $userData = $this->get('session')->get('userdata');
 
-        return $this->json(array(
+        return new JsonResponse(array(
             'has_user_data' => ($userData) ? 1 : 0
         ));
     }
@@ -45,10 +46,10 @@ class MiribotController extends Controller
         $userData = $request->get('userdata');
 
         if (empty($userData)) {
-            return $this->json(array('done' => 0));
+            return new JsonResponse(array('done' => 0));
         }
 
         $session->set('userdata', $userData);
-        return $this->json(array('done' => 1));
+        return new JsonResponse(array('done' => 1));
     }
 }

@@ -10,20 +10,10 @@ namespace MiribotBundle\Helper;
 
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\HttpFoundation\Session\Session;
 
-class MemoryHelper extends FilesystemAdapter
+class MemoryHelper extends Session
 {
-    /**
-     * MemoryHelper constructor.
-     * @param string $namespace
-     * @param int $defaultLifetime
-     * @param string $directory
-     */
-    public function __construct($namespace = '', $defaultLifetime = 3600, $directory = null)
-    {
-        parent::__construct($namespace, $defaultLifetime, $directory);
-    }
-
     /**
      * Remember the last sentence of bot's response
      * @param $answer
@@ -31,9 +21,7 @@ class MemoryHelper extends FilesystemAdapter
     public function rememberLastSentence($answer)
     {
         $sentences = $this->sentenceSplitting($answer);
-        $lastSentence = $this->getItem('bot_last_sentence');
-        $lastSentence->set(end($sentences));
-        $this->save($lastSentence);
+        $this->set('bot_last_sentence', end($sentences));
     }
 
     /**
@@ -42,8 +30,7 @@ class MemoryHelper extends FilesystemAdapter
      */
     public function recallLastSentence()
     {
-        $lastSentence = $this->getItem('bot_last_sentence');
-        return $lastSentence->get();
+        return $this->get('bot_last_sentence');
     }
 
     /**
@@ -52,9 +39,7 @@ class MemoryHelper extends FilesystemAdapter
      */
     public function rememberTopic($topic)
     {
-        $botTopic = $this->getItem('bot_topic');
-        $botTopic->set($topic);
-        $this->save($botTopic);
+        $this->set('bot_topic', $topic);
     }
 
     /**
@@ -63,8 +48,7 @@ class MemoryHelper extends FilesystemAdapter
      */
     public function recallTopic()
     {
-        $botTopic = $this->getItem('bot_topic');
-        return $botTopic->get();
+        return $this->get('bot_topic');
     }
 
     /**
@@ -74,9 +58,7 @@ class MemoryHelper extends FilesystemAdapter
      */
     public function rememberUserData($name, $data)
     {
-        $userData = $this->getItem("user_data.{$name}");
-        $userData->set($data);
-        $this->save($userData);
+        $this->set("user_data.{$name}", $data);
     }
 
     /**
@@ -86,8 +68,7 @@ class MemoryHelper extends FilesystemAdapter
      */
     public function recallUserData($name)
     {
-        $userData = $this->getItem("user_data.{$name}");
-        return $userData->get();
+        return $this->get("user_data.{$name}");
     }
 
     /**
@@ -96,7 +77,7 @@ class MemoryHelper extends FilesystemAdapter
      */
     public function forgetUserData($name)
     {
-        $this->deleteItem("user_data.{$name}");
+        $this->remove("user_data.{$name}");
     }
 
     /**

@@ -50,7 +50,7 @@ class Graphmaster
     public function build()
     {
         // Build AIML path
-        $aimlPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml';
+        $aimlPath = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml';
 
         // Get all AIML files
         $aimlFiles = glob($aimlPath . DIRECTORY_SEPARATOR . "*.aiml");
@@ -80,7 +80,7 @@ class Graphmaster
      */
     public function loadTopicData($topicName)
     {
-        $aimlPath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . 'topics' . DIRECTORY_SEPARATOR . "{$topicName}.aiml";
+        $aimlPath = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . 'topics' . DIRECTORY_SEPARATOR . "{$topicName}.aiml";
         $aiml = new \DOMDocument();
         $data = @file_get_contents($aimlPath);
 

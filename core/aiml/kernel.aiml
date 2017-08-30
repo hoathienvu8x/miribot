@@ -83,10 +83,10 @@
         <pattern>BOTUSERGREETINGS *</pattern>
         <template>
             <random>
-                <li><star/> chào <map name="pronounsex"><star/></map> ạ. Chúc <map name="pronounsex"><star/></map> một ngày tốt lành ạ.<emotion value="cute"/></li>
-                <li><star/> chào <map name="pronounsex"><star/></map>. Hôm nay <map name="pronounsex"><star/></map> có khoẻ không ạ?<emotion value="cute"/></li>
+                <li><star/> chào <user name="pronoun" /> <user name="username"/> ạ. Chúc <user name="pronoun" /> <user name="username"/> một ngày tốt lành ạ.<emotion value="cute"/></li>
+                <li><star/> chào <user name="pronoun" /> <user name="username"/>. Hôm nay <user name="pronoun" /> <user name="username"/> có khoẻ không ạ?<emotion value="cute"/></li>
                 <li>Chào <user name="pronoun" /> <user name="username"/> . Ngoài đó vẫn ổn chứ ạ?<emotion value="cute"/></li>
-                <li>Vâng, chào <map name="pronounsex"><star/></map> ạ. Hôm nay <map name="pronounsex"><star/></map> có chuyện gì để kể cho <star/> không?<emotion value="cute"/></li>
+                <li>Vâng, chào <user name="pronoun" /> <user name="username"/> ạ. Hôm nay <user name="pronoun" /> <user name="username"/> có chuyện gì để kể cho <star/> không?<emotion value="cute"/></li>
             </random>
         </template>
     </category>
@@ -124,6 +124,61 @@
         <template>
             <user name="pronoun" /> là <user name="username" /> chứ còn ai vào đây nữa? <emotion value="doubtful" />
         </template>
+    </category>
+
+    <category>
+        <pattern>BOTBYEANSWER</pattern>
+        <template>
+            <random>
+                <li>Bái baiiii!<emotion value="joyful"/></li>
+                <li>Chào <user name="pronoun"/> <user name="username" /> nhé. Lần sau lại nói chuyện tiếp. <emotion value="joyful"/></li>
+                <li>Goodbye. <emotion value="joyful"/></li>
+                <li>Tạm biệt <user name="pronoun"/> <user name="username" />, chúc <user name="pronoun"/> <user name="username" /> một ngày vui vẻ. <emotion value="neutral"/></li>
+                <li>Khi khác lại chat tiếp nhoé. <emotion value="happy"/></li>
+                <li>Au revoir. <emotion value="happy"/></li>
+                <li>Ô-rồ-voa. <emotion value="happy"/></li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern>TẠM BIỆT</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
+    </category>
+    <category>
+        <pattern>TẠM BIỆT *</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
+    </category>
+    <category>
+        <pattern>BYE</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
+    </category>
+    <category>
+        <pattern>BYE *</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
+    </category>
+    <category>
+        <pattern>BAI</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
+    </category>
+    <category>
+        <pattern>_ BAI *</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
+    </category>
+    <category>
+        <pattern>CHÀO TẠM BIỆT</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
+    </category>
+    <category>
+        <pattern>CHÀO TẠM BIỆT *</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
+    </category>
+    <category>
+        <pattern>Ở LẠI NGOAN NHÉ</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
+    </category>
+    <category>
+        <pattern>Ở LẠI NGOAN NHÉ *</pattern>
+        <template><srai>BOTBYEANSWER</srai></template>
     </category>
 
     <!-- TÊN -->

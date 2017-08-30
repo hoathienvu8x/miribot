@@ -1,3 +1,3 @@
-php bin/console cache:clear
-php bin/console cache:warmup
-php bin/console server:run
+php app/console cache:clear
+php app/console cache:warmup
+php app/console server:run

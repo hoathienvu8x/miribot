@@ -32,13 +32,15 @@ class Helper
      */
     public function saveToChatLog($userInput, $botAnswer)
     {
-        $file = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . "web" . DIRECTORY_SEPARATOR . "chatlog.txt";
-        $chatlog = fopen($file, "a+b");
-        $file = "\xEF\xBB\xBF".$file;
-        fputs($chatlog, "{$file}\n");
-        fputs($chatlog, "[User] >> {$userInput}\n");
-        fputs($chatlog, "[Bot] >> {$botAnswer}\n");
-        fclose($chatlog);
+        $file = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . "web" . DIRECTORY_SEPARATOR . "chatlog.txt";
+        $chatlog = @fopen($file, "a+b");
+        if ($chatlog) {
+            $file = "\xEF\xBB\xBF".$file;
+            fputs($chatlog, "{$file}\n");
+            fputs($chatlog, "[User] >> {$userInput}\n");
+            fputs($chatlog, "[Bot] >> {$botAnswer}\n");
+            fclose($chatlog);
+        }
     }
 
     /**

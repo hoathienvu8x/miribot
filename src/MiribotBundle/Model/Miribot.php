@@ -34,7 +34,7 @@ class Miribot
     protected function init()
     {
         // Load Miri's predefined properties onto memory
-        $path = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . self::BOT_ALIAS . ".json";
+        $path = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . self::BOT_ALIAS . ".json";
         $json = @file_get_contents($path);
         if ($json && $properties = json_decode($json, true)) {
             foreach ($properties as $property => $value) {
