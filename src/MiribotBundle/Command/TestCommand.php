@@ -28,7 +28,6 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $file = $this->getContainer()->getParameter('path_aiml_learn');
-        $this->getContainer()->get('helper')->downloadFromDropbox('robots.txt');
+        $this->getContainer()->get('helper')->downloadFromDropbox('chatlog.txt');
     }
 }

@@ -69,13 +69,9 @@ class Miribot
         $learnPath = $this->kernel->getContainer()->getParameter('path_aiml_learn');
         $chatLogPath = $this->kernel->getContainer()->getParameter('path_chatlog');
 
-        if (!@file_exists($learnPath)) {
-            $this->helper->downloadFromDropbox($learnPath);
-        }
-
-        if (!@file_exists($chatLogPath)) {
-            $this->helper->downloadFromDropbox($chatLogPath);
-        }
+        // Update changes from drop box
+        $this->helper->downloadFromDropbox($learnPath);
+        $this->helper->downloadFromDropbox($chatLogPath);
     }
 
     /**
@@ -86,6 +82,7 @@ class Miribot
         $learnPath = $this->kernel->getContainer()->getParameter('path_aiml_learn');
         $chatLogPath = $this->kernel->getContainer()->getParameter('path_chatlog');
 
+        // Upload changes to drop box
         $this->helper->uploadToDropbox($learnPath);
         $this->helper->uploadToDropbox($chatLogPath);
     }

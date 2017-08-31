@@ -10,3 +10,4 @@ parameters:
     path_chatlog: '%kernel.root_dir%/../web/chatlog.txt'
     path_bot_info: '%path_system%%/miri.json'
     dropbox_api_token: 'Deq1RZFzbqAAAAAAAAAACiRPWMXUnZEdjzfEfqkv01Xk5--JtdaSMhkPk1rCE4hm'
+    dropbox_max_upload_size: 149000000

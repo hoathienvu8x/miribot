@@ -55,10 +55,23 @@ class Helper
     {
         try {
             $accessToken = $this->kernel->getContainer()->getParameter('dropbox_api_token');
+            $maxUploadSize = $this->kernel->getContainer()->getParameter('dropbox_max_upload_size');
+
+            // Get file rev from memory if presented
+            $filenameHash = md5($filename);
+            $rev = $this->memory->recallUserData("file.{$filenameHash}.rev");
+            $size = $this->memory->recallUserData("file.{$filenameHash}.size");
+
+            if ($size > $maxUploadSize) {
+                return false;
+            }
 
             $params = json_encode(array(
-                "path"=> '/'. basename($filename),
-                "mode" => "overwrite",
+                "path" => '/' . basename($filename),
+                "mode" => array(
+                    ".tag" => "update",
+                    "update" => $rev
+                ),
                 "autorename" => true,
                 "mute" => false
             ));
@@ -104,7 +117,7 @@ class Helper
             $accessToken = $this->kernel->getContainer()->getParameter('dropbox_api_token');
 
             $params = json_encode(array(
-                "path"=> '/'. basename($filename)
+                "path" => '/' . basename($filename)
             ));
 
             $headers = array(
@@ -113,16 +126,42 @@ class Helper
                 "Content-Type: application/octet-stream"
             );
 
+            $responseHeaders = array();
+
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_URL, 'https://content.dropboxapi.com/2/files/download');
+            curl_setopt($ch, CURLOPT_HEADERFUNCTION, function ($curl, $header) use (&$responseHeaders) {
+                $len = strlen($header);
+                $header = explode(':', $header, 2);
+                if (count($header) < 2) // ignore invalid headers
+                    return $len;
+
+                $name = strtolower(trim($header[0]));
+                if (!array_key_exists($name, $responseHeaders))
+                    $responseHeaders[$name] = [trim($header[1])];
+                else
+                    $responseHeaders[$name][] = trim($header[1]);
+
+                return $len;
+            });
 
             $result = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
             if ($httpCode == '200') {
+                if (isset($responseHeaders['dropbox-api-result'])) {
+                    $json = array_shift($responseHeaders['dropbox-api-result']);
+                    $fileData = json_decode($json);
+
+                    // Save revision to session for later update
+                    $filenameHash = md5($filename);
+                    $this->memory->rememberUserData("file.{$filenameHash}.rev", $fileData->rev);
+                    $this->memory->rememberUserData("file.{$filenameHash}.size", $fileData->size);
+                }
+
                 // Save file content to path
                 $uploaded = @file_put_contents($filename, $result);
 
