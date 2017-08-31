@@ -81,6 +81,7 @@ class Brain
      */
     protected function determineTopic($userInput)
     {
+        $userInput = $this->helper->string->substituteWords($userInput);
         $topicList = $this->helper->memory->recallUserData('topic_list');
 
         foreach ($topicList as $topic) {

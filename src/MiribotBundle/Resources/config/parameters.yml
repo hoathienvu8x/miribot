@@ -8,6 +8,6 @@ parameters:
     path_sets: '%path_core%/sets'
     path_substitutes: '%path_core%/substitutes'
     path_chatlog: '%kernel.root_dir%/../web/chatlog.txt'
-    path_bot_info: '%path_system%%/miri.json'
+    path_bot_info: '%path_system%/miri.json'
     dropbox_api_token: 'Deq1RZFzbqAAAAAAAAAACiRPWMXUnZEdjzfEfqkv01Xk5--JtdaSMhkPk1rCE4hm'
     dropbox_max_upload_size: 149000000

@@ -18,7 +18,7 @@ class Graphmaster
     protected $kernel;
     protected $graph;
     protected $helper;
-    protected $topics;
+    protected $topic;
 
     /**
      * Graphmaster constructor.
@@ -30,8 +30,7 @@ class Graphmaster
         $this->kernel = $kernel;
         $this->helper = $helper;
         $this->graph = new Nodemapper('[root]', '[root]', null);
-        $topicList = $this->helper->memory->recallUserData("topic_list");
-        $this->topics = $topicList ? $topicList : array();
+        $this->topic = $helper->memory->recallTopic();
     }
 
     /**
@@ -59,16 +58,11 @@ class Graphmaster
         $aiml = new \DOMDocument();
         $aiml->loadXML($this->loadAimlData($aimlFiles));
 
-        /** @var \DOMNodeList $categories */
-        $categories = $aiml->getElementsByTagName("category");
+        // Extract topics
+        $this->extractTopics($aiml);
 
         // Map AIML data to bot's Graphmaster knowledge
-        $this->mapToNodemapper($categories);
-
-        // Save the list of known topics to memory
-        $this->helper->memory->rememberUserData('topic_list', $this->topics);
-
-        //dump($this->graph);die;
+        $this->mapToNodemapper($aiml);
 
         return $this;
     }
@@ -85,15 +79,16 @@ class Graphmaster
         $data = @file_get_contents($aimlPath);
 
         if ($data) {
+            // Load AIML data
             $aiml->loadXML($data);
 
-            /** @var \DOMNodeList $categories */
-            $categories = $aiml->getElementsByTagName("category");
+            // Extract topics
+            $this->extractTopics($aiml);
 
             // Map AIML data to bot's Graphmaster knowledge
-            $this->mapToNodemapper($categories);
+            $this->mapToNodemapper($aiml);
         }
-        //dump($this->graph->getChildrenByWord('CÓ'));die;
+
         return $this;
     }
 
@@ -137,9 +132,10 @@ class Graphmaster
             while (!empty($query)) {
                 $word = array_shift($query);
 
-                // Check if the word is a reserved keyword
+                // Check if the word is a reserved keyword, including current topic
                 if (($this->helper->string->stringcmp($word, 'userref') == 0)
-                    || ($this->helper->string->stringcmp($word, 'botref') == 0)) {
+                    || ($this->helper->string->stringcmp($word, 'botref') == 0)
+                ) {
                     continue;
                 }
 
@@ -172,7 +168,7 @@ class Graphmaster
     protected function matchToken(Nodemapper $node, $token, $query)
     {
         /** @var Nodemapper $child */
-        foreach($node->getChildren() as $child) {
+        foreach ($node->getChildren() as $child) {
             // If the current node has <set> tag
             if (strpos($child->getWord(), "<set>") !== FALSE) {
                 // Get all words in the set
@@ -187,8 +183,12 @@ class Graphmaster
                 }
             }
 
-            // If the current node contains normal word
-            if ($this->helper->string->stringcmp($child->getWord(), $token) == 0) {
+            $topicSub = $this->helper->string->substituteWords($child->getWord());
+            $topicMatch = $this->helper->string->stringcmp($topicSub, $this->topic) == 0;
+            $tokenMatch = $this->helper->string->stringcmp($child->getWord(), $token) == 0;
+
+            // If the current node contains normal word or a topic
+            if ($topicMatch || $tokenMatch) {
                 if ($matchBranch = $this->match($child, $query)) {
                     return $matchBranch;
                 }
@@ -200,10 +200,14 @@ class Graphmaster
 
     /**
      * Map AIML data to Graphmaster
-     * @param $categories
+     * @param \DOMDocument $aiml
      */
-    protected function mapToNodemapper($categories)
+    protected function mapToNodemapper($aiml)
     {
+
+        /** @var \DOMNodeList $categories */
+        $categories = $aiml->getElementsByTagName("category");
+
         /** @var \DOMElement $category */
         foreach ($categories as $category) {
 
@@ -239,7 +243,7 @@ class Graphmaster
         $pattern = $category->getElementsByTagName("pattern")->item(0);
 
         /** @var \DOMNode $node */
-        foreach($pattern->childNodes as $node) {
+        foreach ($pattern->childNodes as $node) {
             $string .= $pattern->ownerDocument->saveXML($node);
         }
 
@@ -256,7 +260,6 @@ class Graphmaster
         if ($parent = $category->parentNode) {
             if ($parent->tagName == "topic") {
                 $topicName = $parent->getAttribute("name");
-                $this->topics[] = $topicName; // Add topic to the list of known topics
                 $string .= " <topic> " . mb_strtoupper($topicName);
             } else {
                 $string .= " <topic>";
@@ -266,6 +269,32 @@ class Graphmaster
         }
 
         return $string;
+    }
+
+    /**
+     * @param \DOMDocument $aiml
+     */
+    protected function extractTopics(\DOMDocument $aiml)
+    {
+        // Get topics from memory if exist
+        $topicList = $this->helper->memory->recallUserData("topic_list");
+
+        if (empty($topicList)) {
+            $topicList = array();
+        }
+
+        $topicNodes = $aiml->getElementsByTagName('topic');
+
+        /** @var \DOMElement $node */
+        foreach ($topicNodes as $node) {
+            $topic = $node->getAttribute('name');
+            if ($topic) {
+                $topicList[md5($topic)] = $topic;
+            }
+        }
+
+        // Save the list of known topics to memory
+        $this->helper->memory->rememberUserData('topic_list', $topicList);
     }
 
     /**

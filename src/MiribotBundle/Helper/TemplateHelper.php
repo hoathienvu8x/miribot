@@ -87,7 +87,7 @@ class TemplateHelper
     {
         $userTags = $template->getElementsByTagName('user');
         $noOfUserTags = $userTags->length;
-        $userData = $this->session->get('userdata');
+        $userData = $this->memory->recallUserData('userinfo');
 
         for ($i = 0; $i < $noOfUserTags; $i++) {
             $user = $userTags->item(0);
