@@ -1,0 +1,42 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+    <topic name="choi">
+        <category>
+            <pattern>_ THÍCH CHƠI GAME GÌ</pattern>
+            <template>
+                <think><set name="who"><star/></set></think>
+                <condition name="who">
+                    <li value="botref"><bot name="name" /> chả thích trò gì cả, có biết chơi đâu mà thích? <emotion value="sad" /></li>
+                    <li value="userref"><user name="pronoun"/> <user name="username"/> bảo cho <bot name="name"/> biết đi. <emotion value="cute"/></li>
+                    <li>Hỏi câu gì dễ hơn được hem?</li>
+                </condition>
+            </template>
+        </category>
+
+        <category>
+            <pattern>VẬY CHƠI ĐI</pattern>
+            <template>Chơi luôn!</template>
+        </category>
+
+        <category>
+            <pattern>_ THÍCH CHƠI *</pattern>
+            <template>
+                <srai>BOTYESANS</srai>. <bot name="name" /> sẽ nhớ ạ.
+                <learn>
+                    <category>
+                        <pattern><star/> THÍCH CHƠI GÌ</pattern>
+                        <template><star/> thích chơi <star index="1" /></template>
+                    </category>
+                    <category>
+                        <pattern><star/> CÓ THÍCH CHƠI <star index="1" /> KHÔNG</pattern>
+                        <template>Tất nhiên <star/> thích chơi <star index="1" /> rồi ạ.</template>
+                    </category>
+                    <category>
+                        <pattern><star/> CÓ CHƠI <star index="1" /> KHÔNG</pattern>
+                        <template><srai>BOTYESANS</srai></template>
+                    </category>
+                </learn>
+            </template>
+        </category>
+    </topic>
+</aiml>
