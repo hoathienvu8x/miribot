@@ -36,7 +36,10 @@ class StringHelper
             if ($json && $substitutes = json_decode($json, true)) {
                 foreach ($substitutes as $o => $r) {
                     $o = "\b({$o})\b";
-                    $string = mb_eregi_replace($o, $r, $string, 'i');
+                    $rep = @mb_eregi_replace($o, $r, $string, 'i');
+                    if ($rep) {
+                        $string = $rep;
+                    }
                 }
             }
         }

@@ -50,6 +50,9 @@
                 <li>Không ạ.</li>
                 <li>Ứ...</li>
                 <li>Không đâu...</li>
+                <li>Khồng ạ.</li>
+                <li>Nope.</li>
+                <li>Vậy hoy đi nha.</li>
             </random>
         </template>
     </category>
@@ -348,6 +351,34 @@
         <pattern>CUNG HOÀNG ĐẠO CỦA * LÀ GÌ</pattern>
         <template>
             <srai>BOTHOROSIGNANS <star/></srai>
+        </template>
+    </category>
+
+    <!-- TRẢ LỜI CÂU CHỨA YES/NO -->
+    <category>
+        <pattern><set>useryesans</set> *</pattern>
+        <template>
+            <random>
+                <li>Thế là tốt rồi ạ.</li>
+                <li>Thế ạ?</li>
+                <li>"<star/>" là tốt rồi ạ.</li>
+                <li>Vầng, <bot name="name" /> cũng nghĩ thế.</li>
+                <li>Cùng quan điểm.</li>
+                <li><srai>BOTYESANS</srai></li>
+            </random>
+        </template>
+    </category>
+    <category>
+        <pattern><set>usernoans</set> *</pattern>
+        <template>
+            <random>
+                <li>Sao lại "<star/>" ạ?</li>
+                <li>Như vậy có nghĩa là không tốt ạ?</li>
+                <li><bot name="name" /> cũng nghĩ thế.</li>
+                <li>Kể tiếp cho <bot name="name"/> nghe với ạ.</li>
+                <li>Không vuiii. <emotion value="sad"/></li>
+                <li><srai>BOTNOANS</srai></li>
+            </random>
         </template>
     </category>
 </aiml>

@@ -127,7 +127,12 @@ class TemplateHelper
             if ($info = $this->searchWikipedia($keyword, $language, $random)) {
                 $infoNode = $wiki->ownerDocument->createTextNode($info);
 
-                $escKeyword = mb_eregi_replace("\W", "_", $keyword);
+                $escKeyword = @mb_eregi_replace("\W", "_", $keyword);
+
+                if (!$escKeyword) {
+                    $escKeyword = $keyword;
+                }
+
                 $keyword = ucwords($keyword);
 
                 if (!$random) { // If the keyword is not random
@@ -474,8 +479,12 @@ class TemplateHelper
             } else {
                 $mappedValue = $this->mapData($originalValue, $filename);
             }
-            $mappedValue = mb_eregi_replace("\b(userref)\b", "", $mappedValue);
-            $mappedValue = mb_eregi_replace("\b(botref)\b", "", $mappedValue);
+            $mappedValueRep = @mb_eregi_replace("[\b(userref)\b\b(botref)\b]", "", $mappedValue);
+
+            if ($mappedValueRep) {
+                $mappedValue = $mappedValueRep;
+            }
+
             $mappedNode = $template->ownerDocument->createTextNode($mappedValue);
             $map->parentNode->replaceChild($mappedNode, $map);
         }
@@ -558,7 +567,11 @@ class TemplateHelper
 
             if ($pattern) {
                 // Remove wildcard characters
-                $tmpPattern = mb_eregi_replace("[\#\_\^\*]", "", $pattern->nodeValue);
+                $tmpPattern = @mb_eregi_replace("[\#\_\^\*]", "", $pattern->nodeValue);
+
+                if (!$tmpPattern) {
+                    $tmpPattern = $pattern->nodeValue;
+                }
 
                 if ($this->containsForbiddenWords($tmpPattern)) {
                     $error = "Không thể học được vì chứa từ cấm!";

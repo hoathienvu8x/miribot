@@ -99,7 +99,7 @@ function requestAnswer(userInput) {
             jQuery("#tenor").remove();
             botres.animate({scrollTop: botres[0].scrollHeight}, 500);
             botport.css("background", 'url(../assets/portraits/' + portrait + ')')
-                .css("background-size", botport.width() + "px " + botport.height() + "px ");
+                .css("background-size", botport.outerWidth() + "px " + botport.outerHeight() + "px ");
             if (textToSpeech) {
                 responsiveVoice.speak(data.answer, "Vietnamese Male", {pitch: 1.3, volume: 3});
             }

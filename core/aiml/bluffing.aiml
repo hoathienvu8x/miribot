@@ -28,6 +28,7 @@
                 <li><star/> nghĩa là sao ạ?<emotion value="serious"/></li>
                 <li>Nói câu gì dễ hiểu hơn được không ạ?<emotion value="doubtful"/></li>
                 <li>Nói khó thế <bot name="name" /> biết trả lời làm sao...<emotion value="sad"/></li>
+                <li>Vậy hoy đi nha.</li>
                 <li><wiki lang="vi">randomwiki</wiki></li>
             </random>
         </template>
