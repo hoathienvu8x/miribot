@@ -298,7 +298,7 @@
         </template>
     </category>
     <category>
-        <pattern>* SINH NGÀY NÀO</pattern>
+        <pattern>_ SINH NGÀY NÀO</pattern>
         <template>
             <srai>BOTDOBANSWER <star/></srai>
         </template>
@@ -310,7 +310,7 @@
         </template>
     </category>
     <category>
-        <pattern>* BAO NHIÊU TUỔI</pattern>
+        <pattern>_ BAO NHIÊU TUỔI</pattern>
         <template>
             <think><set name="who"><star/></set></think>
             <condition name="who">
@@ -323,7 +323,7 @@
         </template>
     </category>
     <category>
-        <pattern>* MẤY TUỔI</pattern>
+        <pattern>_ MẤY TUỔI</pattern>
         <template><srai><star/> BAO NHIÊU TUỔI</srai></template>
     </category>
 
@@ -342,7 +342,7 @@
         </template>
     </category>
     <category>
-        <pattern>* CUNG GÌ</pattern>
+        <pattern>_ CUNG GÌ</pattern>
         <template>
             <srai>BOTHOROSIGNANS <star/></srai>
         </template>
@@ -359,11 +359,11 @@
         <pattern><set>useryesans</set> *</pattern>
         <template>
             <random>
-                <li>Thế là tốt rồi ạ.</li>
-                <li>Thế ạ?</li>
-                <li>"<star/>" là tốt rồi ạ.</li>
-                <li>Vầng, <bot name="name" /> cũng nghĩ thế.</li>
-                <li>Cùng quan điểm.</li>
+                <li>Thế là tốt rồi ạ.<emotion value="happy"/></li>
+                <li>Thế ạ?<emotion value="surprise"/></li>
+                <li>"<star/>" là tốt rồi ạ.<emotion value="joyful"/></li>
+                <li>Vầng, <bot name="name" /> cũng nghĩ thế.<emotion value="neutral"/></li>
+                <li>Cùng quan điểm.<emotion value="serious"/></li>
                 <li><srai>BOTYESANS</srai></li>
             </random>
         </template>
@@ -372,10 +372,10 @@
         <pattern><set>usernoans</set> *</pattern>
         <template>
             <random>
-                <li>Sao lại "<star/>" ạ?</li>
-                <li>Như vậy có nghĩa là không tốt ạ?</li>
-                <li><bot name="name" /> cũng nghĩ thế.</li>
-                <li>Kể tiếp cho <bot name="name"/> nghe với ạ.</li>
+                <li>Sao lại "<star/>" ạ?<emotion value="surprise"/></li>
+                <li>Như vậy có nghĩa là không tốt ạ?<emotion value="thoughtful"/></li>
+                <li><bot name="name" /> cũng nghĩ thế.<emotion value="sad"/></li>
+                <li>Kể tiếp cho <bot name="name"/> nghe với ạ.<emotion value="thoughtful"/></li>
                 <li>Không vuiii. <emotion value="sad"/></li>
                 <li><srai>BOTNOANS</srai></li>
             </random>

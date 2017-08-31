@@ -50,7 +50,7 @@ class Graphmaster
     public function build()
     {
         // Build AIML path
-        $aimlPath = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml';
+        $aimlPath = $this->kernel->getContainer()->getParameter('path_aiml');
 
         // Get all AIML files
         $aimlFiles = glob($aimlPath . DIRECTORY_SEPARATOR . "*.aiml");
@@ -80,7 +80,7 @@ class Graphmaster
      */
     public function loadTopicData($topicName)
     {
-        $aimlPath = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . 'topics' . DIRECTORY_SEPARATOR . "{$topicName}.aiml";
+        $aimlPath = $this->kernel->getContainer()->getParameter('path_aiml_topics') . DIRECTORY_SEPARATOR . "{$topicName}.aiml";
         $aiml = new \DOMDocument();
         $data = @file_get_contents($aimlPath);
 
@@ -93,7 +93,7 @@ class Graphmaster
             // Map AIML data to bot's Graphmaster knowledge
             $this->mapToNodemapper($categories);
         }
-
+        //dump($this->graph->getChildrenByWord('CÓ'));die;
         return $this;
     }
 
@@ -131,7 +131,7 @@ class Graphmaster
      */
     protected function match($node, $query)
     {
-        if (empty($query) && $node->getTemplate() !== null) {
+        if (empty($query) || $node->getTemplate() !== null) {
             return $node;
         } else {
             while (!empty($query)) {
@@ -313,8 +313,12 @@ class Graphmaster
 
         // Read and merge all AIML file contents into one raw XML string
         foreach ($files as $aimlFile) {
-            $fileContent = strip_tags(file_get_contents($aimlFile), $this->helper->string->getAllowedAIMLTagList());
-            $aimlString .= trim($fileContent) . "\n";
+            $content = @file_get_contents($aimlFile);
+            if ($content) {
+                $fileContent = strip_tags($content, $this->helper->string->getAllowedAIMLTagList());
+                $aimlString .= trim($fileContent) . "\n";
+            }
+
         }
 
         $aimlString .= "</aiml>";

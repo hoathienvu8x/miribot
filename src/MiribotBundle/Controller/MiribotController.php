@@ -28,7 +28,8 @@ class MiribotController extends Controller
      */
     public function userdataexistAction()
     {
-        $userData = $this->get('session')->get('userdata');
+        $memory = $this->get('helper_memory');
+        $userData = $memory->recallUserData('userinfo');
 
         return new JsonResponse(array(
             'has_user_data' => ($userData) ? 1 : 0
@@ -42,14 +43,14 @@ class MiribotController extends Controller
      */
     public function saveuserdataAction(Request $request)
     {
-        $session = $this->get('session');
+        $memory = $this->get('helper_memory');
         $userData = $request->get('userdata');
 
         if (empty($userData)) {
             return new JsonResponse(array('done' => 0));
         }
 
-        $session->set('userdata', $userData);
+        $memory->rememberUserData('userinfo', $userData);
         return new JsonResponse(array('done' => 1));
     }
 }

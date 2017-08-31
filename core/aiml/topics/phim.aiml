@@ -2,7 +2,7 @@
 <aiml version="2.0" encoding="UTF-8">
     <topic name="phim">
         <category>
-            <pattern>* THÍCH PHIM GÌ</pattern>
+            <pattern>_ THÍCH PHIM GÌ</pattern>
             <template>
                 <think><set name="who"><star/></set></think>
                 <condition>
@@ -38,25 +38,25 @@
         </category>
 
         <category>
-            <pattern>CÓ *</pattern>
+            <pattern><set>useryesans</set> *</pattern>
             <that>PHIM ĐẤY CÓ CẢNH NÓNG HAY BẬY BẠ KHÔNG Ạ</that>
             <template>Èo, thế thì <bot name="name" /> không xem đâu.<emotion value="doubtful"/></template>
         </category>
 
         <category>
-            <pattern>KHÔNG *</pattern>
+            <pattern><set>usernoans</set> *</pattern>
             <that>PHIM ĐẤY CÓ CẢNH NÓNG HAY BẬY BẠ KHÔNG Ạ</that>
             <template>Hoy được rồi, tạm tin <user name="pronoun" /> đấy nhé!<emotion value="happy"/></template>
         </category>
 
         <category>
-            <pattern>* MỘT TÍ *</pattern>
+            <pattern>MỘT TÍ *</pattern>
             <that>PHIM ĐẤY CÓ CẢNH NÓNG HAY BẬY BẠ KHÔNG Ạ</that>
             <template>Dạ thế thì thôi ạ.<emotion value="nope"/></template>
         </category>
 
         <category>
-            <pattern>* MỘT CHÚT *</pattern>
+            <pattern>MỘT CHÚT *</pattern>
             <that>PHIM ĐẤY CÓ CẢNH NÓNG HAY BẬY BẠ KHÔNG Ạ</that>
             <template>Thế thì thôi khỏi xem đi ạ.<emotion value="nope"/></template>
         </category>

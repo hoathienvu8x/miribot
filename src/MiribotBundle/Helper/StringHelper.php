@@ -27,7 +27,7 @@ class StringHelper
      */
     public function substituteWords($string)
     {
-        $subsPath = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'substitutes';
+        $subsPath = $this->kernel->getContainer()->getParameter('path_substitutes');
         $subsFiles = glob($subsPath . DIRECTORY_SEPARATOR . "*.json");
 
         foreach ($subsFiles as $subsFile) {

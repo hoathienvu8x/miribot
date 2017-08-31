@@ -99,12 +99,12 @@ function requestAnswer(userInput) {
             jQuery("#tenor").remove();
             botres.animate({scrollTop: botres[0].scrollHeight}, 500);
             botport.css("background", 'url(../assets/portraits/' + portrait + ')')
-                .css("background-size", botport.outerWidth() + "px " + botport.outerHeight() + "px ");
+                .css("background-size", botport.innerWidth() + "px " + botport.innerHeight() + "px ");
             if (textToSpeech) {
                 responsiveVoice.speak(data.answer, "Vietnamese Male", {pitch: 1.3, volume: 3});
             }
         },
-        fail: function(data) {
+        fail: function (data) {
             jQuery("#tenor").remove();
         }
     });
@@ -148,6 +148,7 @@ function clearChat() {
  * Get random emotion
  */
 function randomEmotion() {
+    var botport = jQuery("#botport");
     var emolist = [
         "angry",
         "cute",
@@ -167,7 +168,8 @@ function randomEmotion() {
     ];
 
     var portrait = emolist[Math.floor(Math.random() * emolist.length)];
-    jQuery("#botport").css("background", 'url(../assets/portraits/' + portrait + '.png)');
+    botport.css("background", 'url(../assets/portraits/' + portrait + '.png)')
+        .css("background-size", botport.innerWidth() + "px " + botport.innerHeight() + "px ");
 }
 
 /**

@@ -1,0 +1,12 @@
+parameters:
+    path_core: '%kernel.root_dir%/../core'
+    path_aiml: '%path_core%/aiml'
+    path_aiml_learn: '%path_aiml%/learn.aiml'
+    path_aiml_topics: '%path_aiml%/topics'
+    path_system: '%path_core%/system'
+    path_maps: '%path_core%/maps'
+    path_sets: '%path_core%/sets'
+    path_substitutes: '%path_core%/substitutes'
+    path_chatlog: '%kernel.root_dir%/../web/chatlog.txt'
+    path_bot_info: '%path_system%%/miri.json'
+    dropbox_api_token: 'Deq1RZFzbqAAAAAAAAAAB5vjexFGMka8ARJFF9FaqRKOLZDRM_hrqa27RDQ_BAAr'

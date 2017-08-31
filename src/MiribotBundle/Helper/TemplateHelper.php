@@ -413,7 +413,7 @@ class TemplateHelper
     public function handleLearning(&$template)
     {
         // Get learn document
-        $learnPath = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'aiml' . DIRECTORY_SEPARATOR . "learn.aiml";
+        $learnPath = $this->kernel->getContainer()->getParameter('path_aiml_learn');
 
         $learnContent = @file_get_contents($learnPath);
         $learnAiml = new \DOMDocument();
@@ -539,7 +539,7 @@ class TemplateHelper
      */
     private function mapData($originalValue, $filename)
     {
-        $path = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . "core" . DIRECTORY_SEPARATOR . "maps" . DIRECTORY_SEPARATOR . $filename . ".json";
+        $path = $this->kernel->getContainer()->getParameter('path_maps') . DIRECTORY_SEPARATOR . $filename . ".json";
         $content = @file_get_contents($path);
         if ($content && $maps = json_decode($content, true)) {
             $originalValue = mb_strtolower($originalValue);
@@ -611,7 +611,7 @@ class TemplateHelper
      */
     public function getSetWords($set)
     {
-        $setPath = $this->kernel->getRootDir() . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'sets' . DIRECTORY_SEPARATOR . $set . '.json';
+        $setPath = $this->kernel->getContainer()->getParameter('path_sets') . DIRECTORY_SEPARATOR . $set . '.json';
         $setWordsJson = @file_get_contents($setPath);
 
         if ($setWordsJson) {

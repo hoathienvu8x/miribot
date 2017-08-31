@@ -2,7 +2,7 @@
 <aiml version="2.0" encoding="UTF-8">
     <topic name="nhạc">
         <category>
-            <pattern>* THÍCH LOẠI NHẠC GÌ</pattern>
+            <pattern>_ THÍCH LOẠI NHẠC GÌ</pattern>
             <template>
                 <think><set name="who"><star/></set></think>
                 <condition name="who">
@@ -13,7 +13,7 @@
             </template>
         </category>
         <category>
-            <pattern>* CÓ HAY NGHE NHẠC KHÔNG</pattern>
+            <pattern>_ CÓ HAY NGHE NHẠC KHÔNG</pattern>
             <template>
                 <think><set name="who"><star/></set></think>
                 <condition name="who">

@@ -28,8 +28,5 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        //$wildcards = ".*[\#\_\^\*\b(set)\b]";
-        $match = mb_ereg_match(".*[(\#)(\_)(\^)(\*)\b(<set>)\b]", 'IS SET');
-        var_dump($match);
     }
 }
