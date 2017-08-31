@@ -8,6 +8,8 @@
 
 namespace MiribotBundle\Helper;
 
+use MyProject\Proxies\__CG__\stdClass;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpKernel\Kernel;
 
 class Helper
@@ -37,10 +39,99 @@ class Helper
         if ($chatlog) {
             $userInfo = $this->memory->recallUserData('userinfo');
             $username = isset($userInfo['username']) ? $userInfo['username'] : "User";
-            $file = "\xEF\xBB\xBF".$file;
+            $file = "\xEF\xBB\xBF" . $file;
             fputs($chatlog, "[{$username}] >> {$userInput}\n");
             fputs($chatlog, "[Bot] >> {$botAnswer}\n");
             fclose($chatlog);
+        }
+    }
+
+    /**
+     * Upload file to Dropbox
+     * @param $filename
+     * @return bool
+     */
+    public function uploadToDropbox($filename)
+    {
+        try {
+            $accessToken = $this->kernel->getContainer()->getParameter('dropbox_api_token');
+
+            $params = json_encode(array(
+                "path"=> '/'. basename($filename),
+                "mode" => "overwrite",
+                "autorename" => true,
+                "mute" => false
+            ));
+
+            $headers = array(
+                "Authorization: Bearer {$accessToken}",
+                "Dropbox-API-Arg: {$params}",
+                "Content-Type: application/octet-stream"
+            );
+
+            $path = $filename;
+            $fp = fopen($path, 'rb');
+            $filesize = filesize($path);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, fread($fp, $filesize));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, 'https://content.dropboxapi.com/2/files/upload');
+
+            $result = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($httpCode != '200') {
+                return false;
+            }
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Download file from Dropbox
+     * @param $filename
+     * @return bool
+     */
+    public function downloadFromDropbox($filename)
+    {
+        try {
+            $accessToken = $this->kernel->getContainer()->getParameter('dropbox_api_token');
+
+            $params = json_encode(array(
+                "path"=> '/'. basename($filename)
+            ));
+
+            $headers = array(
+                "Authorization: Bearer {$accessToken}",
+                "Dropbox-API-Arg: {$params}",
+                "Content-Type: application/octet-stream"
+            );
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, 'https://content.dropboxapi.com/2/files/download');
+
+            $result = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($httpCode == '200') {
+                // Save file content to path
+                $uploaded = @file_put_contents($filename, $result);
+
+                return ($uploaded !== FALSE);
+            }
+
+            return true;
+        } catch (Exception $e) {
+            return false;
         }
     }
 

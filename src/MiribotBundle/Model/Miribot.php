@@ -48,6 +48,45 @@ class Miribot
      */
     public function answer($userInput)
     {
-        return $this->brain->getAnswer($userInput);
+        // Download learned file and chat log
+        $this->downloadNecessaryFiles();
+
+        // Get answer
+        $answer = $this->brain->getAnswer($userInput);
+
+        // Then upload updated file
+        $this->uploadNecessaryFiles();
+
+        return $answer;
+    }
+
+    /**
+     * Download necessary files
+     */
+    protected function downloadNecessaryFiles()
+    {
+        // Check if learn file and chat log exist
+        $learnPath = $this->kernel->getContainer()->getParameter('path_aiml_learn');
+        $chatLogPath = $this->kernel->getContainer()->getParameter('path_chatlog');
+
+        if (!@file_exists($learnPath)) {
+            $this->helper->downloadFromDropbox($learnPath);
+        }
+
+        if (!@file_exists($chatLogPath)) {
+            $this->helper->downloadFromDropbox($chatLogPath);
+        }
+    }
+
+    /**
+     * Upload necessary files
+     */
+    protected function uploadNecessaryFiles()
+    {
+        $learnPath = $this->kernel->getContainer()->getParameter('path_aiml_learn');
+        $chatLogPath = $this->kernel->getContainer()->getParameter('path_chatlog');
+
+        $this->helper->uploadToDropbox($learnPath);
+        $this->helper->uploadToDropbox($chatLogPath);
     }
 }
