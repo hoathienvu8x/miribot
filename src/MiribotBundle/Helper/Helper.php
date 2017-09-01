@@ -55,7 +55,13 @@ class Helper
     {
         $mathString = trim($mathString); // trim white spaces
         $mathString = mb_eregi_replace('[^0-9\+\-\*\/]', '', $mathString); // remove any non-numbers chars; exception for math operators
-        $compute = @create_function("", "return (" . $mathString . ");");
+
+        if (empty($mathString)) {
+            $compute = @create_function("", "return '';");
+        } else {
+            $compute = @create_function("", "return (" . $mathString . ");");
+        }
+
         if ($compute) {
             return 0 + $compute();
         }

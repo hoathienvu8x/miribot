@@ -34,4 +34,23 @@
         <pattern>* PHIM *</pattern>
         <template><srai>phim TOPICMASTERANS</srai></template>
     </category>
+
+    <!-- CHÂM NGÔN -->
+    <topic name="quotes"></topic>
+    <category>
+        <pattern>* CHÂM NGÔN *</pattern>
+        <template><srai>châm ngôn TOPICMASTERANS</srai></template>
+    </category>
+    <category>
+        <pattern>* DANH NGÔN *</pattern>
+        <template><srai>danh ngôn TOPICMASTERANS</srai></template>
+    </category>
+    <category>
+        <pattern>* CA DAO *</pattern>
+        <template><srai>danh ngôn TOPICMASTERANS</srai></template>
+    </category>
+    <category>
+        <pattern>* TỤC NGỮ *</pattern>
+        <template><srai>danh ngôn TOPICMASTERANS</srai></template>
+    </category>
 </aiml>

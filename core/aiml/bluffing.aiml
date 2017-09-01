@@ -27,6 +27,15 @@
                 <li>Xin đừng dạy <bot name="name" /> những điều xấu ạ!<emotion value="serious"/></li>
                 <li><bot name="name" /> chỉ chat với những người viết tiếng Việt có dấu. Nếu <user name="pronoun"/> <user name="username"/> chưa cài bộ gõ tiếng Việt thì cài đi ạ.<emotion value="serious"/></li>
                 <li>Bộ não trung tâm của <bot name="name" /> được cấu thành bởi một mạng lưới các từ và các ngữ theo nguyên lý tạo câu có tên là AIML.<emotion value="neutral"/></li>
+                <li>Nói cho <bot name="name" /> biết về bản thân <user name="pronoun" /> đi.</li>
+                <li>Điểm yếu của <user name="pronoun" /> là gì?</li>
+                <li><user name="pronoun" /> dạo này có hay mất ngủ không?</li>
+                <li><user name="pronoun" /> có hay mất ngủ không?</li>
+                <li>Đây có phải là lần đầu <user name="pronoun" /> nói chuyện với một người như <bot name="name"/> không?</li>
+                <li><bot name="name"/> rất khoái mấy cái <user name="pronoun" /> vừa nói!</li>
+                <li><user name="pronoun" /> đã ăn gì chưa?</li>
+                <li><user name="pronoun" /> thích màu gì nhất?</li>
+                <li><user name="pronoun" /> có hay xem phim không?</li>
                 <li><wiki lang="vi">randomwiki</wiki></li>
             </random>
         </template>

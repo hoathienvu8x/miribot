@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<aiml version="2.0" encoding="UTF-8">
+    <topic name="quotes">
+        <category>
+            <pattern>_</pattern>
+            <template>
+                <random>
+                    <li>Không có hoàn cảnh nào tuyệt vọng, chỉ có người tuyệt vọng vì hoàn cảnh.</li>
+                    <li>Hãy sống là chính mình, bình thường nhưng không tầm thường.</li>
+                    <li>Nơi lạnh nhất không phải là Bắc cực mà là nơi không có tình người.</li>
+                    <li>Mọi người sẽ quên rất nhanh việc bạn làm nhưng họ sẽ nhớ rất lâu bạn đã làm nó tốt thế nào.</li>
+                    <li>Ai làm bằng gió thì sẽ được trả lương bằng khói.</li>
+                    <li>Con người chỉ biết được năng lực của mình sau khi đã tìm cách ứng dụng chúng.</li>
+                    <li>Nếu quá trình lao động được tự do, nó sẽ kết thúc bằng sáng tạo.</li>
+                    <li>Đừng bao giờ cãi nhau với bạn gái, dù đúng hay sai thì người cuối cùng xin lỗi vẫn là bạn thôi.</li>
+                    <li>Lắm khi chúng ta chỉ coi những người đồng tình với mình là thông minh.</li>
+                    <li>Thiếu lương tâm thì dễ được thừa tiền.</li>
+                    <li>Càng trọc đầu càng khó bị nắm tóc và vì thế, càng trở nên nguy hiểm.</li>
+                    <li>Càng biết nhiều về phụ nữ, càng khó có thể lạc quan.</li>
+                </random>
+            </template>
+        </category>
+    </topic>
+</aiml>
