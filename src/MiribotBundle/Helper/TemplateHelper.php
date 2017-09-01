@@ -228,9 +228,9 @@ class TemplateHelper
             $maxIdx = $lis->length - 1;
 
             // Randomize response content from min to max index
-            $idx = range(0, $maxIdx);
-            $randIdx = shuffle($idx);
-            $template = $lis->item($randIdx);
+            $idx = mt_rand(0, $maxIdx);
+
+            $template = $lis->item($idx);
         }
         return $this;
     }
