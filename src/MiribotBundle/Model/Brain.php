@@ -52,6 +52,7 @@ class Brain
      */
     public function getAnswer($userInput)
     {
+
         // Check user input for conversation topic and load corresponding topic from the AIML data set
         $this->determineTopic($userInput);
 
@@ -63,6 +64,10 @@ class Brain
 
         // Think for answer
         $response = $this->thinkForAnswer($sentences);
+
+        if ($mathResult = $this->helper->calculateMathInString($userInput)) {
+            $response['answer'] = $mathResult . "! " . $response['answer'];
+        }
 
         // Save bot's last sentence
         $this->helper->memory->rememberLastSentence($response['answer']);

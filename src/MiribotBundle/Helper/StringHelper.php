@@ -108,7 +108,7 @@ class StringHelper
      */
     public function tokenize($text)
     {
-        $tokens = mb_split('[^\w\_\^\#\*\d]', $text);
+        $tokens = mb_split('[^\w\_\^\#\*\+\-\*\/\d]', $text);
         $tokens = array_map('trim', $tokens);
         return array_filter($tokens);
     }

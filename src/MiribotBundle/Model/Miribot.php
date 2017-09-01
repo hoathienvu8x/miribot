@@ -49,13 +49,17 @@ class Miribot
     public function answer($userInput)
     {
         // Download learned file and chat log
-        $this->downloadNecessaryFiles();
+        if (!$this->kernel->isDebug()) {
+            $this->downloadNecessaryFiles();
+        }
 
         // Get answer
         $answer = $this->brain->getAnswer($userInput);
 
         // Then upload updated file
-        $this->uploadNecessaryFiles();
+        if (!$this->kernel->isDebug()) {
+            $this->uploadNecessaryFiles();
+        }
 
         return $answer;
     }

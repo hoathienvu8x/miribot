@@ -28,6 +28,7 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('helper')->downloadFromDropbox('chatlog.txt');
+        $string = "This is 1 + 2 * 4 and something else";
+        echo $this->getContainer()->get('helper')->calculateMathInString($string);
     }
 }
