@@ -8,6 +8,7 @@
 
 namespace MiribotBundle\Helper;
 
+use ChrisKonnertz\StringCalc\StringCalc;
 use MyProject\Proxies\__CG__\stdClass;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpKernel\Kernel;
@@ -47,25 +48,19 @@ class Helper
     }
 
     /**
-     * Calculate math expression
-     * @param $mathString
-     * @return int
+     * Calculate mathematical expression in the user input
+     * @param $string
+     * @return bool|float|int
      */
-    public function calculateMathInString($mathString)
+    public function evaluateMathInString($string)
     {
-        $mathString = trim($mathString); // trim white spaces
-        $mathString = mb_eregi_replace('[^0-9\+\-\*\/]', '', $mathString); // remove any non-numbers chars; exception for math operators
-
-        if (empty($mathString)) {
-            $compute = @create_function("", "return '';");
-        } else {
-            $compute = @create_function("", "return (" . $mathString . ");");
+        try {
+            $stringCalc = new StringCalc();
+            $string = $this->string->produceMathExpression($string);
+            return $stringCalc->calculate($string);
+        } catch (\Exception $exception) {
+            return false;
         }
-
-        if ($compute) {
-            return 0 + $compute();
-        }
-        return false;
     }
 
     /**

@@ -9,6 +9,7 @@
 namespace MiribotBundle\Command;
 
 
+use ChrisKonnertz\StringCalc\StringCalc;
 use MiribotBundle\Helper\StringHelper;
 use MiribotBundle\Model\Miribot;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -28,7 +29,10 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $string = "This is 1 + 2 * 4 and something else";
-        echo $this->getContainer()->get('helper')->calculateMathInString($string);
+        $string = "This is 1.2 + 1 and + sin(123) expression math and * abs(-4) yeah";
+        $term = $this->getContainer()->get('helper_string')->produceMathExpression($string);
+        echo $term . "\n";
+        $strCalc = new StringCalc();
+        echo $strCalc->calculate($term);
     }
 }

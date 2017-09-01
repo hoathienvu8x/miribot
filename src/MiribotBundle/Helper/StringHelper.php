@@ -104,13 +104,46 @@ class StringHelper
     /**
      * Get string tokens
      * @param $text
+     * @param string $regex
      * @return array
      */
-    public function tokenize($text)
+    public function tokenize($text, $regex = '[^\w\_\^\#\*\+\-\*\/\(\)\d]')
     {
-        $tokens = mb_split('[^\w\_\^\#\*\+\-\*\/\d]', $text);
+        $tokens = mb_split($regex, $text);
         $tokens = array_map('trim', $tokens);
         return array_filter($tokens);
+    }
+
+    /**
+     * Produce a math expression from text
+     * @param $text
+     */
+    public function produceMathExpression($text)
+    {
+        $tokens = $this->tokenize($text, '[^\w\_\^\#\*\+\-\*\/\(\)\.\d]');
+
+        $mathString = "";
+
+        foreach ($tokens as $token) {
+            foreach($this->allowedMathOperators() as $operator) {
+                if (mb_ereg_match($operator, $token)) {
+                    $mathString .= " " . $token;
+                }
+            }
+        }
+
+        return $mathString;
+    }
+
+    public function allowedMathOperators()
+    {
+        return array(
+            '\+', '\-', '\*', '\/', '\d',
+            '\b(abs)\b', '\b(sin)\b', '\b(cos)\b', '\b(tan)\b',
+            '\b(min)\b', '\b(max)\b', '\b(pi)\b', '\b(ceil)\b',
+            '\b(floor)\b', '\b(round)\b', '\b(sqrt)\b', '\b(pow)\b',
+            '\b(log)\b', '\b(log10)\b'
+        );
     }
 
     /**
@@ -153,8 +186,11 @@ class StringHelper
      * @param null $encoding
      * @return int
      */
-    public function stringcmp($str1, $str2, $encoding = null) {
-        if (null === $encoding) { $encoding = mb_internal_encoding(); }
+    public function stringcmp($str1, $str2, $encoding = null)
+    {
+        if (null === $encoding) {
+            $encoding = mb_internal_encoding();
+        }
         return strcmp(mb_strtoupper($str1, $encoding), mb_strtoupper($str2, $encoding));
     }
 

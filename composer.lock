@@ -4,8 +4,53 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c06300ad70a67a444a4c9f90541195e9",
+    "content-hash": "78950be564a7ba7d2a9f396793f9f54b",
     "packages": [
+        {
+            "name": "chriskonnertz/string-calc",
+            "version": "v1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chriskonnertz/string-calc.git",
+                "reference": "c08abd46d0d9fa0d9e37b3f1d9a933718b6ba2e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chriskonnertz/string-calc/zipball/c08abd46d0d9fa0d9e37b3f1d9a933718b6ba2e1",
+                "reference": "c08abd46d0d9fa0d9e37b3f1d9a933718b6ba2e1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "ChrisKonnertz\\StringCalc": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Konnertz"
+                }
+            ],
+            "description": "StringCalc is a PHP calculator library for mathematical terms (expressions) passed as strings.",
+            "keywords": [
+                "calculation",
+                "expression",
+                "math",
+                "parser",
+                "string calc",
+                "string-calc",
+                "stringcalc",
+                "term"
+            ],
+            "time": "2017-08-26T10:19:17+00:00"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",

@@ -8,6 +8,7 @@
 
 namespace MiribotBundle\Model;
 
+use ChrisKonnertz\StringCalc\StringCalc;
 use MiribotBundle\Helper\Helper;
 use MiribotBundle\Model\Graphmaster\Nodemapper;
 use Twig\Node\Node;
@@ -65,7 +66,7 @@ class Brain
         // Think for answer
         $response = $this->thinkForAnswer($sentences);
 
-        if ($mathResult = $this->helper->calculateMathInString($userInput)) {
+        if ($mathResult = $this->helper->evaluateMathInString($userInput)) {
             $response['answer'] = $mathResult . "! " . $response['answer'];
         }
 
@@ -137,7 +138,10 @@ class Brain
                         $answer .= "."; // Add a period to the answer before moving on
                     }
                 }
-                $answer .= " " . $matchedAnswerTemplate;
+
+                if (strpos($answer, $matchedAnswerTemplate) === FALSE) {
+                    $answer .= " " . $matchedAnswerTemplate;
+                }
             }
         }
 

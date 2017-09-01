@@ -308,7 +308,8 @@ class Nodemapper
     public function getRandomChild()
     {
         $keys = array_keys($this->children);
-        return $this->children[$keys[mt_rand(0, $this->countChildren() - 1)]];
+        $idx = range(0, $this->countChildren() - 1);
+        return $this->children[$keys[shuffle($idx)]];
     }
 
     /**
