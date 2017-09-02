@@ -18,7 +18,6 @@ class Graphmaster
     protected $kernel;
     protected $graph;
     protected $helper;
-    protected $topic;
 
     /**
      * Graphmaster constructor.
@@ -30,7 +29,6 @@ class Graphmaster
         $this->kernel = $kernel;
         $this->helper = $helper;
         $this->graph = new Nodemapper('[root]', '[root]', null);
-        $this->topic = $helper->memory->recallTopic();
     }
 
     /**
@@ -126,7 +124,7 @@ class Graphmaster
      */
     protected function match($node, $query)
     {
-        if (empty($query) || $node->getTemplate() !== null) {
+        if ($node->getTemplate() !== null) {
             return $node;
         } else {
             while (!empty($query)) {
@@ -183,16 +181,16 @@ class Graphmaster
                 }
             }
 
-            $topicSub = $this->helper->string->substituteWords($child->getWord());
-            $topicMatch = $this->helper->string->stringcmp($topicSub, $this->topic) == 0;
             $tokenMatch = $this->helper->string->stringcmp($child->getWord(), $token) == 0;
+            $childWordSub = $this->helper->string->substituteWords($child->getWord());
+            $tokenSubMatch = $this->helper->string->stringcmp($childWordSub, $token) == 0;
 
-            // If the current node contains normal word or a topic
-            if ($topicMatch || $tokenMatch) {
+            if ($tokenMatch || $tokenSubMatch) {
                 if ($matchBranch = $this->match($child, $query)) {
                     return $matchBranch;
                 }
             }
+
         }
 
         return false;
