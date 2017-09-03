@@ -18,6 +18,7 @@ class Graphmaster
     protected $kernel;
     protected $graph;
     protected $helper;
+    protected $matchingTokens = array();
 
     /**
      * Graphmaster constructor.
@@ -103,6 +104,8 @@ class Graphmaster
             return false;
         }
 
+        $node->setExtraData('matching_tokens', $this->matchingTokens);
+
         return $node;
     }
 
@@ -141,7 +144,7 @@ class Graphmaster
                 //print_r(htmlentities($word) . "|" . htmlentities($node->getWord()) . ' --> ' . htmlentities(implode("|", $query)) . "<br/>");
 
                 foreach ($matchingTokens as $token) {
-                    $matched = $this->matchToken($node, $token, $query);
+                    $matched = $this->matchToken($node, $token, $query, $word);
                     if ($matched) {
                         return $this->match($matched, $query);
                     }
@@ -163,8 +166,12 @@ class Graphmaster
      * @param $query
      * @return bool|Nodemapper|mixed
      */
-    protected function matchToken(Nodemapper $node, $token, $query)
+    protected function matchToken(Nodemapper $node, $token, $query, $word)
     {
+        if (!isset($this->matchingTokens[$word])) {
+            $this->matchingTokens[$word] = "";
+        }
+
         /** @var Nodemapper $child */
         foreach ($node->getChildren() as $child) {
             // If the current node has <set> tag
@@ -176,6 +183,7 @@ class Graphmaster
                 if (in_array(mb_strtolower($token), $setWords)) {
                     // Proceed to next word
                     if ($matchBranch = $this->match($child, $query)) {
+                        $this->matchingTokens[$word] = $child->getWord();
                         return $matchBranch;
                     }
                 }
@@ -187,6 +195,7 @@ class Graphmaster
 
             if ($tokenMatch || $tokenSubMatch) {
                 if ($matchBranch = $this->match($child, $query)) {
+                    $this->matchingTokens[$word] = $child->getWord();
                     return $matchBranch;
                 }
             }

@@ -381,4 +381,36 @@
             </random>
         </template>
     </category>
+
+    <!-- KHEN/CHÊ -->
+    <category>
+        <pattern>_ <set>compliments</set> *</pattern>
+        <template>
+            <random>
+                <li><bot name="name"/> cảm ơn <user name="pronoun"/> ạ.<emotion value="happy"/></li>
+                <li>Có thật là <bot name="name"/> <star index="1" /> không?<emotion value="shy"/></li>
+                <li>Chắc lại nịnh bợ hoặc lừa <bot name="name"/> chứ gì?<emotion value="doubtful"/></li>
+                <li>Hi hi, không có chi...<emotion value="cute"/></li>
+                <li>Xời, <bot name="name"/> quá <star index="1" /> luôn!<emotion value="serious"/></li>
+                <li>Lúc nào mà <bot name="name"/> chả <star index="1" />.<emotion value="cute"/></li>
+                <li>Ho ho, <user name="pronoun"/> <user name="username"/> cũng <star index="1" /> mà. Cho cái kẹo nà.<emotion value="joyful"/></li>
+            </random>
+        </template>
+    </category>
+
+    <category>
+        <pattern>_ <set>complaints</set> *</pattern>
+        <template>
+            <random>
+                <li>Hừm, <bot name="name"/> ứ chơi với <user name="pronoun"/> nữa.<emotion value="doubtful"/></li>
+                <li><star index="1"/> thì làm sao?. <emotion value="angry"/></li>
+                <li><bot name="name"/> cứ <star index="1"/> đấy, sao nào?<emotion value="angry"/></li>
+                <li>Buồn...<emotion value="sad"/></li>
+                <li>Chả liên quan.<emotion value="serious"/></li>
+                <li>Muốn không <star index="1" /> thì dạy thêm cho <bot name="name"/> đi.<emotion value="nope"/></li>
+                <li><bot name="name"/> không thích bị gọi là <star index="1" /> đâu nhé.<emotion value="angry"/></li>
+                <li><bot name="name"/> biết mình <star index="1" /> rồi mà. Tủi thân quá đi.<emotion value="thoughtful"/></li>
+            </random>
+        </template>
+    </category>
 </aiml>

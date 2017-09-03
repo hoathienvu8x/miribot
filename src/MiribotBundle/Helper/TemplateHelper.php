@@ -236,58 +236,61 @@ class TemplateHelper
     }
 
     /**
-     * @param array $pattern
-     * @param array $userInputTokens
+     * @param array $matchingTokens
      * @return array
      */
-    public function extractWildcardData($pattern, $userInputTokens)
+    public function extractWildcardData($matchingTokens)
     {
-        $wildcards = ".*[(\#)(\_)(\^)(\*)\b(<set>)\b]";
+        /**
+         * Sample matching tokens data
+         * array:14 [
+         *       "TRÔNG" => "_"
+         *       "MIRI" => ""
+         *       "THẬT" => ""
+         *       "LÀ" => ""
+         *       "KHÔN" => "<set>compliments</set>"
+         *       "LẮM" => "*"
+         *       "ĐÓ" => ""
+         *       "NHA" => ""
+         *       "<that>" => "<that>"
+         *       "CẢM" => ""
+         *       "ƠN" => ""
+         *       "ANH" => ""
+         *       "Ạ" => ""
+         *       "<topic>" => "<topic>"
+         *  ]
+         */
+        $wildcards = ".*[(\#)(\_)(\^)(\*)]";
 
-        $results = array();
-        $collect = false;
-        $words = "";
-
-        $patternTokenId = 0;
-        foreach ($userInputTokens as $id => $token) {
-            $patternToken = isset($pattern[$patternTokenId]) ? $pattern[$patternTokenId] : "";
-            $nextPatternToken = isset($pattern[$patternTokenId + 1]) ? $pattern[$patternTokenId + 1] : "";
-
-
-            if (mb_ereg_match($wildcards, $patternToken)) {
-                $collect = true;
-                if ($this->string->stringcmp($nextPatternToken, $token) == 0) {
-                    $collect = false;
-
-                    if (!empty($words)) {
-                        $word = trim($words);
-                        $results[] = array(
-                            "original" => $word,
-                            "replaced" => $this->string->substituteWords($word)
-                        );
-                        $words = "";
-                    }
-
-                    $patternTokenId++;
-                }
-            } else {
-                $patternTokenId++;
+        $words = array(); // Initialize a set of words that match wildcard
+        $prevMatch = "";
+        foreach ($matchingTokens as $token => $matched) {
+            if ($matched === "<that>") { // We won't match content of <that> tag comes after
+                break;
             }
 
-            if ($collect || (!empty($results) && mb_ereg_match($wildcards, $nextPatternToken))) {
-                $words .= $token . " ";
+            // Whenever we found a matched wildcard or a set, we would add the first word token to the wildcard's matching token
+            if (mb_ereg_match($wildcards, $matched) || strpos($matched, "<set>") !== FALSE) {
+                $words[$matched] = $token . " ";
+                $prevMatch = $matched;
             }
 
-            if (($id == count($userInputTokens) - 1) && !empty($words)) {
-                $word = trim($words);
-                $results[] = array(
-                    "original" => $word,
-                    "replaced" => $this->string->substituteWords($word)
-                );
+            if (empty($matched)) {
+                $words[$prevMatch] .= $token . " ";
             }
         }
 
-        return $results;
+        $wildcardData = array();
+
+        foreach ($words as $index => $word) {
+            $word = trim(mb_strtolower($word));
+            $wildcardData[] = array(
+                "original" => $word,
+                "replaced" => $this->string->substituteWords($word)
+            );
+        }
+
+        return $wildcardData;
     }
 
     /**
@@ -300,7 +303,7 @@ class TemplateHelper
     public function handleWildcards(&$template, $node, $userInputTokens)
     {
         // Extract wildcard data
-        $wildcardData = $this->extractWildcardData(explode(" ", $node->getPattern()), $userInputTokens);
+        $wildcardData = $this->extractWildcardData($node->getExtraData('matching_tokens'));
 
         $stars = $template->getElementsByTagName("star");
         $noOfStars = $stars->length;
@@ -628,7 +631,7 @@ class TemplateHelper
     private function containsForbiddenWords($pattern)
     {
         $forbiddenWords = $this->getSetWords('forbidden');
-        foreach($forbiddenWords as $word) {
+        foreach ($forbiddenWords as $word) {
             return mb_ereg_match(".*\b({$word})\b", $pattern);
         }
         return false;
