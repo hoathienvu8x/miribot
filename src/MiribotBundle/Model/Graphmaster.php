@@ -97,6 +97,9 @@ class Graphmaster
      */
     public function matchQueryPattern($query)
     {
+        // Build a matching token from query
+        $this->buildMatchingTokensFromQuery($query);
+
         // Find the node that matches query pattern
         $node = $this->match($this->graph, $query);
 
@@ -168,10 +171,6 @@ class Graphmaster
      */
     protected function matchToken(Nodemapper $node, $token, $query, $word)
     {
-        if (!isset($this->matchingTokens[$word])) {
-            $this->matchingTokens[$word] = "";
-        }
-
         /** @var Nodemapper $child */
         foreach ($node->getChildren() as $child) {
             // If the current node has <set> tag
@@ -183,7 +182,12 @@ class Graphmaster
                 if (in_array(mb_strtolower($token), $setWords)) {
                     // Proceed to next word
                     if ($matchBranch = $this->match($child, $query)) {
-                        $this->matchingTokens[$word] = $child->getWord();
+                        if (!empty($this->matchingTokens[$word])) {
+                            $this->matchingTokens[$word . " "] = $this->matchingTokens[$word];
+                            $this->matchingTokens[$word] = $child->getWord();
+                        } else {
+                            $this->matchingTokens[$word] = $child->getWord();
+                        }
                         return $matchBranch;
                     }
                 }
@@ -195,7 +199,12 @@ class Graphmaster
 
             if ($tokenMatch || $tokenSubMatch) {
                 if ($matchBranch = $this->match($child, $query)) {
-                    $this->matchingTokens[$word] = $child->getWord();
+                    if (!empty($this->matchingTokens[$word])) {
+                        $this->matchingTokens[$word . " "] = $this->matchingTokens[$word];
+                        $this->matchingTokens[$word] = $child->getWord();
+                    } else {
+                        $this->matchingTokens[$word] = $child->getWord();
+                    }
                     return $matchBranch;
                 }
             }
@@ -203,6 +212,31 @@ class Graphmaster
         }
 
         return false;
+    }
+
+    /**
+     * Build matching tokens from query
+     * @param $query
+     */
+    protected function buildMatchingTokensFromQuery($query)
+    {
+        foreach ($query as $token) {
+            if ($this->helper->string->stringcmp($token, "userref") == 0
+                || $this->helper->string->stringcmp($token, "botref") == 0
+            ) {
+                continue;
+            }
+
+            if ($this->helper->string->stringcmp($token, "<that>") == 0) {
+                break;
+            }
+
+            if (!isset($this->matchingTokens[$token])) {
+                $this->matchingTokens[$token] = "";
+            } else {
+                $this->matchingTokens[$token . " "] = "";
+            }
+        }
     }
 
     /**

@@ -62,7 +62,7 @@ class TemplateHelper
 
         // Process template data
         $this->handleRandomResponse($template)// Select random response if necessary
-        ->handleWildcards($template, $node, $userInputTokens)// Replace all template wildcards with user input
+        ->handleWildcards($template, $node)// Replace all template wildcards with user input
         ->handleSetters($template)// Handle set tags
         ->handleThinks($template)// Handle think tags
         ->handleGetters($template)// Handle get tags
@@ -252,12 +252,6 @@ class TemplateHelper
          *       "LẮM" => "*"
          *       "ĐÓ" => ""
          *       "NHA" => ""
-         *       "<that>" => "<that>"
-         *       "CẢM" => ""
-         *       "ƠN" => ""
-         *       "ANH" => ""
-         *       "Ạ" => ""
-         *       "<topic>" => "<topic>"
          *  ]
          */
         $wildcards = ".*[(\#)(\_)(\^)(\*)]";
@@ -277,12 +271,12 @@ class TemplateHelper
 
             // Whenever we found a matched wildcard or a set, we would add the first word token to the wildcard's matching token
             if (mb_ereg_match($wildcards, $matched) || strpos($matched, "<set>") !== FALSE) {
-                $words[$matched . $i] = $token . " ";
+                $words[$matched . $i] = trim($token) . " ";
                 $prevMatch = $matched;
             }
 
             if (empty($matched)) {
-                $words[$prevMatch . $i] .= $token . " ";
+                $words[$prevMatch . $i] .= trim($token) . " ";
             }
 
         }
@@ -290,7 +284,7 @@ class TemplateHelper
         $wildcardData = array();
 
         foreach ($words as $index => $word) {
-            $word = trim(mb_strtolower($word));
+            $word = mb_strtolower(trim($word));
             $wildcardData[] = array(
                 "original" => $word,
                 "replaced" => $this->string->substituteWords($word)
@@ -304,10 +298,9 @@ class TemplateHelper
      * Replace all wildcards in template with user input values
      * @param \DOMElement $template
      * @param Nodemapper $node
-     * @param array $userInputTokens
      * @return $this
      */
-    public function handleWildcards(&$template, $node, $userInputTokens)
+    public function handleWildcards(&$template, $node)
     {
         // Extract wildcard data
         $wildcardData = $this->extractWildcardData($node->getExtraData('matching_tokens'));

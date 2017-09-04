@@ -1,7 +1,7 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <aiml version="2.0" encoding="UTF-8">
     <category>
-        <pattern>HÃY NHỚ * LÀ NGƯỜI *</pattern>
+        <pattern>HÃY NHỚ ^ LÀ NGƯỜI *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -13,7 +13,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ CON * LÀ *</pattern>
+        <pattern>HÃY NHỚ CON ^ LÀ *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -29,7 +29,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * LÀ CON *</pattern>
+        <pattern>HÃY NHỚ ^ LÀ CON *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -65,7 +65,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * LÀ *</pattern>
+        <pattern>HÃY NHỚ ^ LÀ *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -77,7 +77,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * ĐÃ *</pattern>
+        <pattern>HÃY NHỚ ^ ĐÃ *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -89,7 +89,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * ĐANG *</pattern>
+        <pattern>HÃY NHỚ ^ ĐANG *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -101,7 +101,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * SẼ *</pattern>
+        <pattern>HÃY NHỚ ^ SẼ *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -113,7 +113,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * TỪNG *</pattern>
+        <pattern>HÃY NHỚ ^ TỪNG *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -125,7 +125,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * BỊ *</pattern>
+        <pattern>HÃY NHỚ ^ BỊ *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -137,7 +137,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * KHÔNG *</pattern>
+        <pattern>HÃY NHỚ ^ KHÔNG *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -149,7 +149,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * CÓ *</pattern>
+        <pattern>HÃY NHỚ ^ CÓ *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -161,7 +161,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * GIỐNG *</pattern>
+        <pattern>HÃY NHỚ ^ GIỐNG *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -173,7 +173,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * KHÁC *</pattern>
+        <pattern>HÃY NHỚ ^ KHÁC *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -185,7 +185,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ KHI ĐƯỢC HỎI * THÌ TRẢ LỜI *</pattern>
+        <pattern>HÃY NHỚ KHI ĐƯỢC HỎI ^ THÌ TRẢ LỜI *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -197,7 +197,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * THÍCH *</pattern>
+        <pattern>HÃY NHỚ ^ THÍCH *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -217,7 +217,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * MUỐN *</pattern>
+        <pattern>HÃY NHỚ ^ MUỐN *</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
@@ -237,7 +237,7 @@
         </template>
     </category>
     <category>
-        <pattern>HÃY NHỚ * NĂM NAY * TUỔI</pattern>
+        <pattern>HÃY NHỚ ^ NĂM NAY * TUỔI</pattern>
         <template>
             <srai>BOTYESANS</srai>
             <learn>
