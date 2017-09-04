@@ -4,7 +4,8 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "MiribotBundle\\": "src/MiribotBundle"
+            "MiribotBundle\\": "src/MiribotBundle",
+            "BrainBundle\\": "src/BrainBundle"
         },
         "classmap": [
             "app/AppKernel.php",
@@ -37,6 +38,8 @@
         "twig/twig": "^1.0||^2.0"
     },
     "require-dev": {
+        "liip/functional-test-bundle": "^1.8",
+        "phpunit/phpunit": "5.7",
         "sensio/generator-bundle": "~3.0",
         "symfony/phpunit-bridge": "~2.7"
     },

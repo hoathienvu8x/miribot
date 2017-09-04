@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             //new AppBundle\AppBundle(),
 
             new MiribotBundle\MiribotBundle(),
+            new BrainBundle\BrainBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

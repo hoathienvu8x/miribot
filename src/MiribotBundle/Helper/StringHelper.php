@@ -117,6 +117,7 @@ class StringHelper
     /**
      * Produce a math expression from text
      * @param $text
+     * @return string
      */
     public function produceMathExpression($text)
     {
@@ -132,13 +133,13 @@ class StringHelper
             }
         }
 
-        return $mathString;
+        return trim($mathString);
     }
 
     public function allowedMathOperators()
     {
         return array(
-            '\+', '\-', '\*', '\/', '\d',
+            '\+', '\-', '\*', '\/', '\d', '\(', '\)',
             '\b(abs)\b', '\b(sin)\b', '\b(cos)\b', '\b(tan)\b',
             '\b(min)\b', '\b(max)\b', '\b(pi)\b', '\b(ceil)\b',
             '\b(floor)\b', '\b(round)\b', '\b(sqrt)\b', '\b(pow)\b',
