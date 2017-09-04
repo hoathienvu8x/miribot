@@ -6,6 +6,10 @@
         <template><wiki lang="vi"><star/></wiki><emotion value="searchful"/></template>
     </category>
     <category>
+        <pattern>WIKIPEDIABLANK</pattern>
+        <template><bot name="name" /> đã tìm nhưng trên Wikipedia Tiếng Việt không có câu trả lời <emotion value="sad"/></template>
+    </category>
+    <category>
         <pattern>AI LÀ *</pattern>
         <template>
             <srai>WIKIPEDIASEARCHKNOWLEDGE <star/></srai>

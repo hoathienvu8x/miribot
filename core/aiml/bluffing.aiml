@@ -36,7 +36,6 @@
                 <li><user name="pronoun" /> đã ăn gì chưa?</li>
                 <li><user name="pronoun" /> thích màu gì nhất?</li>
                 <li><user name="pronoun" /> có hay xem phim không?</li>
-                <li><wiki lang="vi">randomwiki</wiki></li>
             </random>
         </template>
     </category>

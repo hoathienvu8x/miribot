@@ -264,20 +264,27 @@ class TemplateHelper
 
         $words = array(); // Initialize a set of words that match wildcard
         $prevMatch = "";
+
+        $i = 0;
         foreach ($matchingTokens as $token => $matched) {
             if ($matched === "<that>") { // We won't match content of <that> tag comes after
                 break;
             }
 
+            if ($matched == $prevMatch) {
+                $i++;
+            }
+
             // Whenever we found a matched wildcard or a set, we would add the first word token to the wildcard's matching token
             if (mb_ereg_match($wildcards, $matched) || strpos($matched, "<set>") !== FALSE) {
-                $words[$matched] = $token . " ";
+                $words[$matched . $i] = $token . " ";
                 $prevMatch = $matched;
             }
 
             if (empty($matched)) {
-                $words[$prevMatch] .= $token . " ";
+                $words[$prevMatch . $i] .= $token . " ";
             }
+
         }
 
         $wildcardData = array();

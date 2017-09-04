@@ -384,7 +384,7 @@
 
     <!-- KHEN/CHÊ -->
     <category>
-        <pattern>_ <set>compliments</set> *</pattern>
+        <pattern>^ <set>compliments</set> *</pattern>
         <template>
             <random>
                 <li><bot name="name"/> cảm ơn <user name="pronoun"/> ạ.<emotion value="happy"/></li>
@@ -399,7 +399,7 @@
     </category>
 
     <category>
-        <pattern>_ <set>complaints</set> *</pattern>
+        <pattern>^ <set>complaints</set> *</pattern>
         <template>
             <random>
                 <li>Hừm, <bot name="name"/> ứ chơi với <user name="pronoun"/> nữa.<emotion value="doubtful"/></li>
