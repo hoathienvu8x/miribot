@@ -32,5 +32,7 @@ class WernickeControllerTest extends WebTestCase
         $form->setValues(['form[input_text]' => 'Lorem Ipsum dolor sit amet', 'form[length]' => '10']);
         $client->submit($form);
         $this->assertStatusCode(200, $client);
+        $text = $client->getCrawler()->filter('div.output p')->text();
+        echo $text;
     }
 }
