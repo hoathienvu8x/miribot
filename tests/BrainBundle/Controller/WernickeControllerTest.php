@@ -33,6 +33,6 @@ class WernickeControllerTest extends WebTestCase
         $client->submit($form);
         $this->assertStatusCode(200, $client);
         $text = $client->getCrawler()->filter('div.output p')->text();
-        echo $text;
+        $this->assertNotEmpty(trim($text));
     }
 }
