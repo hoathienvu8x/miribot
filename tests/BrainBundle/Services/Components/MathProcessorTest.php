@@ -8,6 +8,7 @@
 
 namespace tests\BrainBundle\Services\Components;
 
+use BrainBundle\Services\Components\ArrayProcessor;
 use BrainBundle\Services\Components\MathProcessor;
 use BrainBundle\Services\Components\StringProcessor;
 use PHPUnit\Framework\TestCase;
@@ -20,15 +21,21 @@ class MathProcessorTest extends TestCase
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->math = new MathProcessor(new StringProcessor());
+        $this->math = new MathProcessor(new StringProcessor(new ArrayProcessor()));
     }
 
+    /**
+     * Test function to calculate mathematical expression in a string
+     */
     public function testCalculateMathInString()
     {
         $result = $this->math->calculateMathInString($this->txt);
         $this->assertEquals("75", $result);
     }
 
+    /**
+     * Test function to produce math expression from a string
+     */
     public function testProduceMathExpression()
     {
         $result = $this->math->produceMathExpression($this->txt);

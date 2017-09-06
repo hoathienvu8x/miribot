@@ -94,24 +94,28 @@ class StringHelper
     /**
      * Split the input text into sentences
      * @param $text
+     * @param $regex
      * @return array
      */
-    public function sentenceSplitting($text)
+    public function sentenceSplitting($text, $regex = "[\.\!\?\;\:\t]")
     {
-        return preg_split("/[\.\!\?\;\:\n\t]/", trim($text), -1, PREG_SPLIT_NO_EMPTY);
+        $trimmed = trim(mb_eregi_replace("\n", " ", trim($text)));
+        $sentences = array_filter(mb_split($regex, $trimmed));
+        return array_values($sentences);
     }
 
     /**
      * Get string tokens
-     * @param $text
-     * @param string $regex
+     * @param string $text
+     * @param string $delimiterRegex
      * @return array
      */
-    public function tokenize($text, $regex = '[^\w\_\^\#\*\+\-\*\/\(\)\d]')
+    public function tokenize($text, $delimiterRegex = '[^\w\_\^\#\*\+\-\*\/\(\)\d]')
     {
-        $tokens = mb_split($regex, $text);
-        $tokens = array_map('trim', $tokens);
-        return array_filter($tokens);
+        $tokens = mb_split($delimiterRegex, $text);
+        $mapped = array_map('trim', $tokens);
+        $filtered = array_filter($mapped);
+        return array_values($filtered);
     }
 
     /**

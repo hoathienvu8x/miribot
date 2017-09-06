@@ -27,6 +27,5 @@ class Wernicke
 
     public function processTextInput($input)
     {
-        $this->math->calculateMathInString($input);
     }
 }

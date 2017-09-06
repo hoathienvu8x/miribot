@@ -5,9 +5,12 @@ services:
 
     brain.components.string:
         class: BrainBundle\Services\Components\StringProcessor
-        arguments: []
+        arguments: ["@brain.components.array"]
 
     brain.components.math:
         class: BrainBundle\Services\Components\MathProcessor
         arguments: ["@brain.components.string"]
 
+    brain.components.array:
+        class: BrainBundle\Services\Components\ArrayProcessor
+        arguments: []

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Markov Generator">
+    <meta name="author" content="Khue Quang Nguyen">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
+    <title>Markov Generator</title>
+</head>
+<body>
+<div class="content">
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <div class="output">
+        <p>
+            {% if output is defined %}
+                {{ output }}
+            {% endif %}
+        </p>
+    </div>
+</div>
+</body>
+</html>

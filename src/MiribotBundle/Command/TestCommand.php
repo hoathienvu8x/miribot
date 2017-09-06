@@ -29,7 +29,8 @@ class TestCommand extends ContainerAwareCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->whatever();
+        //$this->whatever();
+        echo array_sum(array());
     }
 
     protected function whatever()
