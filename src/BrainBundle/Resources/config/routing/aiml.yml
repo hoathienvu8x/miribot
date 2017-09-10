@@ -1,0 +1,3 @@
+aiml_upload:
+    path:     /
+    defaults: { _controller: "BrainBundle:Aiml:upload" }

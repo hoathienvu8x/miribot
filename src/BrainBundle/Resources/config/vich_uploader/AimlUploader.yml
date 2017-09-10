@@ -1,0 +1,7 @@
+BrainBundle\Entity\AimlUploader:
+    file:
+        mapping:           aiml # required
+        filename_property: fileName     # required
+        size:              fileSize
+        mime_type:         fileMimeType
+        original_name:     fileOriginalName

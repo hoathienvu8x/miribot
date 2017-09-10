@@ -1,13 +1,58 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Trò chuyện cùng Miribot">
+    <meta name="author" content="Khue Quang Nguyen">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
+    <title>{% block title %}Miribot{% endblock %}</title>
+
+    <!-- Stylesheets -->
+    {% block stylesheets %}
+        <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/css/bootstrap-theme.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/jBox.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/plugins/Confirm/jBox.Confirm.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/plugins/Image/jBox.Image.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/plugins/Notice/jBox.Notice.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/NoticeFancy.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipBorder.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipBorderThick.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipDark.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipError.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipSmall.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/js/jBox/themes/TooltipSmallGray.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    {% endblock %}
+</head>
+
+<body>
+
+{% block body %}{% endblock %}
+
+<div class="clearfix"></div>
+
+<footer>
+    <div class="text-center">Created by Khue Quang Nguyen, {{ "now"|date('Y') }}</div>
+</footer>
+
+<!-- JavaScripts -->
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jBox/jBox.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jBox/plugins/Confirm/jBox.Confirm.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jBox/plugins/Image/jBox.Image.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jBox/plugins/Notice/jBox.Notice.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/ie10-viewport-bug-workaround.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/responsivevoice.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/scripts.js') }}"></script>
+{% endblock %}
+
+</body>
+
 </html>
+

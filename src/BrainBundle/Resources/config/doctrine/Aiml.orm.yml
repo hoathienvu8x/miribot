@@ -1,0 +1,36 @@
+BrainBundle\Entity\Aiml:
+    type: entity
+    table: null
+    repositoryClass: BrainBundle\Repository\AimlRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        hash:
+            type: string
+            length: 255
+        pattern:
+            type: string
+            length: 255
+        that:
+            type: string
+            length: 255
+            nullable: true
+        topic:
+            type: string
+            length: 255
+            nullable: true
+        template:
+            type: string
+            length: '1024'
+        fileName:
+            type: string
+            length: 255
+            nullable: true
+        updatedAt:
+            type: datetime
+            nullable: true
+    lifecycleCallbacks: {  }

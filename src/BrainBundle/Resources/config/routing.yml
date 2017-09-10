@@ -1,3 +1,7 @@
+brain_aiml:
+    resource: "@BrainBundle/Resources/config/routing/aiml.yml"
+    prefix:   /aiml
+
 brain_homepage:
     path:     /
     defaults: { _controller: BrainBundle:Index:index }

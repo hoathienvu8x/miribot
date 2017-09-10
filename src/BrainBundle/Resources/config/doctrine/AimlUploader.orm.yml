@@ -1,0 +1,31 @@
+BrainBundle\Entity\AimlUploader:
+    type: entity
+    table: null
+    repositoryClass: BrainBundle\Repository\AimlUploaderRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        fileName:
+            type: string
+            length: 255
+            nullable: true
+        fileSize:
+            type: string
+            length: 255
+            nullable: true
+        fileMimeType:
+            type: string
+            length: 255
+            nullable: true
+        fileOriginalName:
+            type: string
+            length: 255
+            nullable: true
+        updatedAt:
+            type: datetime
+            nullable: true
+    lifecycleCallbacks: {  }

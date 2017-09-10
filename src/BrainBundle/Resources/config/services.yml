@@ -14,3 +14,9 @@ services:
     brain.components.array:
         class: BrainBundle\Services\Components\ArrayProcessor
         arguments: []
+
+    brain.aiml.upload.listener:
+        class: BrainBundle\EventListener\AimlUploaderListener
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_listener, event: vich_uploader.post_upload }

@@ -56,7 +56,7 @@ class WernickeController extends Controller
                 if (!$length) {
                     $length = 300;
                 }
-                $markov = $this->get('brain.components.string')->markovGenerator($inputText, $length, 3);
+                $markov = $this->get('brain.components.string')->markovGenerator($inputText, $length, 1);
             } else {
                 $form->addError(new FormError('Input text must be provided'));
                 $error = $form->getErrors();
@@ -66,13 +66,13 @@ class WernickeController extends Controller
                 ));
             }
 
-            return $this->render('BrainBundle:Wernicke:markov.html.twig', array(
+            return $this->render('BrainBundle:wernicke:markov.html.twig', array(
                 'form' => $form->createView(),
                 'output' => $markov
             ));
         }
 
-        return $this->render('BrainBundle:Wernicke:markov.html.twig', array(
+        return $this->render('BrainBundle:wernicke:markov.html.twig', array(
             'form' => $form->createView(),
         ));
     }
